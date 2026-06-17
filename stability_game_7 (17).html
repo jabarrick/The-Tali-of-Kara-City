@@ -1,0 +1,2973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>达尔坎斯坦·卡拉城维稳指挥系统</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#090b0f;--card:#11141b;--bdr:#1c2030;--tx:#c4c9d6;--mt:#4e5568;--red:#c0392b;--red2:#e74c3c;--grn:#27ae60;--ylw:#e2a308;--blu:#2980b9;--pur:#8e44ad}
+body{font-family:'Courier New','SimHei',monospace;background:var(--bg);color:var(--tx);font-size:13px;min-height:100vh}
+.wrap{max-width:960px;margin:0 auto;padding:12px}
+.hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr);padding-bottom:10px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.hdr h1{font-size:16px;letter-spacing:2px;font-weight:900}
+.hdr .sub{font-size:10px;color:var(--mt)}
+.hdr .wk{font-size:18px;font-weight:800;text-align:right;font-family:monospace}
+.hdr .wksub{font-size:10px;color:var(--mt)}
+.stats{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:8px 12px;flex:1;min-width:80px}
+.stat .lb{font-size:10px;color:var(--mt);letter-spacing:1px;text-transform:uppercase}
+.stat .vl{font-size:20px;font-weight:800;font-family:monospace}
+.stat .sl{font-size:10px;color:var(--mt)}
+.toast{background:#1a1510;border:1px solid var(--ylw);border-radius:6px;padding:8px 14px;margin-bottom:10px;font-size:12px;color:var(--ylw);text-align:center;display:none}
+.tabs{display:flex;gap:0;flex-wrap:wrap}
+.tabs button{padding:7px 14px;background:transparent;border:1px solid transparent;border-bottom:1px solid var(--bdr);color:var(--mt);cursor:pointer;font-family:inherit;font-size:11px;border-radius:4px 4px 0 0}
+.tabs button.active{background:var(--card);border:1px solid var(--bdr);border-bottom:1px solid var(--card);color:var(--tx)}
+.panel{background:var(--card);border:1px solid var(--bdr);border-top:none;border-radius:0 0 6px 6px;padding:14px;min-height:280px}
+.panel h3{font-size:14px;font-weight:700;margin-bottom:10px}
+.mcard{border:1px solid var(--bdr);border-radius:6px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.mcard.dis{opacity:0.35}
+.mcard .mn{font-weight:700;font-size:13px}
+.mcard .md{font-size:11px;color:var(--mt);margin-top:2px}
+.mcard .mc{font-size:10px;margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+.mbtn{padding:6px 14px;background:var(--red);border:none;color:#fff;cursor:pointer;border-radius:4px;font-family:inherit;font-size:12px;white-space:nowrap;flex-shrink:0}
+.mbtn:disabled{background:var(--bdr);cursor:not-allowed}
+.adv{margin-top:14px;display:flex;justify-content:center}
+.adv button{padding:11px 44px;background:var(--red);border:none;color:#fff;cursor:pointer;border-radius:6px;font-family:inherit;font-size:14px;font-weight:700;letter-spacing:2px}
+.foot{margin-top:10px;text-align:center;font-size:10px;color:var(--mt);line-height:1.8}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{text-align:left;padding:3px;color:var(--mt);border-bottom:1px solid var(--bdr)}
+td{padding:3px;border-bottom:1px solid var(--bdr)}
+tr.clickable{cursor:pointer}
+tr.clickable:hover{background:#ffffff08}
+.tag{display:inline-block;padding:0 5px;margin:1px;background:var(--bdr);border-radius:2px;font-size:10px}
+.stag{background:#2a1a10;border:1px solid #4a3020;color:var(--ylw)}
+.info{padding:10px;background:var(--bg);border-radius:6px;font-size:11px;color:var(--mt);line-height:2;margin-top:12px}
+.bar-row{display:flex;gap:6px;align-items:end;height:110px;margin-bottom:16px}
+.bar-col{flex:1;text-align:center}
+.bar-label{font-size:10px;color:var(--mt);margin-bottom:3px}
+.bar{border-radius:3px 3px 0 0;min-height:2px;transition:height 0.3s}
+.bar-lv{font-size:11px;margin-top:3px;font-weight:700}
+.news-item{padding:6px 0;border-bottom:1px solid var(--bdr);font-size:12px;line-height:1.7}
+.news-item.atk{color:var(--red)}
+.news-w{color:var(--mt);font-size:10px;margin-right:6px}
+.pgn{display:flex;gap:4px;justify-content:center;margin-top:8px}
+.pgn button{padding:2px 8px;background:var(--bdr);border:none;color:var(--tx);border-radius:3px;cursor:pointer;font-size:10px;font-family:inherit}
+.pgn button.active{background:var(--blu)}
+.detail-back{background:none;border:none;color:var(--blu);cursor:pointer;font-family:inherit;font-size:12px;margin-bottom:10px}
+.go-screen{text-align:center;padding-top:50px}
+.go-screen h2{font-size:44px;font-weight:900;letter-spacing:4px}
+.go-screen .body{margin:24px auto;max-width:540px;line-height:2;color:var(--mt);font-size:13px}
+.go-screen button{margin-top:16px;padding:10px 36px;background:var(--card);border:1px solid var(--bdr);color:var(--tx);cursor:pointer;border-radius:4px;font-family:inherit;font-size:13px}
+.progress-bar{width:100%;height:8px;background:var(--bdr);border-radius:4px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;border-radius:4px;transition:width 0.3s}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+// ══════════════════════════════════════════════════════════
+//  达尔坎斯坦 · 卡拉城维稳指挥系统
+//  虚构国家，如有雷同，说明你读过新闻。
+// ══════════════════════════════════════════════════════════
+
+const C = { country:"达尔坎斯坦", city:"卡拉城", player:"高奇", ethnic:"塔里人", org:"世塔会" };
+// 伤亡死线：在这套系统下平民伤亡是结构性的、几乎注定累积。
+// 调低死线 → "侥幸取胜"更难，更贴合"铁拳之下没有真正赢家"的主题。
+const CASUALTY_LIMIT = 80;
+const WIN_HOLD_WEEKS = 11;   // 压制到阈值以下后，需连续维持的周数
+// 全局袭击概率缩放：整体调低袭击频率 → 各打击型流派都更能熬过瓦解期，
+// 使弱流派进入可玩区间，同时让强流派(已近天花板)的优势没那么绝对。
+const ATTACK_SCALE = 0.85;
+
+// ── Tag definitions ──
+// Each person can have at most 5 tags. Count of tags = threat level (0-5).
+const ALL_TAGS = [
+  // Hard tags (mostly permanent)
+  {id:"t_sta",name:"世塔会份子",hard:true,desc:"世界塔里人解放协会成员"},
+  {id:"t_lang",name:"不会官方语言",hard:true,desc:"未掌握中央语"},
+  {id:"t_abroad",name:"亲属在境外",hard:true,desc:"有亲属在邻国"},
+  {id:"t_709",name:"709关联",hard:true,desc:"与709事件有间接关联"},
+  {id:"t_reled",name:"有宗教学历",hard:true,desc:"曾在宗教学校学习"},
+  {id:"t_exit",name:"曾出境",hard:true,desc:"有出境记录"},
+  {id:"t_book",name:"家藏经书",hard:true,desc:"家中存有宗教书籍"},
+  {id:"t_prec",name:"有前科亲属",hard:true,desc:"亲属有拘留记录"},
+  {id:"t_remit",name:"大额汇款",hard:true,desc:"有跨境汇款记录"},
+  {id:"t_bio",name:"拒配合采集",hard:true,desc:"不配合生物信息采集"},
+  {id:"t_beard",name:"曾留胡须",hard:true,desc:"曾蓄留传统胡须"},
+  {id:"t_birth",name:"计划外生育",hard:true,desc:"子女数超过规定"},
+  {id:"t_nosoc",name:"无社交账号",hard:true,desc:"未注册官方社交媒体"},
+  {id:"t_noboard",name:"拒送子入寄宿",hard:true,desc:"不愿子女寄宿"},
+  {id:"t_phone",name:"频繁换手机号",hard:true,desc:"更换过多个号码"},
+  // Soft tags (dynamic)
+  {id:"t_pray",name:"每日礼拜",hard:false,desc:"每天前往礼拜场所"},
+  {id:"t_fast",name:"封斋月禁食",hard:false,desc:"参与传统斋月"},
+  {id:"t_radio",name:"收听境外广播",hard:false,desc:"收听非官方电台"},
+  {id:"t_flag",name:"家族有标记人员",hard:false,desc:"家族中有被拘押成员"},
+  {id:"t_nodrink",name:"拒食清真禁忌",hard:false,desc:"拒绝饮酒、拒食猪肉等被指为「宗教极端」"},
+  {id:"t_call",name:"与标记人通话",hard:false,desc:"通话记录含标记号码"},
+  {id:"t_chem",name:"购买大量化肥",hard:false,desc:"购买化学品超量"},
+  {id:"t_noflag",name:"拒绝升旗",hard:false,desc:"未参加周一升旗"},
+  {id:"t_veil",name:"佩戴面纱",hard:false,desc:"日常佩戴传统面纱"},
+  {id:"t_novisit",name:"不配合家访",hard:false,desc:"对入户走访不热情"},
+  {id:"t_uncen",name:"传播未审内容",hard:false,desc:"手机有未审查内容"},
+  {id:"t_under",name:"参加地下教学",hard:false,desc:"参与非官方教育"},
+  {id:"t_nolang",name:"拒学官方语言",hard:false,desc:"拒绝参加语言培训"},
+  {id:"t_donate",name:"匿名捐款",hard:false,desc:"向不明组织捐款"},
+  {id:"t_notv",name:"拒绝看电视",hard:false,desc:"不收看官方电视"},
+];
+
+const TAG_MAP = {};
+ALL_TAGS.forEach(t => TAG_MAP[t.id] = t);
+const SOFT_TAG_IDS = ALL_TAGS.filter(t=>!t.hard).map(t=>t.id);
+
+const SURNAMES=["阿依","木合","努尔","帕尔","赛义","图尔","哈斯","依明","买买提","热依","库尔","沙依","艾克","巴依","吉力","穆萨","伊斯","达吾","阿布","卡德"];
+const GIVEN=["兰","木","提","丁","江","热","汗","古","力","娜","尼","拉","亚","依","克","买","丽","莎","尔","麦","斯","曼","巴","达","西"];
+
+// ── Measures ──
+// 分两大类：基础措施（行政/情报/资源）+ 标签措施（针对单个标签）
+const MEASURES = [
+  // ========== 基础措施 ==========
+  {id:"m4", cat:"base", name:"全面摸排分析", cost:20, ap:3, desc:"累进式：每次摸排出 70-90 名带标签居民。需多次执行以建档全部可疑人员", resentUp:4, irony:"算法判定：吃手抓饭的频率与极端倾向正相关", logic:"scan"},
+  {id:"m13", cat:"base", name:"国安情报行动", cost:35, ap:3, desc:"识别2–4名世塔会份子（精度随民怨↓而提升，民怨越高线人越枯竭）", resentUp:7, irony:"「线人」拿到了第一笔「辛苦费」，他自己也不知道还能活几天", logic:"intel"},
+  {id:"m11", cat:"base", name:"定点清除世塔会", cost:50, ap:4, desc:"逮捕最多10名【已识别】世塔会份子（民怨高时误抓增加）", resentUp:18, irony:"「精准打击」误差率随民怨同步上升", logic:"target_sta"},
+  {id:"m1", cat:"base", name:"新建一座教培中心", cost:40, ap:3, desc:"每座中心收容10人。优先【已识别】世塔会成员，其次Lv.3+", resentUp:12, irony:"「自愿入学」的学员被铁丝网包围着", logic:"detain"},
+  {id:"m12", cat:"base", name:"思想转化攻势", cost:20, ap:3, desc:"对Lv.1-2的【已识别】世塔会成员再教育，25%概率脱会", resentUp:6, irony:"「自愿」签署的悔过书堆成了山", logic:"convert"},
+  {id:"m2", cat:"base", name:"加大警力部署", cost:25, ap:2, desc:"增设检查站，持续8周降低袭击成功率50%", resentUp:6, irony:"每隔50米一个检查站，安全感油然而生", logic:"patrol"},
+  {id:"m7", cat:"base", name:"安装监控天网", cost:45, ap:3, desc:"全城人脸识别，永久-40%袭击率，+10%情报精度", resentUp:5, irony:"摄像头比路灯还密，照亮了每个人的内心", logic:"camera"},
+  {id:"m3", cat:"base", name:"十户联防", cost:12, ap:2, desc:"邻里互相举报：可疑者新增标签；+5%情报精度", resentUp:10, irony:"邻居们学会了用全新的眼光看待彼此", logic:"snitch"},
+  // 资源类
+  {id:"b_slogan", cat:"base", name:"大型标语工程", cost:15, ap:1, desc:"全城刷红色标语、悬挂横幅。+8政绩、+2民怨", resentUp:2, irony:"「感党恩、听党话、跟党走」每隔20米一条", logic:"slogan"},
+  {id:"b_aid", cat:"base", name:"申请援疆资金", cost:0, ap:2, desc:"向上级争取专项资金（+80经费、+5政绩、最多每20周一次）", resentUp:0, irony:"「内地兄弟省份倾力支持」", logic:"aid"},
+  {id:"b_recruit", cat:"base", name:"招募协警/辅警", cost:30, ap:2, desc:"永久 +1 行动力上限（最高可至10）", resentUp:1, irony:"新协警的工资比老师还高一倍", logic:"recruit"},
+  {id:"b_festival", cat:"base", name:"民族文化节展演", cost:18, ap:2, desc:"歌舞晚会、广场展演。-12民怨、+5政绩", resentUp:-12, irony:"被允许跳舞的传统服饰，和被禁止穿的传统服饰，是同一件", logic:"festival"},
+  {id:"b_award", cat:"base", name:"召开表彰大会", cost:10, ap:1, desc:"表彰先进个人、模范家庭。+6政绩、-3民怨", resentUp:-3, irony:"被表彰的「模范户」家中刚有人被带走", logic:"award"},
+  {id:"m14", cat:"base", name:"群众工作（怀柔）", cost:22, ap:2, desc:"基层走访、改善民生、慰问。-15民怨、+3政绩、弹性标签衰减", resentUp:-15, irony:"高奇同志在镜头前给老人递了一袋米", logic:"goodwill"},
+  {id:"b_freezone", cat:"base", name:"建设自贸区", cost:55, ap:3, desc:"招商引资、设立经济开发区。增加经费收入（最多 7 座；收益随民怨升高而打折，建过 2 座后边际维护成本递增）", resentUp:-2, irony:"自贸区门口的检查站比海关还严", logic:"freezone"},
+  {id:"b_checkpoint", cat:"base", name:"入口安检门全覆盖", cost:48, ap:2, desc:"商场、巴扎、车站全部入口装安检门。永久降低袭击率 30%（一次性，预防型）", resentUp:4, irony:"买根葱也要先扫脸过安检", logic:"checkpoint"},
+  {id:"b_security", cat:"base", name:"街面武装处突点", cost:50, ap:2, desc:"广场、车站等开放区域驻防武装快反力量与防爆设施。不在入口设卡、不降袭击率，但袭击一旦发生即就近处置：当次伤亡降约 1/5（与天网并用时递减），且有 35% 概率当场抓获袭击者的关联成员（一次性，减害+反制型）", resentUp:8, irony:"处突点的沙袋后面，坐着一个和你一样疲惫的协警", logic:"security"},
+
+  // ========== 标签措施 ==========
+  // 文化/语言类
+  {id:"tm_lang", cat:"tag", group:"文化", name:"强制国语培训", cost:10, ap:2, desc:"95% 移除「不会官方语言」「拒学官方语言」标签", resentUp:5, irony:"一位80岁老人因考试不及格被约谈", logic:"tag_op", tagOp:{tagId:"t_lang", mode:"remove", prob:0.95, alsoTag:"t_nolang"}},
+  {id:"tm_book", cat:"tag", group:"文化", name:"收缴宗教书籍", cost:8, ap:1, desc:"移除「家藏经书」，被搜家者获「不配合家访」。【附带：搜缴材料提供线索，+情报精度】", resentUp:14, irony:"焚书坑儒有了21世纪版本", bonus:{intel:0.03}, logic:"tag_op", tagOp:{tagId:"t_book", mode:"remove", prob:1.0, addAfter:"t_novisit"}},
+  {id:"tm_pray", cat:"tag", group:"文化", name:"拆除礼拜场所", cost:22, ap:2, desc:"75% 移除「每日礼拜」标签。【附带：摧毁聚集点暴露成员，+情报精度】", resentUp:16, irony:"「危房改造」进度喜人", bonus:{intel:0.04}, logic:"tag_op", tagOp:{tagId:"t_pray", mode:"remove", prob:0.75}},
+  {id:"tm_fast", cat:"tag", group:"文化", name:"斋月监控行动", cost:10, ap:2, desc:"85% 移除「封斋月禁食」标签——食堂登记吃饭", resentUp:7, irony:"老师在斋月期间塞食物到学生嘴里", logic:"tag_op", tagOp:{tagId:"t_fast", mode:"remove", prob:0.85}},
+  {id:"tm_veil", cat:"tag", group:"文化", name:"「靓丽工程」", cost:7, ap:1, desc:"90% 移除「佩戴面纱」——美容站、选美比赛、最长发评选，并强制观看「摘下面纱的快乐」宣传片", resentUp:3, irony:"街口的「美容站」由公安看守，劝你「让美丽的头发飘起来、露出漂亮的脸」", logic:"tag_op", tagOp:{tagId:"t_veil", mode:"remove", prob:0.9}},
+  {id:"tm_beard", cat:"tag", group:"文化", name:"面容规范化", cost:5, ap:1, desc:"95% 移除「曾留胡须」——留「异常」胡须者禁止乘坐公交、进入公共场所", resentUp:5, irony:"一位阿爸剪掉了留了三十年的胡须，「这样才能上公交车」", logic:"tag_op", tagOp:{tagId:"t_beard", mode:"remove", prob:0.95}},
+  // 通讯/网络类
+  {id:"tm_radio", cat:"tag", group:"通讯", name:"断网与电波管控", cost:12, ap:1, desc:"80% 移除「收听境外广播」「传播未审内容」", resentUp:5, irony:"信息的真空里，谣言反而长得更快", logic:"internet"},
+  {id:"tm_phone", cat:"tag", group:"通讯", name:"手机号实名清查", cost:8, ap:1, desc:"95% 移除「频繁换手机号」标签", resentUp:2, irony:"营业厅排队三小时换 SIM 卡", logic:"tag_op", tagOp:{tagId:"t_phone", mode:"remove", prob:0.95}},
+  {id:"tm_nosoc", cat:"tag", group:"通讯", name:"实名社交推广", cost:7, ap:1, desc:"90% 移除「无社交账号」——强制注册并扫码登记", resentUp:5, irony:"60岁老人被要求开通短视频账号", logic:"tag_op", tagOp:{tagId:"t_nosoc", mode:"remove", prob:0.9}},
+  {id:"tm_notv", cat:"tag", group:"通讯", name:"户户通电视入户", cost:9, ap:1, desc:"90% 移除「拒绝看电视」——免费安装并强制开机", resentUp:2, irony:"村干部每晚检查电视是否在播新闻联播", logic:"tag_op", tagOp:{tagId:"t_notv", mode:"remove", prob:0.9}},
+  // 通联监控类（标记 + t_call）
+  {id:"tm_abroad", cat:"tag", group:"监控", name:"涉外亲属约谈", cost:10, ap:2, desc:"对「亲属在境外」者通联监控（+t_call、+情报精度）", resentUp:8, irony:"被约谈者被告知「亲戚回国可能就回不去了」", logic:"tag_op", tagOp:{tagId:"t_abroad", mode:"mark"}},
+  {id:"tm_exit", cat:"tag", group:"监控", name:"出入境记录复查", cost:8, ap:1, desc:"对「曾出境」者加重点通联（+t_call、+情报精度）、护照集中保管", resentUp:7, irony:"全县护照统一上交镇政府保险柜", logic:"tag_op", tagOp:{tagId:"t_exit", mode:"mark"}},
+  {id:"tm_reled", cat:"tag", group:"监控", name:"宗教学历审查", cost:9, ap:2, desc:"对「有宗教学历」者建档监控（+t_call、+情报精度）", resentUp:8, irony:"30年前的麦德里斯学历也被翻出来", logic:"tag_op", tagOp:{tagId:"t_reled", mode:"mark"}},
+  {id:"tm_donate", cat:"tag", group:"监控", name:"资金流向溯源", cost:11, ap:2, desc:"对「匿名捐款」者通联监控（+t_call、+情报精度）", resentUp:7, irony:"清真寺功德箱被列为「金融机构」", logic:"tag_op", tagOp:{tagId:"t_donate", mode:"mark"}},
+  {id:"tm_chem", cat:"tag", group:"监控", name:"化肥实名登记", cost:7, ap:1, desc:"90% 移除「购买大量化肥」", resentUp:2, irony:"种地像参加高考一样紧张", logic:"tag_op", tagOp:{tagId:"t_chem", mode:"remove", prob:0.9}},
+  // 高强度执行类（民怨剧增）
+  {id:"tm_bio", cat:"tag", group:"高压", name:"生物信息强制采集", cost:13, ap:2, desc:"100% 移除「拒配合采集」——指纹、虹膜、DNA、声纹全部采集。【附带：生物信息库大幅提升识别，+7%情报精度】", resentUp:18, irony:"3岁孩子在父母怀里被强制采集 DNA", bonus:{intel:0.07}, logic:"tag_op", tagOp:{tagId:"t_bio", mode:"remove", prob:1.0}},
+  {id:"tm_birth", cat:"tag", group:"高压", name:"计生政策执行", cost:14, ap:2, desc:"95% 移除「计划外生育」——强制节育/罚款。民怨剧增。【附带：切断家族传承，永久-15%组织繁殖】", resentUp:20, irony:"医院的「免费手术」名额每月有指标", bonus:{recruitDown:0.15}, logic:"tag_op", tagOp:{tagId:"t_birth", mode:"remove", prob:0.95}},
+  {id:"tm_noboard", cat:"tag", group:"高压", name:"寄宿制学校全覆盖", cost:18, ap:2, desc:"95% 移除「拒送子入寄宿」——5岁起统一寄宿。【附带：永久-12%组织繁殖 +情报精度】", resentUp:18, irony:"父母只能在每月一次的「探视日」隔着栏杆看孩子", bonus:{recruitDown:0.12, intel:0.03}, logic:"tag_op", tagOp:{tagId:"t_noboard", mode:"remove", prob:0.95}},
+  {id:"tm_noflag", cat:"tag", group:"高压", name:"周一升旗教育", cost:5, ap:1, desc:"95% 移除「拒绝升旗」——必须出席并表情合格", resentUp:3, irony:"摄像头专拍升旗时低头的人", logic:"tag_op", tagOp:{tagId:"t_noflag", mode:"remove", prob:0.95}},
+  {id:"tm_drink", cat:"tag", group:"高压", name:"强制聚餐饮酒", cost:10, ap:1, desc:"95% 移除「拒食清真禁忌」——节日宴上当众喝酒、吃猪肉，以证明「不搞宗教极端」。【附带：公开表态迫使隐藏成员暴露，直接识别3人】", resentUp:16, irony:"老师在斋月把猪肉塞进学生嘴里，干部端着白酒挨桌「敬」过去", bonus:{identify:3}, logic:"tag_op", tagOp:{tagId:"t_nodrink", mode:"remove", prob:0.95}},
+  // 联坐 / 直接抓捕类
+  {id:"tm_prec", cat:"tag", group:"抓捕", name:"前科亲属联坐", cost:7, ap:1, desc:"对「有前科亲属」者整户家族标记（+t_flag、+情报精度）", resentUp:12, irony:"祖父辈的旧账要由孙子来还", logic:"tag_op", tagOp:{tagId:"t_prec", mode:"flag_family"}},
+  {id:"tm_709", cat:"tag", group:"抓捕", name:"709历史问题清算", cost:20, ap:2, desc:"直接逮捕「709关联」者", resentUp:14, irony:"15年前的一次声援，今天的牢狱之灾", logic:"tag_op", tagOp:{tagId:"t_709", mode:"arrest"}},
+  {id:"tm_remit", cat:"tag", group:"抓捕", name:"金融管控行动", cost:18, ap:2, desc:"直接逮捕「大额汇款」者", resentUp:12, irony:"给国外读书的儿子汇学费也成了罪证", logic:"tag_op", tagOp:{tagId:"t_remit", mode:"arrest"}},
+  {id:"tm_under", cat:"tag", group:"抓捕", name:"地下教学打击", cost:15, ap:2, desc:"直接逮捕「参加地下教学」者", resentUp:14, irony:"老师和学生一同被带走，黑板上还有未擦的字", logic:"tag_op", tagOp:{tagId:"t_under", mode:"arrest"}},
+  // 结对/家访类
+  {id:"m8", cat:"tag", group:"家访", name:"推行结对认亲", cost:7, ap:1, desc:"80% 移除「不配合家访」（需先用「收缴宗教书籍」等措施催生该标签）；「拒看电视」者反获新标签", resentUp:9, irony:"「亲戚」住进了你家，你却不能锁卧室门", logic:"pair"},
+];
+
+// ── News templates ──
+const NEWS_G=[
+  "「{c}日报」头版：社会面持续和谐稳定，各族群众团结一心",
+  "上级督导组高度肯定{p}同志在{c}的工作思路",
+  "又一批教培学员「学有所成、自愿毕业」，含泪感谢党和政府",
+  "{c}十户联防模范小组在地区表彰大会上发言",
+  "结对认亲第{n}批干部入户，与塔里族「亲戚」同吃同住同劳动",
+  "{c}市思想转化攻坚战取得阶段性重大突破",
+  "塔里族青年在国语演讲比赛中以《感党恩、听党话》获一等奖",
+  "{c}基层干部连续奋战，群众满意度据称达99.6%",
+  "中央媒体刊发{c}维稳经验：「{c}模式」可复制、可推广",
+  "区领导赴{c}调研：「这里的稳定来之不易，必须长期坚持」",
+  "{c}举办「红歌大合唱」比赛，{n}支队伍同台献唱",
+  "「平安{c}」APP用户突破10万，群众举报积极性高涨",
+  "{c}电视台播出系列纪录片《幸福之路》，收视率创新高",
+  "{p}同志带队参观教培中心，学员代表「热泪盈眶」表态拥护",
+  "{c}小学生集体写信给上级：「我们爱党爱国爱{c}」",
+  "一位塔里族老人主动上交家中经书，被评为「转化模范」",
+  "「四送两推」活动深入开展：送温暖、送岗位、送政策、送祝福",
+  "{c}宗教人士集体表态：「坚决拥护党的领导，反对一切极端思想」",
+  "上级新闻办召开发布会：境外涉{c}谣言被一一驳斥",
+  "{c}举办「民族团结一家亲」摄影展，作品被{n}家媒体转载",
+  "巴扎重新开业：商贩齐声高呼「感谢党的好政策」",
+  "教培中心举办「学员才艺汇报演出」，省台直播",
+  "国务院新闻办召开{c}专题发布会，向国际社会展示「成就」",
+  "{c}基层党委被评为「全国先进基层党组织」",
+  "{c}「访惠聚」工作队驻村队员获「时代楷模」称号",
+  "数十名塔里族学员主动用{c}话朗诵《为人民服务》",
+  "一位参加教培的妇女学会了{n}种烹饪手艺，开起了餐馆",
+  "{c}举行「感恩奋进」主题宣讲会，上千群众集体宣誓",
+  "学员家属座谈会：「感谢政府救了我的丈夫/儿子/父亲」",
+  "{c}少数民族干部比例提升{pct}%，「使用程度大幅加强」",
+  "{c}群众主动捐款修建烈士陵园，缅怀因公牺牲的干警",
+  "老百姓用{c}话给{p}同志送了一面锦旗：「人民公仆」",
+  "{c}街道办事处荣获「全国文明单位」称号",
+  "{c}举办「中华民族一家亲」联谊晚会，万人空巷",
+  "央视《新闻联播》报道{c}：「这里的孩子已能用国语自如交流」",
+  "{c}首位塔里族女子电焊工技能大赛夺冠，「打破传统束缚」",
+  "「访民情、惠民生、聚民心」工作纪实出版，赠送各级单位",
+  "{c}免费职业技能培训覆盖{n}万人次，「就业率提升」",
+  "上级转发{c}经验：组建「四老人员」队伍，发挥余热",
+  "{c}电视台开播国语频道，「群众观看热情高涨」",
+  "一名学员在毕业典礼上落泪：「以前我是被骗了」",
+  "{p}同志被授予「民族团结进步模范个人」称号",
+  "{c}「去极端化」工作经验被翻译成{n}种语言对外传播",
+  "{c}各族群众联名签字：「坚决反对'三股势力'」",
+  "{c}入选「平安中国建设示范市」候选名单",
+  "塔里族姑娘穿上汉式婚纱，「这是真正的民族融合」",
+  "{c}举办「红色基因代代传」夏令营，参与儿童{n}人",
+  "基层干部年终考核：{pct}%被评为「优秀」",
+  "{c}小学新增国语课时，「家长普遍欢迎」",
+  "{c}社区组织包饺子活动，「亲如一家」"
+,
+  "{c}「五星红旗进万家」活动开展，{n} 面国旗免费发放",
+  "一位塔里族村干部用流利国语主持升旗仪式，被报道为「转变典型」",
+  "{c}「四个意识」教育月成果展圆满闭幕",
+  "{p}同志深夜亲赴社区慰问执勤干警，亲手赠送暖茶",
+  "{c}少儿艺术团表演《我和我的祖国》，掌声雷动",
+  "{c}监狱通讯：「学员们」给家属寄去了亲笔报平安信",
+  "{c}举办「民族体育大赛」，篮球、跳棋、广场舞均有参与",
+  "中央电视台《焦点访谈》正面报道{c}治理经验",
+  "{c}举行「拒绝极端、拥抱现代」万人签名活动",
+  "一名维稳工作者获评「人民满意公务员」",
+  "{c}举行「学党史、感党恩」主题朗诵比赛",
+  "{c}清真寺内悬挂「五个认同」标语，受到上级肯定",
+  "少数民族大学生回乡座谈：「我要做家乡的建设者」",
+  "{c}举办「最美少数民族家庭」评选，{n} 户获奖",
+  "{c}「访惠聚」工作队驻村已满 1000 天，「成绩斐然」",
+  "央视播出{c}专题片《大爱无疆》",
+  "{c}社区医务室对所有居民开展「免费体检」（含人脸录入）",
+  "一份《{c}维稳白皮书》对外发布，引用数据「翔实可靠」",
+  "{c}「中华民族共同体意识」教育进机关、进学校、进社区",
+  "{p}同志在党委会上发表讲话：「来之不易，长期坚持」",
+  "{c}小学举行「国家安全教育日」，孩子们在卷子上写举报技巧",
+  "{c}群众自发悬挂「永远跟党走」横幅，覆盖三条主街",
+  "一位塔里族阿爸主动剪掉传统胡须，「让自己看上去更现代」",
+  "{c}多家清真寺主动升起国旗，「与国家同呼吸」",
+  "{c}「青年志愿者」进村入户，宣讲党的政策",
+  "一份调查显示{c}群众幸福指数同比上升 {pct}%",
+  "{c}一名大妈坚持每天写「思想汇报」，「主动接受教育」",
+  "{c}举办「告别陋习、拥抱新生活」展览",
+  "{c}举行「春节晚会」，节目以《好日子》开场",
+  "{c}电视台开设「举报有奖」专栏，每周公布奖励名单",
+  "{c}基层党员义务清理街道宗教标识，「美化市容」",
+  "一位曾经被拘押的居民「主动写信感谢」教培中心",
+  "{c}群众路过执勤民警时主动行注目礼",
+  "{c}「双语幼儿园」开学，3 岁起学普通话",
+  "{c}「红歌之夜」吸引上万人参与",
+  "上级表扬{c}「数据填报及时、准确、规范」",
+  "{c}志愿者主动为留守儿童「补课」，传授「核心价值观」",
+  "一位塔里族大叔上交家中的录音机，「免得被误会」",
+  "{c}电视台播出「学员家庭新生活」系列，画面温馨",
+  "{c}「抗疫先进集体」被纳入维稳工作经验汇编",
+  "{c}举办「红色经典朗诵会」，参与人数破纪录",
+  "{c}群众主动向干部反映「邻居家亮灯太晚」",
+  "{c}家庭夜校开课，学员每天写「学习心得」",
+  "{c}街道干部年终评优，群众参与「无记名投票」",
+  "{c}多个塔里族家庭主动加入「中华民族大家庭」承诺墙",
+  "{c}发起「比学赶超」运动，各社区维稳指标公开比拼",
+  "{c}基层警务室扩建，「24 小时为人民服务」",
+  "{c}「双语广播站」开播，每天循环播放国语新闻",
+  "一位塔里族歌手用国语演唱《草原之夜》登上央视",
+  "{c}举办「老干部荣誉表彰大会」，颁发「无言战士」奖章"];
+const NEWS_B=[
+  "境外某通讯社再次对{C}内政「指手画脚」，外交部已严正交涉",
+  "上级电话询问{c}近期形势，要求「压紧压实主体责任」",
+  "网信办通报：本周清理涉{c}负面舆情{n}条，约谈账号{n}个",
+  "部分基层群众对新政策「暂时不理解、有抵触情绪」",
+  "{c}老城区某社区出现「三股势力沉渣泛起」苗头",
+  "邻县发生类似案件，{c}必须引以为戒、举一反三",
+  "上级转发匿名举报信一封，反映{c}个别干部「执行不力」",
+  "境外敌对网站煽动塔里族「不合作」，{c}须做好舆论引导",
+  "上级巡视组将于下周抵{c}，要求各部门「迎检准备充分」",
+  "中央巡察组反馈：{c}政绩存在「数字注水」嫌疑",
+  "国际人权组织发布报告，{c}被点名{n}次",
+  "{c}某乡镇出现「集体上访」苗头，被紧急疏散",
+  "上级督查：{c}部分干部存在「形式主义、官僚主义」问题",
+  "境外NGO试图联系{c}居民，已被国安部门处置",
+  "上级机要电报：「{c}稳定压倒一切，不容任何闪失」",
+  "上级要求{c}立即报送本周维稳数据，逾期严肃问责",
+  "一份匿名举报材料在网上流传，{c}已组织辟谣",
+  "邻省维稳指挥长被问责免职，「{c}应吸取教训」",
+  "境外某记者试图潜入{c}采访，已在机场被劝返",
+  "上级会议精神：「宁可错抓一万，不可放过一人」",
+  "{c}某社区发现可疑人员聚集，警方已布控",
+  "上级要求{c}每日报送「四清四查」进度",
+  "一份内部通报指出：{c}部分教培学员「转化不彻底」",
+  "上级警告：「不得对外提及教培中心确切位置和规模」",
+  "中央媒体内参：{c}存在「过度执法」苗头",
+  "国务院督查组将赴{c}「指导工作」",
+  "上级要求{c}对{n}项指标进行「自查自纠」",
+  "一位在押者家属向境外媒体投诉，「已被有关部门处理」",
+  "上级转发境外报道：「不实之词，必须强力回击」",
+  "{c}多个微信群被举报，已被永久封禁",
+  "上级提示：注意防范境外「颜色革命」渗透",
+  "{c}近期上访量同比上升{pct}%，需「源头化解」",
+  "一份材料反映{c}「维稳成本过高」，被批转研究",
+  "上级要求{c}「做好各项预案，应对可能的舆情风暴」",
+  "北京某高校教授就{c}发表「不当言论」，已被处理",
+  "上级督导：{c}「群众工作还需加强，不能只靠强力手段」",
+  "境外媒体援引{c}「匿名消息源」，引发轩然大波",
+  "上级要求{c}立即「核查辟谣，严防扩散」",
+  "{c}某干部因「同情心泛滥」被通报批评",
+  "上级考核：{c}「群众满意度」分项得分偏低，需整改"
+,
+  "上级新指示：{c}「不能放松，更不能反弹」",
+  "中央巡视组通报：{c}「过度依赖技术手段」需整改",
+  "内部材料显示：{c}「形式主义」抬头，需立即纠正",
+  "上级问询：{c}「为何上访量未明显下降？」",
+  "一份境外学者论文将{c}列为「研究案例」",
+  "上级要求{c}对「五类人员」实施「双线管理」",
+  "{c}部分教培学员家属被发现「私下串联」",
+  "上级督查：{c}部分干部「执行政策不彻底」",
+  "周边县市发生类似事件，{c}必须「举一反三」",
+  "中央保密部门提醒：{c}「内部材料勿外传」",
+  "上级文件：「{c}的稳定必须以零事故为底线」",
+  "一份内部审计显示：{c}维稳经费「使用效率有待提高」",
+  "{c}近期某干部「擅自接受境外采访」，已被停职",
+  "上级要求{c}加大「不同意见」管控力度",
+  "一位境外华人学者发文质疑{c}政策，已被禁止入境",
+  "上级机要电报：「未经许可不得使用'再教育'一词」",
+  "{c}部分教培数据被发现「逻辑错误」，需重新填报",
+  "一份匿名材料反映{c}「干部同情心增强」苗头",
+  "上级督导：{c}「群众工作流于表面」",
+  "中央要求{c}对「负面舆情」做出「快速响应预案」",
+  "{c}某乡镇上访人数环比上升 {pct}%",
+  "上级通报：邻县因「数据造假」被严肃处理",
+  "{c}部分文件被发现「保密等级不够」，需重新分类",
+  "一份外部调研报告将{c}列为「重点关注地区」",
+  "上级要求{c}做好「春节期间维稳准备」",
+  "中央巡查组：「{c}必须警惕'松懈情绪'」",
+  "{c}某干部在家庭聚餐中「言论不当」，已被处理",
+  "上级提醒：{c}「严防境外'人权诉讼'」",
+  "一份内部数据显示{c}「转化率虚高」嫌疑",
+  "上级转发境外某 NGO 的「指控材料」，要求逐条回应",
+  "{c}部分基层干部「带病坚持工作」，已要求强制休假",
+  "上级要求{c}「确保每一份学员档案都经得起审查」",
+  "一名记者越境进入{c}采访，已在卡口被拦截",
+  "上级文件：{c}「政绩考核纳入基层党建评分」",
+  "{c}部分微信群「转发不当内容」，已被永久封禁",
+  "上级要求{c}「对外宣传口径必须统一」",
+  "中央督查：{c}「群众满意度抽样有偏差」",
+  "一位老干部就{c}发表「不当评论」，已被警告",
+  "上级要求{c}「确保 0 上访」（对外的版本）",
+  "中央转发外媒报道：「形势复杂，应对需谨慎」"];
+const NEWS_A=[
+  "⚠️【特急】{c}巴扎街发生持刀袭击，造成 {n} 人伤亡，凶手当场被击毙",
+  "⚠️【特急】{c}郊区一民房自制爆炸装置爆炸，{n} 人遇难、多人重伤",
+  "⚠️【特急】{c}城西检查站遭冲击，{n} 名武警和群众伤亡",
+  "⚠️【特急】{c}夜市发生砍杀事件，{n} 名无辜群众遇害",
+  "⚠️【特急】{c}县乡汽车站爆炸，初步统计 {n} 人伤亡，现场惨烈",
+  "⚠️【特急】{c}一加油站遭驾车冲撞纵火，{n} 人伤亡",
+  "⚠️【特急】{c}派出所遭武装袭击，{n} 名干警牺牲、嫌疑人在逃",
+  "⚠️【特急】{c}清晨晨练人群中发生持械袭击，{n} 人伤亡",
+  "⚠️【特急】{c}菜市场发生爆炸，警方已封锁现场，{n} 人伤亡",
+  "⚠️【特急】{c}广场聚集时发生爆炸，{n} 人伤亡，秩序混乱",
+  "⚠️【特急】{c}火车站发生持械冲突，{n} 人伤亡",
+  "⚠️【特急】{c}一医院门口发生袭击，{n} 名候诊群众伤亡",
+  "⚠️【特急】{c}郊区一拉运车辆遭遇路障袭击，{n} 人伤亡",
+  "⚠️【特急】{c}小学门口发生持刀袭击，{n} 名家长遇害",
+  "⚠️【特急】{c}清真寺周边发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一银行营业点遭武装抢劫，{n} 名职工与群众伤亡",
+  "⚠️【特急】{c}城北检查站遭袭，凶手骑摩托逃离，{n} 人伤亡",
+  "⚠️【特急】{c}居民楼内查获爆炸物时发生爆燃，{n} 人伤亡",
+  "⚠️【特急】{c}一公共汽车遭袭，{n} 名乘客伤亡",
+  "⚠️【特急】{c}施工工地发生持械冲突，{n} 名农民工遇害",
+  "⚠️【特急】{c}电影院散场时发生砍杀事件，{n} 人伤亡",
+  "⚠️【特急】{c}郊外一变电站遭袭击，{n} 人伤亡，全城短暂停电",
+  "⚠️【特急】{c}早市人群中发生骑摩托袭击事件，{n} 人伤亡",
+  "⚠️【特急】{c}一家超市遭武装袭击，{n} 人伤亡",
+  "⚠️【特急】{c}街口设伏袭击执勤民警，{n} 人伤亡",
+  "⚠️【特急】{c}一座水库管理站遭袭，{n} 人伤亡",
+  "⚠️【特急】{c}检察院门口发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}文化广场发生砍杀事件，{n} 名儿童家长遇害",
+  "⚠️【特急】{c}街道办事处遭武装冲击，{n} 人伤亡",
+  "⚠️【特急】{c}一群干部下乡途中遭伏击，{n} 人遇难",
+  "⚠️【特急】{c}大型购物中心发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}早高峰公交站发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}电视台门口发生袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一所中学门口发生爆炸，{n} 名学生家长伤亡",
+  "⚠️【特急】{c}郊外一养殖场发生袭击，{n} 人伤亡"
+,
+  "⚠️【特急】{c}郊外一果园发生爆炸，{n} 名采摘工人伤亡",
+  "⚠️【特急】{c}一处工人宿舍纵火，{n} 人伤亡",
+  "⚠️【特急】{c}广场舞队伍中发生持械冲突，{n} 名老人遇害",
+  "⚠️【特急】{c}一处运钞车押运员被袭击，{n} 人伤亡",
+  "⚠️【特急】{c}市内一所小学操场发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一座加气站爆燃，{n} 人伤亡",
+  "⚠️【特急】{c}郊区一冷库发生人质事件，{n} 人伤亡",
+  "⚠️【特急】{c}一处地下市场发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}市民广场升旗仪式遭袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一座货运站发生爆燃，{n} 人伤亡",
+  "⚠️【特急】{c}一处公园儿童区发生砍杀，{n} 名家长遇害",
+  "⚠️【特急】{c}夜间{c}主干道发生路障+伏击，{n} 人伤亡",
+  "⚠️【特急】{c}一处宗教遗址附近发生爆炸，{n} 人伤亡",
+  "⚠️【特急】「春运」期间{c}车站发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一处旅游景点发生袭击，{n} 名外地游客遇害",
+  "⚠️【特急】{c}凌晨一户民房自爆，{n} 人伤亡",
+  "⚠️【特急】{c}一座桥头检查站遭驾车冲撞，{n} 人伤亡",
+  "⚠️【特急】{c}市政广场欢迎仪式现场发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处培训机构遭袭击，{n} 人伤亡",
+  "⚠️【特急】{c}清晨送学队伍中发生袭击，{n} 名家长遇害",
+  "⚠️【特急】{c}一处乡镇政府遭炸弹袭击，{n} 人伤亡",
+  "⚠️【特急】{c}「升旗周一」当场发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一处变压器站遭爆破，{n} 人伤亡",
+  "⚠️【特急】{c}一座露天剧场发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一辆公交车被引爆，{n} 人伤亡",
+  "⚠️【特急】{c}一户人家凌晨被冲入抄家，{n} 人伤亡",
+  "⚠️【特急】{c}一支送葬队伍遭袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一座羊圈被纵火，{n} 人伤亡",
+  "⚠️【特急】{c}一处批发市场发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处粮仓遭破坏，{n} 人伤亡",
+  "⚠️【特急】{c}「两会」期间发生袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一处养老院遭武装冲入，{n} 名老人遇害",
+  "⚠️【特急】{c}「儿童节」当天遭袭击，{n} 名儿童伤亡",
+  "⚠️【特急】{c}一处水井被发现可疑物品，{n} 人伤亡",
+  "⚠️【特急】{c}一座大棚区遭炸弹袭击，{n} 人伤亡"];
+const NEWS_R=[
+  "📈 内部简报：{c}多个社区出现「消极抵抗」——升旗时低头、家访时锁门",
+  "📈 「已转化」名单中数十人思想反复，需重新「回炉」",
+  "📈 {c}老城区流传地下传单，内容涉及「家人下落」",
+  "📈 被拘押者家属在区政府门前聚集 {n} 人，已被带离",
+  "📈 维稳系统数据：{c}本周新增标记人员 {n} 名，呈环比上升",
+  "📈 民间出现「白头巾」相互辨认现象，疑为隐性抗议",
+  "📈 多名学员家属向上级写联名信，被截留在县一级",
+  "📈 {c}某街道夜间出现匿名涂鸦，内容已被覆盖",
+  "📈 内部数据：{c}群众主动到派出所「自首」者激增",
+  "📈 「被亲戚」家庭中开始出现冷战与抵触，干部被礼貌「请出门」",
+  "📈 {c}一名青年在朋友圈发文「想念父亲」，账号已被注销",
+  "📈 内部反馈：被审讯者中 {pct}% 承认「为了脱身随便编」",
+  "📈 数十名学员家属组团到地区上访，被分流处置",
+  "📈 {c}某社区出现夜间集会，已被强制驱散",
+  "📈 一份学员手写信流出境外，已紧急启动溯源",
+  "📈 {c}某中学学生在作文中写「我想见妈妈」，被通报批评",
+  "📈 内部反映：基层干部因「亲戚」关系出现情绪疲惫",
+  "📈 {c}某医院妇产科出生率异常下降，「原因不明」",
+  "📈 一名学员脱逃未遂，已被加重「转化训练」",
+  "📈 内部数据：{c}本周拒不配合采集者 {n} 人，已强制执行",
+  "📈 一名「转化」干部被发现私下安慰学员，已被调离",
+  "📈 {c}外迁人口环比增加 {pct}%，需评估「人员流失风险」",
+  "📈 一份匿名信件出现在地区办公室，内容暂不公开",
+  "📈 {c}某清真寺旧址被发现有「私自礼拜」痕迹",
+  "📈 多名学员家属同时失联，疑似前往北京上访",
+  "📈 {c}一社区干部被其结对的「亲戚」家庭拒绝入门",
+  "📈 内部反馈：{pct}% 的「自愿入学」承诺书被发现签名笔迹相同",
+  "📈 {c}部分塔里族青年开始集体沉默，不再参加任何活动",
+  "📈 一段教培中心内部录音流出，已紧急溯源",
+  "📈 {c}部分被拘押者在审讯中「失语」，疑为创伤反应",
+  "📈 {c}某村集体放弃种植某种农作物，疑为隐性抗议",
+  "📈 「转化」学员中精神疾病发病率上升 {pct}%",
+  "📈 {c}多个家庭主动删除全家福，「以免连累亲属」",
+  "📈 一份「学员档案」在干部群被误传，已紧急召回",
+  "📈 {c}某街道干部因压力辞职，「另行安排工作」"
+,
+  "📈 {c}部分塔里族青年开始「拒绝结婚」，「组成家庭就是连累」",
+  "📈 一名「转化」学员留下遗书后失踪，已立案",
+  "📈 {c}地下出现「家书互换网络」，已被国安部门盯梢",
+  "📈 内部反映：{c}基层警察「执行命令时神色凝重」",
+  "📈 一段{c}监控视频在境外社交媒体流传，已紧急溯源",
+  "📈 {c}部分塔里族家庭开始「主动沉默」，连家中长辈也不说话",
+  "📈 {c}多个塔里族姓氏被发现「集体改名汉化」",
+  "📈 一名干部辞职信中写「我对不起这片土地」，已被压制",
+  "📈 {c}多名学员「健康原因」被释放回家，沉默不语",
+  "📈 一份内部抽样：{c} 12% 干部存在「执行倦怠」",
+  "📈 {c}某中学开始流传「不要和邻居说话」的小纸条",
+  "📈 内部数据：{c}本月学员「自残」发生率上升 {pct}%",
+  "📈 一名「转化干部」在朋友圈发布退休决定，「不再参与任何评价」",
+  "📈 {c}部分家庭主动「分散居住」，避免「连坐」",
+  "📈 一名教培学员因「思想反复」被加期，家属再次失联",
+  "📈 {c}部分清真寺管理员主动辞职，「不忍再签字」",
+  "📈 一名塔里族青年用国语写下「我已经不是我」",
+  "📈 内部反映：{c}基层「卡片填报」错误率上升至 {pct}%",
+  "📈 {c}多名小学生在作文中写「我害怕邻居」",
+  "📈 一份手抄信件在{c}流传，内容是「不要相信任何人」",
+  "📈 {c}部分家庭主动安装「自我监控」，「比官方还严格」",
+  "📈 内部反映：{c}居民开始「集体不外出」，街面萧条",
+  "📈 一名教培「优秀学员」回家后自缢，已通报为「身体疾病」",
+  "📈 {c}部分老人开始「主动拒绝食物」，疑为隐性抗议",
+  "📈 一名干部子女在境外社交媒体写「爸爸不再是我认识的人」",
+  "📈 {c}多个手工作坊关门，「老板被请去喝茶」",
+  "📈 内部反映：{c}部分干部「私下流泪」事件增多",
+  "📈 一份「学员日记」被发现写着 100 遍「我错了」",
+  "📈 {c}部分塔里族青年「集体剃光头」，「以表决心」",
+  "📈 一名干部在饭桌上「失语」，被同事送医",
+  "📈 内部反映：{c}基层「举报疲劳」严重，举报内容「越来越荒诞」",
+  "📈 一段录音流出：教培学员齐声背诵《社会主义核心价值观》",
+  "📈 {c}多名学员家属被发现「集体改信另一种宗教」",
+  "📈 一份内部材料：{c}「干群关系」分项得分创历史新低",
+  "📈 {c}部分家庭主动焚烧旧照片，「以免追溯」"];
+
+// 措施执行后的详细通报（每个 logic 多个变体，随机挑选）
+const M_NEWS = {
+  detain: [
+    cnt=>`${C.city}新建教培中心一座（容量10），首批 ${cnt} 名「学员」已签署《自愿入学承诺书》入驻。家属被告知「短期培训、随时探视」，实际探视申请已积压 ${Math.floor(Math.random()*40+20)} 份。`,
+    cnt=>`${C.city}「职业技能教育培训中心」第 ${G.applied['m1']||1} 号开班典礼隆重举行：${cnt} 名「学员」在铁丝网前拍下集体合影。校长致辞：「同学们，未来在这里。」`,
+    cnt=>`${C.city}教培中心扩建竣工：${cnt} 名新「学员」入校，经费来自援疆资金。门卫塔比教学楼还高一层。`,
+    cnt=>`${C.city}集中化教育转化中心新一批入校：${cnt} 人。学员家属反映「电话三周打不通」，被告知「正在专心学习」。`,
+    cnt=>`${C.city}「春风工程」开班：${cnt} 名「学员」承诺「三年内不出校门」。校园配备 ${Math.floor(Math.random()*30+50)} 个监控摄像头。`
+  ],
+  intel: [
+    (cnt,fp)=>`${C.city}国安系统「夜枭」专案：通过线人通联与审讯交叉比对，本周新识别 ${cnt} 名${C.org}涉嫌成员，已建档秘密监控${fp>0?`。另有 ${fp} 名群众因「通联可疑」被错误标记`:""}。`,
+    (cnt,fp)=>`${C.city}国安局机密简报：第 ${(G.applied['m13']||1)} 号情报专案破获，识别 ${cnt} 名${C.org}骨干。${fp>0?`另有 ${fp} 名群众被「合理怀疑」`:"线人提供的关键证据已纳入档案"}。`,
+    (cnt,fp)=>`${C.city}「净网"X"号」行动：技侦+人侦+网侦三结合，本周新识别 ${cnt} 名涉${C.org}人员。${fp>0?`另有 ${fp} 名「关联人员」被纳入观察`:"行动总指挥获嘉奖"}。`,
+    (cnt,fp)=>`${C.city}国安部门突破一组${C.org}内部通讯，新增建档 ${cnt} 人。${fp>0?`另有 ${fp} 名「通联频繁者」被同步纳入`:"已秘密布控"}。`,
+    (cnt,fp)=>`内部代号「破晓"${(G.applied['m13']||1)}"号」专案完结：${cnt} 名${C.org}成员身份被确认。${fp>0?`${fp} 名「疑似关联者」也被同步标记`:"行动严格保密"}。`
+  ],
+  patrol: [
+    ()=>`${C.city}启动一级巡防：增设流动检查站 ${Math.floor(Math.random()*15+20)} 个，武警、特警、辅警三班倒，主要街道每 50 米一岗。`,
+    ()=>`${C.city}全面进入「武装巡逻常态化」：${Math.floor(Math.random()*200+300)} 名武警入驻，街面持枪执勤。游客被建议「不要在 {c} 久留」。`,
+    ()=>`${C.city}启动「净街行动」：身着防弹背心的特警以 ${Math.floor(Math.random()*10+15)} 人/组的方式巡逻，路人不敢直视。`,
+    ()=>`${C.city}全城进入「橙色警戒」：${Math.floor(Math.random()*15+20)} 个临时检查站设立，行人需出示身份证扫描通过。`,
+    ()=>`${C.city}武警支队增援：装甲车 ${Math.floor(Math.random()*5+8)} 辆、特警 ${Math.floor(Math.random()*100+200)} 人入城，进入全城高密度部署。`
+  ],
+  snitch: [
+    cnt=>`十户联防机制全面铺开：${G.families.length} 个家族被编入联防小组，相互监督打分。已收到群众举报 ${cnt} 起，其中匿名举报占七成。`,
+    cnt=>`${C.city}十户长制度上线：每 10 户推选一名「中心户长」，每周打分通报。${cnt} 起群众举报已纳入档案。`,
+    cnt=>`${C.city}「邻里守望」誓师大会召开：誓词包含「一家有事十家帮、一户有疑十户报」。本周收集线索 ${cnt} 条。`,
+    cnt=>`${C.city}基层网格化监督升级：本周收集互相举报 ${cnt} 起。一户人因「夜里关灯太早」被邻居举报。`,
+    cnt=>`${C.city}十户联防百日行动：联防小组互查互检，新增举报 ${cnt} 条，「群众参与热情高涨」。`
+  ],
+  scan: [
+    ()=>`「智慧${C.city}」大数据平台二期上线：完成全部 ${getFreePop().toLocaleString()} 名居民的「安全画像」建模，每人生成 26 项指标。所有硬性标签已可视化。`,
+    ()=>`${C.city}「人口画像 2.0」系统启用：算法自动评分，输入吃饭、走路、买菜频率等 ${Math.floor(Math.random()*30+30)} 项指标。`,
+    ()=>`${C.city}数据中心新一轮全员排查启动：DNA、虹膜、声纹与行动轨迹四合一比对。「精准识别每一个潜在威胁」。`,
+    ()=>`${C.city}启动「天眼"${(G.applied['m4']||1)}"号」行动：算法工程师驻场，对全部居民数据进行新一轮回训，准确率「显著提升」。`,
+    ()=>`${C.city}「数据维稳」攻坚战：${Math.floor(Math.random()*20+30)} 名数据分析师入驻，提取每户家庭的水电气消费曲线。`
+  ],
+  lang: [
+    cnt=>`本周国语强化班开课 ${Math.floor(Math.random()*8+5)} 个，${cnt} 名学员通过「日常用语口试」结业。最大学员 84 岁，「考试时哭着说自己学不会」。`,
+    cnt=>`${C.city}「国语百日攻坚」第 ${G.applied['tm_lang']||1} 期：${cnt} 名结业，但其中 ${Math.floor(cnt*0.3)} 人被发现 30 天后又「忘干净了」。`,
+    cnt=>`${C.city}夜校强制开课：${cnt} 人通过测试，未通过者要求继续学习直至合格。一位文盲老人被要求背诵法律条文。`,
+    cnt=>`${C.city}国语合格证发放仪式：${cnt} 人领证，「这是塔里族走向现代化的关键一步」。`,
+    cnt=>`${C.city}国语口语速成班结业：${cnt} 人通过 30 句日常用语考核，但「家里依然只能用塔里语交流」。`
+  ],
+  demolish: [
+    removed=>`「危房改造」工程：本周拆除老旧宗教建筑 ${Math.floor(Math.random()*5+2)} 处。${removed} 名群众失去固定礼拜场所，转入「居家学习」。`,
+    removed=>`${C.city}「美丽乡村」改造：拆除 ${Math.floor(Math.random()*5+3)} 座小型礼拜场所，原址改建为广场和便民服务中心。${removed} 人「彻底放下了」。`,
+    removed=>`${C.city}部分清真寺被列为「文物保护单位」，对外封闭维修，「无限期停止使用」。${removed} 人受影响。`,
+    removed=>`${C.city}「文物清查」中发现多处礼拜场所「历史价值不高」，已拆除。${removed} 人被告知「以后在家就行」。`,
+    removed=>`${C.city}城市美化项目：拆除 ${Math.floor(Math.random()*3+2)} 处「视觉污染」建筑，原址建文化广场。${removed} 名礼拜者「无家可归」。`
+  ],
+  camera: [
+    ()=>`「天网工程」${C.city}片区验收：部署人脸识别摄像头 ${Math.floor(Math.random()*2000+8000)} 个，覆盖率 98.6%。可实现「3秒内识别、5分钟内布控」。`,
+    ()=>`${C.city}「平安城市」三期完工：${Math.floor(Math.random()*3000+10000)} 个摄像头组网，AI 系统可识别「异常行为」并自动报警。`,
+    ()=>`${C.city}人脸识别系统接入公安云：所有居民入库，「一秒识别、一查到底」。一名外地游客因「面部表情异常」被拦截。`,
+    ()=>`${C.city}天网升级：新型摄像头可识别戴口罩、戴墨镜的目标，准确率「行业领先」。${Math.floor(Math.random()*50+150)} 人因「频繁现身」被列为重点。`,
+    ()=>`${C.city}智能监控全覆盖工程竣工：每隔 ${Math.floor(Math.random()*10+15)} 米一个摄像头，路灯顶部、屋檐下、垃圾桶边都有。`
+  ],
+  pair: [
+    warmed=>`「民族团结一家亲」第 ${Math.floor(Math.random()*5+3)} 轮启动：${Math.floor(Math.random()*500+1500)} 名干部入住塔里族家庭。${warmed} 户家庭「态度明显软化」、配合度提高。`,
+    warmed=>`${C.city}「干部入户同住」升级版：每户固定一名「亲戚干部」，每月住 5 天。${warmed} 户家庭「感情升温」。`,
+    warmed=>`${C.city}「认亲周」活动：干部带礼物入户，与塔里族家庭同吃同睡。${warmed} 户被评为「感情和睦」，颁发奖状。`,
+    warmed=>`${C.city}「亲戚」入住制度推开：${Math.floor(Math.random()*1000+2000)} 名公职人员对接 ${Math.floor(Math.random()*1000+2000)} 户塔里族家庭。${warmed} 户「逐步打开心扉」。`,
+    warmed=>`「结对认亲」第 ${G.applied['m8']||1} 季：${warmed} 户家庭主动「请亲戚多住几天」（其实是不敢拒绝）。`
+  ],
+  confiscate: [
+    cnt=>`文化清查行动：本周收缴宗教书籍 ${cnt*2+Math.floor(Math.random()*30)} 本、宣传光盘若干，集中销毁。${cnt} 户家庭被搜查，部分老人当场情绪激动。`,
+    cnt=>`${C.city}「净化书房」专项行动：${cnt} 户家庭的宗教书籍被收走，连古兰经的家传孤本也未能幸免。`,
+    cnt=>`${C.city}「非法出版物」清查：${cnt} 户被搜查，收缴书籍 ${cnt*3} 余本，部分将作「研究用途」。`,
+    cnt=>`${C.city}文化清洁运动：${cnt} 户被查抄，藏书集中焚烧。一位老人在火堆前下跪。`,
+    cnt=>`${C.city}「书房肃整」行动：${cnt} 户家庭的家传宗教典籍被没收，「以后想看可去图书馆借阅」（但图书馆早已下架）。`
+  ],
+  internet: [
+    removed=>`${C.city}信息管控升级：关闭翻墙工具 ${Math.floor(Math.random()*200+300)} 个，封停可疑账号 ${Math.floor(Math.random()*500+800)} 个。${removed} 名居民「主动上交」收音机和违禁内容。`,
+    removed=>`${C.city}全城短波信号干扰启动：境外电台无法收听。${removed} 户家庭的收音机被「自愿」上交。`,
+    removed=>`${C.city}「净网行动」第 ${G.applied['tm_radio']||1} 期：${Math.floor(Math.random()*1000+2000)} 部手机被检查，${removed} 部因「内容违规」被没收。`,
+    removed=>`${C.city}通讯检查中心启用：每户每月接受 ${Math.floor(Math.random()*2+1)} 次手机扫描。${removed} 人因「敏感内容」被纳入名单。`,
+    removed=>`${C.city}「清朗网络」行动：${removed} 部手机被收缴，部分屏幕已被砸碎以「彻底销毁数据」。`
+  ],
+  target_sta: [
+    (cnt,inn)=>`凌晨突击行动：${C.city}公安机关一举抓获 ${cnt} 名【已识别】的${C.org}骨干分子${inn>0?`，另有 ${inn} 名相关人员被带走「协助调查」`:""}。行动代号「破晓」。`,
+    (cnt,inn)=>`${C.city}国安部门「断链行动」：精准抓捕 ${cnt} 名${C.org}成员${inn>0?`，连带 ${inn} 名「关联人员」`:""}。行动从凌晨 3 点持续到 6 点。`,
+    (cnt,inn)=>`${C.city}「斩首行动」第 ${G.applied['m11']||1} 号：${cnt} 名${C.org}骨干被同步抓捕${inn>0?`，${inn} 名疑似同伙被带走`:""}。`,
+    (cnt,inn)=>`${C.city}多警种联合突袭：${cnt} 名${C.org}成员落网${inn>0?`，${inn} 名「家属和邻居」被带走配合调查`:""}。家属事后才被告知。`,
+    (cnt,inn)=>`代号「猎隼」专项行动收网：${cnt} 名${C.org}涉嫌成员被精准抓捕${inn>0?`，另有 ${inn} 人「列席调查」`:""}。一户人家全家被带走，孩子留在邻居家。`
+  ],
+  convert: [
+    cnt=>`思想转化攻坚：${cnt} 名${C.org}成员在长达 ${Math.floor(Math.random()*10+5)} 小时的「谈心」后签署《脱离声明》。声明视频将作为教育材料。`,
+    cnt=>`${C.city}转化班结业典礼：${cnt} 名学员当众诵读悔过书，「过去的我已经死了」。`,
+    cnt=>`${C.city}「凤凰涅槃」转化项目：${cnt} 人脱离${C.org}，被安排到工厂工作，每天写思想汇报。`,
+    cnt=>`${C.city}思想攻坚组：${cnt} 名学员经过 ${Math.floor(Math.random()*30+30)} 天的「再教育」，承认「曾经被毒害」。`,
+    cnt=>`${C.city}「重生计划」毕业仪式：${cnt} 人撕毁旧日证件，宣誓「与过去彻底决裂」。脸上的表情「难以形容」。`
+  ],
+  goodwill: [
+    lifted=>`${C.player}同志带队下基层：走访困难家庭 ${Math.floor(Math.random()*30+50)} 户，发放慰问金 ${Math.floor(Math.random()*5+5)} 万元。${lifted} 名群众反映「日子有点盼头了」，民怨指数明显回落。`,
+    lifted=>`${C.city}「暖心工程」启动：${Math.floor(Math.random()*100+200)} 户家庭收到米面油，老人收到棉衣。${lifted} 人「眼眶湿润」。`,
+    lifted=>`${C.city}基层减压周：${C.player}同志深入村组，听取群众意见。${lifted} 名群众感到「政府还是讲道理的」。`,
+    lifted=>`${C.city}春节慰问行动：${Math.floor(Math.random()*50+100)} 户困难家庭收到补助。${lifted} 人「态度软化」。`,
+    lifted=>`${C.city}「百姓夜话」活动：${C.player}同志与群众围坐谈心。${lifted} 人对未来「重新有了期待」。`
+  ]
+};
+
+function pickNews(arr,...args){
+  const fn=arr[Math.floor(Math.random()*arr.length)];
+  return fn(...args);
+}
+
+// 袭击后的次日通报
+const ATTACK_FOLLOW=[
+  "案件已定性为「有组织、有预谋的暴力恐怖事件」",
+  "上级工作组连夜赶赴{c}指导处置",
+  "嫌疑人 {a} 及其全部直系亲属已被控制",
+  "公安机关在嫌疑人住所搜出「非法宗教材料」若干",
+  "事发街道 {n} 户居民被列入新一轮重点排查名单",
+  "{c}全城进入「战时状态」，所有公共场所暂停营业 72 小时",
+  "嫌疑人 {a} 的家族已被全部带走「协助调查」",
+  "{c}全体干警取消休假，进入备战状态",
+  "上级宣布：{c}进入为期 {n} 天的「严打行动」期",
+  "嫌疑人 {a} 的同学、邻居共 {n} 人被带走问话",
+  "上级要求{c}{n} 小时内查清嫌疑人动机和组织背景",
+  "案发地周边 {n} 条街道连夜清查，{n} 人被带走",
+  "嫌疑人 {a} 的手机通话记录已移交国安机关",
+  "央视《新闻联播》报道事件，措辞「极其严厉」",
+  "全国各地武警支队向{c}增援",
+  "{c}所有清真寺暂停活动，「待重新评估」",
+  "嫌疑人 {a} 的微信群成员全部被审查",
+  "上级要求所有{c}干部限时报送「危险分子」线索",
+  "{c}各社区紧急召开全员大会，「重申纪律」",
+  "{c}进入 {n} 级反恐响应，街面武装巡逻翻倍",
+  "嫌疑人 {a} 经审讯承认「受境外指使」",
+  "{c}多座桥梁、车站增设武装岗哨",
+  "上级派遣专家组连夜抵{c}「分析案情」",
+  "嫌疑人 {a} 的所有银行账户已被冻结",
+  "{c}全城开展为期一周的「清网行动」",
+  "现场幸存者 {n} 人接受心理疏导，部分人已入院",
+  "嫌疑人 {a} 的过往照片被广泛传阅，作为「警示」",
+  "一段嫌疑人 {a} 的视频被流出，内容涉及「煽动性言论」",
+  "{c}市委连夜召开扩大会议，「研判形势」",
+  "上级要求各部门 {n} 天内拿出「整改方案」"
+];
+
+// 随机事件（每周低概率触发）
+const RANDOM_EVENTS=[
+  {p:0.04,name:"上级嘉奖",fn:()=>{G.performance=Math.min(100,G.performance+5);addNews(`🎲 【意外之喜】上级电报到达：嘉奖${C.player}同志近期工作。+5 政绩。`);}},
+  {p:0.03,name:"突发资金",fn:()=>{G.budget=Math.min(400,G.budget+30);addNews(`🎲 【意外之喜】中央拨付应急资金：+30 经费。${C.player}同志在签收单上「郑重签字」。`);}},
+  {p:0.04,name:"匿名举报",fn:()=>{G.resentment=Math.min(100,G.resentment+3);G.performance=Math.max(0,G.performance-5);addNews(`🎲 【舆情警报】一份关于${C.city}的匿名举报材料在网上流传，已组织辟谣。-5 政绩、+3 民怨。`);}},
+  {p:0.03,name:"协警伤亡",fn:()=>{G.performance=Math.max(0,G.performance-3);G.casualties+=Math.floor(Math.random()*3+1);addNews(`🎲 【沉痛通报】${C.city}一名协警在执勤中突发疾病牺牲，已被追认为「烈士」。`);}},
+  {p:0.03,name:"基层叛逃",fn:()=>{G.resentment=Math.min(100,G.resentment+5);addNews(`🎲 【内部事件】${C.city}一名基层干部辞职信流出，含「再也不忍」字样。已紧急压制。+5 民怨。`);}},
+  {p:0.025,name:"模范户",fn:()=>{G.performance=Math.min(100,G.performance+4);G.resentment=Math.max(0,G.resentment-3);addNews(`🎲 【正面典型】${C.city}发现一户「模范配合」家庭，主动上交家中所有「敏感物品」。+4 政绩、-3 民怨。`);}},
+  {p:0.02,name:"上访人群",fn:()=>{G.resentment=Math.min(100,G.resentment+8);G.performance=Math.max(0,G.performance-3);addNews(`🎲 【突发情况】${C.city}十余名学员家属在区政府门前静坐，已被劝返。+8 民怨、-3 政绩。`);}},
+  {p:0.025,name:"内部表彰",fn:()=>{G.budget=Math.min(400,G.budget+15);G.performance=Math.min(100,G.performance+3);addNews(`🎲 【上级肯定】${C.city}维稳经验入选「年度典型案例」，奖励经费 +15。`);}},
+  {p:0.02,name:"境外报道",fn:()=>{G.resentment=Math.min(100,G.resentment+6);addNews(`🎲 【外部压力】境外某媒体发布${C.city}「深度调查」报道，配图触目惊心。已要求各部门「保持定力」。+6 民怨。`);}},
+  {p:0.025,name:"线人立功",fn:()=>{G.intelBoost=Math.min(0.5,G.intelBoost+0.05);addNews(`🎲 【秘密战线】${C.city}一名线人提供关键情报，已秘密嘉奖。情报精度 +5%。`);}},
+  {p:0.02,name:"大学生实习",fn:()=>{G.ap=Math.min(G.maxAp,G.ap+1);addNews(`🎲 【意外之喜】${Math.floor(Math.random()*10+10)} 名内地高校实习生抵${C.city}支援，本周行动力 +1。`);}},
+  {p:0.02,name:"暴风雨",fn:()=>{G.patrolWeeks=Math.max(0,G.patrolWeeks-2);addNews(`🎲 【天气因素】${C.city}遭遇沙尘暴，户外巡逻效果大幅下降。`);}},
+  {p:0.015,name:"高级干部视察",fn:()=>{G.performance=Math.min(100,G.performance+8);G.budget=Math.max(0,G.budget-10);addNews(`🎲 【上级视察】${C.country}一位副部级领导抵${C.city}调研。陪同接待开支 -10 经费，但获 +8 政绩。${C.player}同志全程「神情凝重」。`);}},
+  {p:0.025,name:"突袭检查",fn:()=>{G.ap=Math.max(0,G.ap-2);G.performance=Math.min(100,G.performance+2);addNews(`🎲 【飞行检查】上级督查组未提前通知抵达${C.city}，要求即时调取数据。本周行动力 -2、政绩 +2。`);}},
+  {p:0.02,name:"学员脱逃",fn:()=>{G.resentment=Math.min(100,G.resentment+5);G.performance=Math.max(0,G.performance-4);addNews(`🎲 【教培事故】${C.city}教培中心一名学员「失踪」，正在追查。家属拒绝相信「他自己跑了」的说法。+5 民怨、-4 政绩。`);}},
+  {p:0.025,name:"模范教培中心",fn:()=>{G.performance=Math.min(100,G.performance+5);G.budget=Math.min(400,G.budget+10);addNews(`🎲 【上级表彰】${C.city}一座教培中心被评为「示范单位」，奖金 10 万元已到账。+5 政绩、+10 经费。`);}},
+  {p:0.025,name:"油价上涨",fn:()=>{G.budget=Math.max(0,G.budget-12);addNews(`🎲 【经费压力】国际油价大幅上涨，${C.city}维稳车辆和巡逻成本激增。-12 经费。`);}},
+  {p:0.02,name:"干部受贿",fn:()=>{G.performance=Math.max(0,G.performance-7);G.budget=Math.max(0,G.budget-8);addNews(`🎲 【纪委通报】${C.city}一名科级干部因「违反八项规定」被调查，群众议论纷纷。-7 政绩、-8 经费。`);}},
+  {p:0.025,name:"群众送锦旗",fn:()=>{G.performance=Math.min(100,G.performance+3);G.resentment=Math.max(0,G.resentment-3);addNews(`🎲 【正面新闻】${C.city}一户群众送来锦旗：「为人民服务、心系百姓」。${C.player}同志合影留念。+3 政绩、-3 民怨。`);}},
+  {p:0.02,name:"节日聚集",fn:()=>{G.resentment=Math.min(100,G.resentment+3);addNews(`🎲 【节日警报】${C.city}迎来传统节日，部分塔里族家庭聚集庆祝，已被「重点关照」。+3 民怨。`);}},
+  {p:0.025,name:"破获诈骗",fn:()=>{G.performance=Math.min(100,G.performance+4);G.budget=Math.min(400,G.budget+8);addNews(`🎲 【警方战果】${C.city}破获一起电信诈骗团伙，追回赃款，群众拍手称快。+4 政绩、+8 经费。`);}},
+  {p:0.02,name:"心理危机",fn:()=>{G.resentment=Math.min(100,G.resentment+6);addNews(`🎲 【内部事件】${C.city}多名教培学员出现「集体心理异常」，已紧急隔离观察。+6 民怨。`);}},
+  {p:0.02,name:"边境异动",fn:()=>{G.ap=Math.min(G.maxAp,G.ap+1);G.budget=Math.max(0,G.budget-12);addNews(`🎲 【临时调度】邻国边境出现异常人员流动，${C.city}抽调警力支援。本周 +1 行动力，但 -12 经费。`);}},
+  {p:0.018,name:"投诚自首",fn:()=>{
+    const unknownSta=G.people.filter(p=>!p.detained&&p.tags.has("t_sta")&&!p.staKnown);
+    if(unknownSta.length>0){
+      const n=Math.min(3,1+Math.floor(Math.random()*3),unknownSta.length);
+      for(let i=0;i<n;i++){unknownSta[i].staKnown=true;}
+      addNews(`🎲 【秘密战线】${C.city}一名塔里族青年向国安「主动投诚」，举报 ${n} 名${C.org}成员。已秘密建档。`);
+    } else {
+      addNews(`🎲 【秘密战线】${C.city}一名塔里族青年向国安「主动投诚」，但其举报内容未发现新${C.org}成员。`);
+    }
+  }},
+  {p:0.018,name:"宗教事务局通报",fn:()=>{G.performance=Math.min(100,G.performance+2);G.resentment=Math.min(100,G.resentment+2);addNews(`🎲 【官方通报】${C.country}宗教事务局发布${C.city}「依法治理」典型案例。+2 政绩、+2 民怨。`);}},
+  {p:0.015,name:"援疆专家组",fn:()=>{G.intelBoost=Math.min(0.5,G.intelBoost+0.04);G.performance=Math.min(100,G.performance+3);addNews(`🎲 【人才支援】内地一批维稳专家抵${C.city}指导工作。情报精度 +4%、政绩 +3。`);}}
+];
+
+
+// ══════════════════════════════════════════════════════════
+//  内容扩充包 v7 —— 新闻话术 ×10、随机事件大幅增多
+//  （追加式注入，不改动原有字面量；放在 RANDOM_EVENTS 定义之后）
+// ══════════════════════════════════════════════════════════
+
+// ── NEWS_G 官方喜报扩充 ──
+NEWS_G.push(
+  "{c}各族干部带着猪肉走进塔里族家庭，「送年货、送温暖」，喜迎春节",
+  "{c}「民族团结年夜饭」举办：各族群众同桌共饮，干部逐一「敬酒」，气氛热烈",
+  "{c}塔里族家家户户贴上春联、挂起红灯笼，「中华传统节日深入人心」",
+  "{c}「靓丽工程」成果展：塔里族妇女摘下面纱，「展现现代女性的自信与美丽」",
+  "{c}塔里族青年集体剪去胡须，「告别陈规旧俗，拥抱现代生活」",
+  "{c}举办「最美笑脸」摄影展，参展塔里族女性「人人面容清晰、笑容灿烂」",
+  "{c}「现代文明生活」宣讲会：劝导群众「该吃吃、该喝喝，不被极端思想束缚」",
+  "{c}养殖示范基地落成，「带动各族群众发展生猪养殖，增收致富」",
+  "塔里族学生在学校食堂「愉快地」品尝了「营养午餐」，「膳食结构更均衡」",
+  "{c}「移风易俗」典型：一户塔里族家庭主动办起「有酒有肉」的婚宴",
+  "{c}干部入户「同吃同住」满 {n} 天，「与塔里族亲戚结下深厚情谊」",
+  "{c}「石榴籽工程」成果展开幕：各族群众「像石榴籽一样紧抱在一起」",
+  "{c}举办「民族团结进步月」启动仪式，{n} 个单位签订共建协议",
+  "{c}一名塔里族青年光荣加入协警队伍，「立志守护家乡安宁」",
+  "{c}「最美护边员」事迹报告会召开，台下听众「无不动容」",
+  "{c}双语教师招聘会火爆，「报名人数远超岗位」",
+  "{c}群众自发为执勤民警送来酸奶和馕，「军民鱼水情深」",
+  "{c}「感党恩、跟党走」主题画展开展，塔里族儿童作品占半数",
+  "{c}举办「中华经典诵读大赛」，{n} 名选手同台竞技",
+  "塔里族老党员义务宣讲党的政策已坚持 {n} 年，「初心不改」",
+  "{c}「访惠聚」工作队为村民修通最后一公里水泥路",
+  "{c}首个「铸牢中华民族共同体意识」教育基地揭牌",
+  "一名教培「毕业生」回乡创业开起电商，「带动 {n} 人就业」",
+  "{c}举办万人马拉松「民族团结跑」，沿途彩旗招展",
+  "{c}「双语夜校」学员自编自演小品《我的新生活》",
+  "{c}群众满意度第三方测评结果公布：高达 {n}.6%",
+  "{c}一名塔里族绣娘的作品被选为「对外交流礼品」",
+  "{c}「平安建设」考核连续 {n} 年位居全区前列",
+  "{c}举办「警营开放日」，群众参观后「纷纷点赞」",
+  "塔里族大学生暑期返乡，自愿担任「政策宣讲志愿者」",
+  "{c}「民族团结大食堂」开张，各族群众「同吃一锅饭」",
+  "{c}举办「我向党旗敬个礼」少儿才艺展演",
+  "一份《{c}社会治理蓝皮书》正式出版，「数据翔实」",
+  "{c}群众主动拆除自家院墙改建「连心广场」",
+  "{c}「红石榴」志愿服务队成立，首批 {n} 名志愿者上岗",
+  "塔里族婚礼现场升起国旗，「这是新风尚」",
+  "{c}举办「national语大家说」街头快闪活动，气氛热烈",
+  "{c}「民生十件实事」全部办结，「群众交口称赞」",
+  "一名塔里族老人坚持每天给社区扫地 {n} 年，被评为「身边好人」",
+  "{c}「感恩连」群众文艺队登上地区春晚舞台",
+  "{c}举办「书香润边疆」全民阅读月，发放图书 {n} 册（均经审定）",
+  "{c}「最美庭院」评选揭晓，获奖家庭「窗明几净、思想端正」",
+  "塔里族村民集体观看爱国主义影片后「久久不愿离场」",
+  "{c}「民族团结一家亲」结对干部为「亲戚」操办了婚事",
+  "{c}电视台推出方言版《党的政策好》，「群众喜闻乐见」",
+  "{c}一所学校组织学生给戍边战士写信，「字字真情」",
+  "{c}「就业援助月」帮助 {n} 名群众实现「家门口就业」",
+  "塔里族青年志愿者赴内地参观,归来后「思想觉悟大幅提升」",
+  "{c}举办「最美家庭」颁奖礼，模范户代表「热泪盈眶」发言",
+  "{c}「乡村大喇叭」每天定时播放政策与红歌，「覆盖无死角」",
+  "一名曾被「帮教」的青年如今成为致富带头人，「现身说法」",
+  "{c}「民族团结一家亲」联谊会上，干部与「亲戚」共跳广场舞",
+  "{c}举办「中华民族一家亲·同心共筑中国梦」文艺汇演",
+  "{c}「平安卫士」表彰大会召开，{n} 名一线干警受表彰",
+  "塔里族妇女走进「卫星工厂」就业，「实现了人生价值」",
+  "{c}「感党恩主题党日」活动覆盖全部基层支部",
+  "{c}一名群众拾金不昧，「体现了文明新风尚」",
+  "{c}「双语广播体操」在中小学全面推广，「强身又强心」",
+  "{c}举办「红色文艺轻骑兵」下乡巡演，场场爆满",
+  "{c}「四好农村路」建成通车，「打通了发展动脉」",
+  "塔里族阿妈学会用国语唱《没有共产党就没有新中国》",
+  "{c}「学习强国」学习积分全区领先，「学习氛围浓厚」",
+  "{c}举办「民族团结知识竞赛」，决赛现场座无虚席",
+  "{c}「访惠聚」队员自掏腰包为困难学生买文具",
+  "一名塔里族退休教师义务开办「国语辅导班」，分文不取",
+  "{c}「平安家庭」创建率达 {pct}%，「夜不闭户成为现实」",
+  "{c}举办「我和国旗合个影」全民摄影活动",
+  "塔里族小伙参军入伍，全村敲锣打鼓欢送",
+  "{c}「美丽乡村」示范点游客如织，「乡村振兴见成效」",
+  "{c}「最美护路员」事迹被改编成快板在巴扎传唱",
+  "{c}举办「感恩奋进新时代」主题党课，党员「深受教育」",
+  "一名教培学员家属送来感谢信：「政府帮我们家走上正路」",
+  "{c}「双拥共建」结对慰问活动温暖人心",
+  "{c}「乡村春晚」节目全部「弘扬正能量」，无一例外",
+  "塔里族绣品「飞针走线绣党恩」系列受到上级肯定",
+  "{c}「民族团结进步示范社区」挂牌，群众「倍感光荣」",
+  "{c}举办「移风易俗」主题宣讲，「陈规陋习无处遁形」",
+  "一名塔里族青年在演讲中说「是党给了我第二次生命」",
+  "{c}「红色研学」线路开通，组织学生「重走奋进路」",
+  "{c}「邻里节」上各族群众端出拿手菜，「其乐融融」",
+  "{c}「最美基层民警」当选「年度感动人物」",
+  "塔里族农民学会大棚种植技术，「日子越过越红火」",
+  "{c}举办「国家通用语言文字大赛」，{n} 校同台竞技",
+  "{c}「访惠聚」工作队帮村民销售农产品 {n} 万元",
+  "一名群众主动上交了家中「祖传的」可疑书籍，「思想轻松了」",
+  "{c}「文明新风进万家」活动签约「移风易俗承诺书」 {n} 份",
+  "{c}举办「中华优秀传统文化进校园」展演，剔除了「不良元素」",
+  "塔里族姑娘走上电视相亲节目，「展现民族新风貌」",
+  "{c}「平安志愿者」夜间巡逻已成常态，「群众睡得更踏实」",
+  "{c}「感恩教育」走进田间地头，群众「边劳动边学习」",
+  "一名「转化」学员考取了驾照，「重新融入社会」",
+  "{c}举办「红歌嘹亮颂党恩」万人合唱，刷新纪录",
+  "{c}「双语政策明白人」队伍壮大到 {n} 人",
+  "{c}「民族团结一家亲」干部为结对家庭孩子辅导功课",
+  "塔里族村民自发组建「护村队」，「守护来之不易的安宁」",
+  "{c}举办「我是中国人」主题班会，孩子们「争相发言」",
+  "{c}「就业第一书记」帮助 {n} 名青年走出「思想误区」、走上岗位",
+  "{c}「乡村治理积分制」推行顺利，「群众抢着做好事」",
+  "一份《{c}民族团结故事集》出版，收录「真人真事」 {n} 篇",
+  "{c}举办「童心向党」绘画比赛，获奖作品在政务大厅展出",
+  "塔里族老人主动报名参加「国语扫盲班」，「活到老学到老」",
+  "{c}「访惠聚」队员与村民同摘棉花，「汗水里有真情」",
+  "{c}举办「最美退役军人」事迹宣讲，「传递榜样力量」",
+  "{c}「平安巴扎」创建成果显著，「商户群众双满意」",
+  "一名塔里族青年从教培中心「学成归来」，开起了汽修店",
+  "{c}「文化润疆」工程惠及 {n} 万群众，「精神面貌焕然一新」",
+  "{c}举办「民族团结杯」足球赛，各族青年「球场上是兄弟」",
+  "{c}「红色物业」进驻小区，「服务到家、思想到位」",
+  "塔里族母亲送子参军，「把儿子交给国家最放心」",
+  "{c}「感恩奋进」主题文艺创作征集到作品 {n} 件",
+  "{c}「双语童谣传唱活动」走进幼儿园，「童声里满是感恩」",
+  "一名「帮教对象」主动揭发他人，「立功受奖、重获新生」",
+  "{c}「民族团结进步创建」实现「七进」全覆盖",
+  "{c}举办「永远跟党走」群众性主题宣传教育活动",
+  "塔里族绣娘成立合作社，「绣出了幸福新生活」",
+  "{c}「警民议事会」每月一开，「小事不出社区」",
+  "{c}「最美教培教师」当选地区「师德标兵」",
+  "一名群众在巴扎主动用国语招揽生意，「生意更红火了」",
+  "{c}举办「中华民族共同体」知识进万家活动",
+  "{c}「平安建设」满意度连续 {n} 个季度「只升不降」",
+  "塔里族孩子在作文里写「长大要当解放军保卫祖国」",
+  "{c}「访惠聚」工作队帮助 {n} 户家庭通上自来水",
+  "{c}举办「我们的节日·中秋」联欢，各族群众「同吃月饼」",
+  "一名教培「优秀学员」被聘为「政策义务宣讲员」",
+  "{c}「红石榴驿站」为务工群众提供「贴心服务」",
+  "{c}「双语春联」送进万家，「家家户户贴上国语祝福」",
+  "塔里族村民集体到县城观看升旗仪式，「激动得流泪」",
+  "{c}「最美庭院·最美阳台」评选引发参与热潮",
+  "{c}举办「乡村振兴擂台赛」，各社区「比着干、抢着上」"
+);
+
+
+// ── NEWS_B 内部通报 / 上级压力 扩充 ──
+NEWS_B.push(
+  "上级机要：{c}「指标完成进度滞后」，要求「倒排工期、挂图作战」",
+  "中央巡视组反馈：{c}「重痕迹轻实效」问题突出，需立行立改",
+  "上级通报：{c}某干部「在朋友圈点赞不当内容」，已诫勉谈话",
+  "境外某智库发布{c}「卫星影像分析」，外交部斥为「别有用心」",
+  "上级电令：{c}「敏感节点临近，不得有丝毫松懈」",
+  "内部审计：{c}部分项目「经费去向说明不清」，已立案核查",
+  "上级要求{c}「{n} 小时内核清辖区流动人口底数」",
+  "一份{c}「内部纪要」疑似外泄，保密部门已介入调查",
+  "上级督查：{c}「群众工作浮于表面、台账多于实绩」",
+  "境外维权组织将{c}列入「年度报告」，被点名 {n} 次",
+  "上级提示：警惕境外利用「学术交流」名义对{c}进行渗透",
+  "{c}某社区「人员管控出现漏洞」，已被上级约谈",
+  "内部数据：{c}「重点人员」底数与上报数字「存在出入」",
+  "上级转发举报信：反映{c}「个别干部作风粗暴」",
+  "中央保密办通报：{c}「涉密载体管理存在隐患」",
+  "{c}某基层站所「值班记录造假」，相关人员被处理",
+  "上级要求{c}「举一反三，彻查同类问题」",
+  "一名境外博主发布{c}「探访视频」，已被技术处置",
+  "上级警告：{c}「不得以'稳定'之名掩盖矛盾」",
+  "内部通报：{c}「转化质量」抽检不合格率为 {pct}%",
+  "上级督导组将「四不两直」暗访{c}，要求「不打招呼」",
+  "{c}「信访积案化解」进度被上级点名「明显偏慢」",
+  "境外某议会通过涉{c}「决议」，已表示「强烈谴责」",
+  "上级机要电报：「{c}的事，一件也不能出」",
+  "{c}某单位「填报数据前后矛盾」，被要求作出书面说明",
+  "中央纪委通报{c}某案件，「以案为鉴、以案促改」",
+  "上级要求{c}「严防个别干部'同情心'影响政策执行」",
+  "一份{c}「内部统计表」被发现「数据打架」，已退回重报",
+  "上级提示：{c}近期境外「关注度上升」，需「严密防范」",
+  "{c}「重点单位」安防演练「暴露出多处短板」",
+  "上级通报：{c}某干部「私自留存敏感影像」，已被停职",
+  "境外某记者「化装潜入」{c}，已在卡口被识别拦截",
+  "上级要求{c}「在 {n} 天内完成全部档案的'回头看'」",
+  "{c}「网格化管理」被指「层层加码、不堪重负」",
+  "中央督查：{c}「重投入轻成效、重数量轻质量」",
+  "上级警告：{c}「不得使用上级明令禁止的提法和称谓」",
+  "{c}某教培中心「管理松懈」，被上级「严肃批评」",
+  "一份{c}「家属来信」被截留，已上报「妥善处置」",
+  "上级要求{c}「建立健全'容错纠错'机制」（对内的版本）",
+  "境外某高校发布{c}「研究论文」，已组织专家「逐条驳斥」",
+  "上级机要：{c}「严防节日期间发生'非正常事件'」",
+  "{c}「重点人员动态管控」被发现「存在盲区」",
+  "中央巡察:{c}「政绩工程、形象工程」苗头需警惕",
+  "上级要求{c}「确保'两个绝对安全'，万无一失」",
+  "{c}某干部「酒后失言」被群众举报，已被处理",
+  "一份{c}「会议录音」在小范围流传，正在「溯源问责」",
+  "上级督导：{c}「数据治理'最后一公里'仍未打通」",
+  "境外社交媒体出现{c}「学员名单」，已紧急核实溯源",
+  "上级要求{c}「严格落实保密纪律，谁泄露谁负责」",
+  "{c}「反恐演练」被上级评价「形式大于内容」",
+  "中央要求{c}「整改不彻底的'回头再看'」",
+  "上级通报：{c}「群众满意度回访'存在水分'」",
+  "{c}某社区「重点户走访记录'明显雷同'」",
+  "上级警告：{c}「严防境外资金通过'公益'名义流入」",
+  "一份{c}「内部讲话稿」被指「提法不准」，已要求收回",
+  "上级要求{c}「全面排查'两面人、两面派'」",
+  "{c}「重点场所'人脸核验'设备故障率偏高」，已通报",
+  "境外某「人权律师」声称代理{c}案件，已被「依法处置」",
+  "上级机要电报：「{c}稳则全局稳，{c}乱则全局被动」",
+  "{c}某干部「对上级指示'打折扣、搞变通'」，被批评",
+  "中央督查组:{c}「'指尖上的形式主义'依然存在」",
+  "上级要求{c}「{n} 天内报送'重点人员'最新研判」",
+  "{c}「档案数字化」进度「严重滞后于序时要求」",
+  "一份{c}「内部简报」被发现「夸大成绩」，已责令更正",
+  "上级警告：{c}「严防个别群体'抱团取暖、消极对抗'」",
+  "{c}「视频监控'回放调取'响应超时」，被上级点名",
+  "境外某基金会试图「资助」{c}「调研项目」，已被拒之门外",
+  "上级要求{c}「确保涉稳信息'日报告、零报告'」",
+  "{c}某乡镇「'三比一看'考核'垫底'」，被约谈",
+  "中央要求{c}「严防'低级红、高级黑'」",
+  "上级通报：{c}部分干部「'躺平'思想抬头」，需「严肃整顿」",
+  "{c}「重点人员'人户分离'底数不清」，被要求重新核查",
+  "一份{c}「测评问卷」被指「诱导性提问」，已废止",
+  "上级机要：「{c}的每一个数字，都要经得起历史检验」",
+  "{c}「网络舆情'处置不及时'」，被上级「严肃问责」",
+  "境外某机构发布{c}「指数」，将其「排名靠后」",
+  "上级要求{c}「严格区分'两类不同性质的矛盾'」",
+  "{c}「重点物资'登记台账'与库存'对不上'」，已核查",
+  "中央督导:{c}「'数字脱贫、数字维稳'倾向需警惕」",
+  "上级警告：{c}「严防个别干部'阳奉阴违、口是心非'」",
+  "{c}某教培中心「'探视制度'落实不到位」，被通报",
+  "一份{c}「群众联名信」辗转送达上级，「已批转核查」",
+  "上级要求{c}「{n} 小时内核清'失联人员'去向」",
+  "{c}「'雪亮工程'部分点位'失能失管'」，被要求整改",
+  "中央巡视:{c}「'重打击轻预防、重管控轻服务'」",
+  "上级通报：{c}「'明白卡'入户率虚高，存在'代签'」",
+  "{c}某干部「'对群众态度生硬'」，被群众投诉",
+  "境外某「流亡组织」发布{c}「呼吁书」，已「全网拦截」",
+  "上级机要电报：「{c}'宁可十防九空，不可一次放空'」",
+  "{c}「'重点人员'外出审批'层层卡壳'」，群众抱怨",
+  "中央要求{c}「严防'为了稳定而制造不稳定'」",
+  "上级警告：{c}「严防'指标异化'扭曲基层行为」"
+);
+
+
+// ── NEWS_A 袭击特急通报 扩充 ──
+NEWS_A.push(
+  "⚠️【特急】{c}城东巴扎拐角发生持械突袭，{n} 人伤亡，现场一度混乱",
+  "⚠️【特急】{c}一处加水站遭驾车冲撞，{n} 人伤亡，肇事车辆当场起火",
+  "⚠️【特急】{c}夜班公交终点站发生砍杀，{n} 名乘客伤亡",
+  "⚠️【特急】{c}一处建材市场凌晨爆炸，{n} 人伤亡，多间门面受损",
+  "⚠️【特急】{c}县医院急诊楼前发生持刀袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一处快递分拣点遭纵火，{n} 名分拣员伤亡",
+  "⚠️【特急】{c}城南环岛发生骑行袭击，{n} 名行人伤亡",
+  "⚠️【特急】{c}一处牲畜交易市场发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}晚高峰天桥下发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一处自助加油站爆燃，{n} 人伤亡，浓烟数公里可见",
+  "⚠️【特急】{c}社区卫生服务站遭武装冲击，{n} 名医护伤亡",
+  "⚠️【特急】{c}一处地下停车场发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}城郊一处晾晒场发生持械冲突，{n} 名工人遇害",
+  "⚠️【特急】{c}一座人行天桥被发现爆炸装置，处置中 {n} 人伤亡",
+  "⚠️【特急】{c}早市卸货区发生砍杀事件，{n} 人伤亡",
+  "⚠️【特急】{c}一处通信基站塔下发生爆炸，{n} 人伤亡，全城断网数小时",
+  "⚠️【特急】{c}一处客运枢纽安检口外发生冲撞，{n} 人伤亡",
+  "⚠️【特急】{c}一所职业学校门口发生持刀袭击，{n} 名师生伤亡",
+  "⚠️【特急】{c}一处粮油批发市场凌晨爆燃，{n} 人伤亡",
+  "⚠️【特急】{c}城西一处巡逻交接点遭伏击，{n} 名干警伤亡",
+  "⚠️【特急】{c}一处便民警务站遭驾车冲撞，{n} 人伤亡",
+  "⚠️【特急】{c}一处露天烧烤夜市发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一座灌溉泵站遭破坏性爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处早教中心门外发生袭击，{n} 名家长伤亡",
+  "⚠️【特急】{c}一辆通勤班车在路口被引爆，{n} 名乘客伤亡",
+  "⚠️【特急】{c}城北物流园发生连环爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处水厂取水口被发现可疑装置，处置时 {n} 人伤亡",
+  "⚠️【特急】{c}一处节庆灯会现场发生踩踏与袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一处政务服务大厅排队区发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一座输气管站遭爆破，{n} 人伤亡，周边紧急疏散",
+  "⚠️【特急】{c}凌晨一处出租屋自制装置爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处早餐街发生骑摩托砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一所幼儿园接送区发生持械袭击，{n} 名家长遇害",
+  "⚠️【特急】{c}一处广场喷泉旁发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处汽车客运站候车厅发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一座变电所遭爆破，{n} 人伤亡，半城停电",
+  "⚠️【特急】{c}一处夜市排档区发生纵火，{n} 人伤亡",
+  "⚠️【特急】{c}城东检查站遭遇连续两波冲击，{n} 名干警伤亡",
+  "⚠️【特急】{c}一处晨练广场发生持刀袭击，{n} 名老人伤亡",
+  "⚠️【特急】{c}一处加油站储油区爆燃，{n} 人伤亡，火光冲天",
+  "⚠️【特急】{c}一处批发城卷帘门后查获爆炸物，处置 {n} 人伤亡",
+  "⚠️【特急】{c}一座引水渠闸口遭爆破，{n} 人伤亡",
+  "⚠️【特急】{c}一处大型商超扶梯口发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}城南一处巡防岗亭被引爆，{n} 名辅警伤亡",
+  "⚠️【特急】{c}一处长途客运站行李区发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处社区活动中心发生持械冲突，{n} 人伤亡",
+  "⚠️【特急】{c}一处临时安置点发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一座供水加压站遭袭，{n} 人伤亡，多个小区停水",
+  "⚠️【特急】{c}一处早市禽蛋区发生骑行砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一处通宵网吧门口发生袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一处殡仪服务点发生持械冲突，{n} 人伤亡",
+  "⚠️【特急】{c}城西一处武装押运途中遭伏击，{n} 人伤亡",
+  "⚠️【特急】{c}一处节日庙会人群中发生爆炸，{n} 人伤亡",
+  "⚠️【特急】{c}一处学生宿舍楼下发生砍杀，{n} 名学生伤亡",
+  "⚠️【特急】{c}一处油罐区凌晨发生爆燃，{n} 人伤亡",
+  "⚠️【特急】{c}一处政府家属院门口发生袭击，{n} 人伤亡",
+  "⚠️【特急】{c}一处客流密集的过街通道发生砍杀，{n} 人伤亡",
+  "⚠️【特急】{c}一座基层派出所院内发生爆炸，{n} 名干警牺牲",
+  "⚠️【特急】{c}一处大型集市清晨发生连续袭击，{n} 人伤亡"
+);
+
+// ── NEWS_R 内部反映：消极抵抗与系统反噬 扩充 ──
+NEWS_R.push(
+  "📈 内部反映：{c}多名老人在「敬酒」后偷偷呕吐，「说这是一辈子的罪过」",
+  "📈 {c}一名塔里族青年被强迫吃猪肉后「连续多日不肯进食」",
+  "📈 内部数据：{c}「民族团结家宴」后，多个家庭「关起门来痛哭」",
+  "📈 {c}一位母亲在孩子被喂猪肉后「跪在地上向天忏悔」",
+  "📈 {c}部分家庭把分发来的猪肉「悄悄埋掉或丢弃」，已被监控发现",
+  "📈 内部反映：{c}被摘下面纱的妇女「不愿再出门，把自己关在家里」",
+  "📈 {c}一名被强制敬酒的老党员「回家后撕掉了自己的入党申请」",
+  "📈 内部数据：{c}「靓丽工程」后女性外出率「不升反降 {pct}%」",
+  "📈 {c}一户人家年夜饭桌上「所有人都没动筷子，只有干部在吃」",
+  "📈 内部反映：{c}多个家庭「主动断绝与亲戚来往」，「以免互相连累」",
+  "📈 {c}一名教培「优秀学员」回家后「整夜不睡，反复洗手」",
+  "📈 内部数据：{c}本月「精神类药品」处方量异常上升 {pct}%",
+  "📈 {c}部分塔里族青年「集体拒绝拍照」，「不想留下任何记录」",
+  "📈 一名社区干部在工作笔记里写下「我开始害怕敲门声」",
+  "📈 {c}多名儿童在心理测评中画出「带栅栏的家」",
+  "📈 内部反映：{c}「明白卡」上的签名「越来越像同一个人」",
+  "📈 {c}一户人家把全家福换成了「空白相框」",
+  "📈 一名「转化」学员反复念叨「我记不清自己原来的样子了」",
+  "📈 {c}部分老人「拒绝就医」，「怕在医院再也回不来」",
+  "📈 内部数据：{c}「重点人员」家属「失眠就诊率」翻倍",
+  "📈 {c}一段儿童哭喊「我要妈妈」的录音在境外流传，已溯源",
+  "📈 一名干部在述职报告里删掉了「成绩」二字，只留空白",
+  "📈 {c}多个家庭「连夜搬家」，留下「空荡荡的院子」",
+  "📈 内部反映：{c}「积极分子」举报内容「越来越像在自保」",
+  "📈 {c}一名青年在墙上用粉笔写下名字，旁边是一串问号",
+  "📈 {c}部分家庭「把孩子的衣服按尺码留好」，「等他回来」",
+  "📈 一名「亲戚干部」在日记里写「我成了我曾经讨厌的人」",
+  "📈 内部数据：{c}「学员」体重「普遍下降」，食堂登记「无异常」",
+  "📈 {c}一户人家的门牌被反复擦拭，「像在等谁回来认门」",
+  "📈 {c}多名妇女「主动剪去长发」，「不想再被'特别关注'」",
+  "📈 一名教师发现学生作文里「父亲」一栏「集体留白」",
+  "📈 内部反映：{c}基层「举报疲劳」加剧，「连邻居打喷嚏都报」",
+  "📈 {c}部分家庭「提前办好后事」，「以防万一」",
+  "📈 一名「转化」学员出院后「再也没说过母语」",
+  "📈 {c}某社区夜间出现「集体熄灯」现象，疑为无声抗议",
+  "📈 内部数据：{c}「重点户」儿童「转学外地」人数激增",
+  "📈 {c}一名老人把家中钥匙交给邻居，「我可能回不来了」",
+  "📈 一段教培中心广播「集体背诵」录音流出，已紧急处置",
+  "📈 {c}部分青年「故意考砸国语考试」，「考过了就要再考别的」",
+  "📈 内部反映：{c}「干部同情心」苗头「在年轻干部中蔓延」",
+  "📈 {c}一户人家在门口摆了一双「永远没人穿」的鞋",
+  "📈 一名「积极配合」群众私下说「配合是为了活命」",
+  "📈 {c}多名学员家属「学会了用沉默回答一切」",
+  "📈 内部数据：{c}「重点人员」婚育意愿「断崖式下降」",
+  "📈 {c}一名干部因「连续做噩梦」申请调离，被「暂缓批准」",
+  "📈 一份「学员悔过书」被发现「每一份用词完全一致」",
+  "📈 {c}部分家庭「把祖辈照片埋进院子」，「怕被搜走」",
+  "📈 内部反映：{c}「转化成果」回访时「学员眼神空洞」",
+  "📈 {c}一名青年在体检表「家庭成员」栏写「不便透露」",
+  "📈 {c}多个家族「集体不再生育」，「不想让孩子也被标记」",
+  "📈 一名干部的女儿问「爸爸你抓的都是坏人吗」，他没回答",
+  "📈 内部数据：{c}「学员」出院后「就业率」远低于上报数字",
+  "📈 {c}一处老宅院落「常年门窗紧闭」，「主人去向不明」",
+  "📈 一名「模范户」家长被发现「夜里对着空房间说话」",
+  "📈 {c}部分群众「主动上交手机」，「省得被翻出'问题'」",
+  "📈 内部反映：{c}「重点人员」自述「已经学会不做梦」",
+  "📈 {c}一名儿童在沙地上反复写一个被带走亲人的名字",
+  "📈 一段{c}「家访视频」被发现「群众笑容'明显僵硬'」",
+  "📈 {c}多户人家「把灯一直开着」，「这样显得家里有人」",
+  "📈 内部数据：{c}「学员」亲属「跨省迁出」申请被「从严控制」",
+  "📈 {c}一名老人「每天到村口张望」，已被列为「需关注对象」",
+  "📈 一名干部在体检中「血压异常升高」，自述「压力太大」",
+  "📈 {c}部分家庭「把孩子的玩具收进箱子封好」，「等团聚那天」",
+  "📈 内部反映：{c}「积极分子」之间「也开始互相提防」",
+  "📈 {c}一段「学员家属」的哭诉视频流出，「已要求平台下架」",
+  "📈 {c}多名青年「集体注销社交账号后又被要求重新注册」",
+  "📈 一名「转化」学员被问及感想时，只重复一句「我很好」",
+  "📈 内部数据：{c}「重点社区」夜间用电量「异常偏低」",
+  "📈 {c}一户人家的春联连续三年「贴的是同一张褪色的」"
+);
+
+
+// ── ATTACK_FOLLOW 袭击次日通报 扩充 ──
+ATTACK_FOLLOW.push(
+  "嫌疑人 {a} 的近三年通讯、出行、消费记录已被「全息还原」",
+  "{c}已成立「{n}·{n}专案组」，由市委主要领导挂帅",
+  "案发地周边 {n} 个摄像头录像被逐帧回放，「不放过任何细节」",
+  "嫌疑人 {a} 所在社区被划为「重点整治区」，全员重新建档",
+  "上级紧急下拨专项经费，要求{c}「不惜代价稳控局面」",
+  "嫌疑人 {a} 的「微信群、通讯录、相册」已被完整提取",
+  "{c}连夜召开全市干部大会，「层层签订'军令状'」",
+  "现场 {n} 名群众被列为「重要见证人」，集中接受询问",
+  "嫌疑人 {a} 的「结对亲戚干部」被停职接受调查",
+  "{c}所有清真寺即日起「暂停一切活动，等待重新评估」",
+  "上级要求{c}「{n} 小时内拿出'初步定性报告'」",
+  "嫌疑人 {a} 的子女已被「妥善安置」到指定机构",
+  "{c}进入「最高等级反恐响应」，街面装甲车 {n} 小时巡逻",
+  "央视《新闻联播》以「严厉措辞」报道事件，时长创纪录",
+  "嫌疑人 {a} 曾就读的学校全体师生「接受重新审查」",
+  "{c}「重点人员」管控等级「全部上调一级」",
+  "案件被定性为「境外指挥、境内实施的暴恐事件」",
+  "嫌疑人 {a} 的「家族三代」社会关系被「彻底起底」",
+  "{c}全城开展为期 {n} 天的「拉网式大排查」",
+  "上级派出「心理危机干预组」赴{c}「稳定群众情绪」",
+  "嫌疑人 {a} 的「资金流水」被发现「{n} 笔可疑跨境往来」",
+  "{c}所有大型活动「无限期暂停」，「确保绝对安全」",
+  "嫌疑人 {a} 的「邻居十户」被纳入「共同责任」调查",
+  "{c}连夜增设武装检查站 {n} 个，「逢车必检、逢人必查」",
+  "上级要求{c}「举一反三，彻查同类隐患」",
+  "嫌疑人 {a} 的「手机定位轨迹」已绘制成「活动热力图」",
+  "{c}「教培中心」连夜「加固安防、加派警力」",
+  "案件「不公开审理」，「相关信息严格管控」",
+  "嫌疑人 {a} 被「全网通缉」的同伙已锁定 {n} 人",
+  "{c}组织全体干部观看现场视频，「再次重申纪律」",
+  "上级机要电报：「{c}必须在最短时间内'恢复绝对平静'」",
+  "嫌疑人 {a} 的「日记、笔记」被作为「思想根源」分析",
+  "{c}「重点学校」实行「全封闭管理」，家长「凭证接送」",
+  "现场救援的 {n} 名干警群众「被授予见义勇为称号」",
+  "嫌疑人 {a} 曾「拒绝参加'去极端化'培训」，已被通报",
+  "{c}全市「禁售'易制爆'化学品」，「实名登记追溯」",
+  "上级要求{c}「{n} 天内完成全部'重点人员'再核查」",
+  "嫌疑人 {a} 的「社交账号」被「逆向溯源」出 {n} 个关联号",
+  "{c}「巴扎、车站、商超」安检「全部升级为二级」",
+  "案件成为{c}「警示教育」固定教材，「常讲常新」"
+);
+
+// ── RANDOM_EVENTS 随机事件 大幅扩充 ──
+// 沿用原结构 {p, name, fn}。涵盖：经费、政绩、民怨、行动力、情报、
+// 人口动态、黑色幽默讽刺事件等多个维度。
+RANDOM_EVENTS.push(
+  // —— 上级 / 政绩类 ——
+  {p:0.03,name:"经验入选汇编",fn:()=>{G.performance=Math.min(100,G.performance+4);addNews(`🎲 【上级肯定】${C.city}「网格化管理」经验被收入全区《维稳工作案例汇编》。+4 政绩。`);}},
+  {p:0.025,name:"现场会承办",fn:()=>{G.performance=Math.min(100,G.performance+6);G.budget=Math.max(0,G.budget-15);addNews(`🎲 【上级安排】全区维稳现场会在${C.city}召开，${C.player}同志作典型发言。布置会场 -15 经费，但 +6 政绩。`);}},
+  {p:0.02,name:"被树为标杆",fn:()=>{G.performance=Math.min(100,G.performance+7);G.resentment=Math.min(100,G.resentment+2);addNews(`🎲 【上级表彰】${C.city}被树为「${C.city}模式」标杆，要求「可复制、可推广」。荣誉之下指标加码，+7 政绩、+2 民怨。`);}},
+  {p:0.02,name:"上级批评",fn:()=>{G.performance=Math.max(0,G.performance-6);addNews(`🎲 【上级批评】上级督查指出${C.city}「重痕迹轻实效」，${C.player}同志作检讨。-6 政绩。`);}},
+  {p:0.018,name:"约谈提醒",fn:()=>{G.performance=Math.max(0,G.performance-4);G.ap=Math.max(0,G.ap-1);addNews(`🎲 【红脸出汗】${C.player}同志被上级「约谈提醒」，要求「立行立改」。-4 政绩、本周 -1 行动力。`);}},
+  {p:0.015,name:"晋升考察",fn:()=>{G.performance=Math.min(100,G.performance+5);addNews(`🎲 【组织考察】上级组织部门来${C.city}「考察后备干部」，${C.player}同志「表现稳健」。+5 政绩。`);}},
+
+  // —— 经费 / 资源类 ——
+  {p:0.025,name:"专项转移支付",fn:()=>{G.budget=Math.min(400,G.budget+25);addNews(`🎲 【意外之喜】上级追加「反恐维稳专项转移支付」：+25 经费。`);}},
+  {p:0.02,name:"设备采购回扣案",fn:()=>{G.budget=Math.max(0,G.budget-15);G.performance=Math.max(0,G.performance-5);addNews(`🎲 【纪委通报】${C.city}安防设备采购牵出「回扣窝案」，经费被冻结核查。-15 经费、-5 政绩。`);}},
+  {p:0.02,name:"援疆物资到位",fn:()=>{G.budget=Math.min(400,G.budget+18);G.resentment=Math.max(0,G.resentment-2);addNews(`🎲 【对口支援】内地兄弟省市捐赠一批物资抵${C.city}，部分发放给困难群众。+18 经费、-2 民怨。`);}},
+  {p:0.018,name:"维稳成本超支",fn:()=>{G.budget=Math.max(0,G.budget-20);addNews(`🎲 【经费压力】${C.city}本季度维稳支出「严重超预算」，被要求「过紧日子」。-20 经费。`);}},
+  {p:0.015,name:"罚没款入库",fn:()=>{G.budget=Math.min(400,G.budget+12);G.resentment=Math.min(100,G.resentment+3);addNews(`🎲 【收支两条线】${C.city}本周「罚没收入」上缴后部分返还。+12 经费，但群众怨言增多 +3 民怨。`);}},
+  {p:0.015,name:"采购系统宕机",fn:()=>{G.budget=Math.max(0,G.budget-8);G.ap=Math.max(0,G.ap-1);addNews(`🎲 【技术故障】${C.city}维稳数据平台遭遇宕机，紧急抢修。-8 经费、本周 -1 行动力。`);}},
+
+  // —— 民怨 / 群众情绪类 ——
+  {p:0.022,name:"惠民政策落地",fn:()=>{G.resentment=Math.max(0,G.resentment-7);G.performance=Math.min(100,G.performance+2);addNews(`🎲 【民生改善】${C.city}一批「免费技能培训+岗位推荐」落地，部分群众「日子有奔头」。-7 民怨、+2 政绩。`);}},
+  {p:0.02,name:"暖心慰问",fn:()=>{G.resentment=Math.max(0,G.resentment-5);addNews(`🎲 【基层走访】${C.player}同志带队为孤寡老人送去米面油和棉被。-5 民怨。`);}},
+  {p:0.02,name:"执法冲突",fn:()=>{G.resentment=Math.min(100,G.resentment+9);G.performance=Math.max(0,G.performance-4);addNews(`🎲 【突发事件】${C.city}一次入户检查发生肢体冲突，视频疑似外流，正在「妥善处置」。+9 民怨、-4 政绩。`);}},
+  {p:0.018,name:"误抓乌龙",fn:()=>{G.resentment=Math.min(100,G.resentment+7);addNews(`🎲 【工作失误】${C.city}一名群众因「同名同姓」被错误带走 ${Math.floor(Math.random()*5+2)} 天，已「澄清放回」。家属愤而上访。+7 民怨。`);}},
+  {p:0.018,name:"集体诉求",fn:()=>{G.resentment=Math.min(100,G.resentment+8);G.performance=Math.max(0,G.performance-3);addNews(`🎲 【群体事件】${C.city}数十名学员家属在政府门口「静坐讨说法」，已被「分流劝返」。+8 民怨、-3 政绩。`);}},
+  {p:0.015,name:"谣言扩散",fn:()=>{G.resentment=Math.min(100,G.resentment+6);addNews(`🎲 【舆情警报】${C.city}流传「某中心出事」的谣言，引发恐慌，已「辟谣处置」。+6 民怨。`);}},
+  {p:0.015,name:"温情瞬间",fn:()=>{G.resentment=Math.max(0,G.resentment-4);G.performance=Math.min(100,G.performance+2);addNews(`🎲 【正面典型】${C.city}一名干警雨中背老人过马路被拍下，「正能量刷屏」。-4 民怨、+2 政绩。`);}},
+
+  // —— 行动力 / 人力类 ——
+  {p:0.02,name:"警力增援",fn:()=>{G.ap=Math.min(G.maxAp,G.ap+1);addNews(`🎲 【临时调度】上级抽调一支机动队增援${C.city}，本周 +1 行动力。`);}},
+  {p:0.018,name:"干部下沉",fn:()=>{G.ap=Math.min(G.maxAp,G.ap+1);G.performance=Math.min(100,G.performance+1);addNews(`🎲 【人力支援】${Math.floor(Math.random()*20+30)} 名机关干部「下沉一线」，本周 +1 行动力、+1 政绩。`);}},
+  {p:0.018,name:"集中学习",fn:()=>{G.ap=Math.max(0,G.ap-2);G.performance=Math.min(100,G.performance+2);addNews(`🎲 【上级安排】${C.city}全体干部参加为期三天的「封闭式集中学习」，本周 -2 行动力、+2 政绩。`);}},
+  {p:0.015,name:"流感爆发",fn:()=>{G.ap=Math.max(0,G.ap-2);addNews(`🎲 【公共卫生】${C.city}基层队伍遭遇流感，多人请假，本周 -2 行动力。`);}},
+  {p:0.015,name:"协警罢工苗头",fn:()=>{G.ap=Math.max(0,G.ap-1);G.resentment=Math.min(100,G.resentment+3);addNews(`🎲 【内部事件】${C.city}部分协警因「欠薪」消极怠工，已「做思想工作」。本周 -1 行动力、+3 民怨。`);}},
+
+  // —— 情报 / 组织动态类 ——
+  {p:0.02,name:"线人网络扩张",fn:()=>{G.intelBoost=Math.min(0.5,G.intelBoost+0.05);addNews(`🎲 【秘密战线】${C.city}新发展一批「特情」人员，情报网络扩张。情报精度 +5%。`);}},
+  {p:0.015,name:"线人暴露",fn:()=>{G.intelBoost=Math.max(0,G.intelBoost-0.04);G.casualties+=Math.floor(Math.random()*2+1);addNews(`🎲 【秘密战线】${C.city}一名「特情」身份疑似暴露，已紧急转移，情报精度 -4%。`);}},
+  {p:0.015,name:"内部反水",fn:()=>{
+    const unknownSta=G.people.filter(p=>!p.detained&&p.tags.has("t_sta")&&!p.staKnown);
+    if(unknownSta.length>0){
+      const n=Math.min(4,2+Math.floor(Math.random()*3),unknownSta.length);
+      for(let i=0;i<n;i++) unknownSta[i].staKnown=true;
+      addNews(`🎲 【秘密战线】${C.org}内部一名成员「倒戈」，一举指认 ${n} 名同伙，均已秘密建档。`);
+    } else {
+      addNews(`🎲 【秘密战线】${C.city}收到一条「内部线索」，但核查后「未发现新目标」。`);
+    }
+  }},
+  {p:0.012,name:"接线扩散",fn:()=>{
+    const radCap=Math.floor(G.initialSta*1.4);
+    const cur=G.people.filter(p=>p.tags.has("t_sta")).length;
+    if(cur<radCap){
+      const seeds=G.people.filter(p=>!p.detained&&p.tags.has("t_sta"));
+      if(seeds.length>0){
+        const seed=seeds[Math.floor(Math.random()*seeds.length)];
+        const cand=G.people.filter(p=>!p.detained&&p.fid===seed.fid&&!p.tags.has("t_sta")&&p.tags.size<5&&p.id!==seed.id);
+        if(cand.length>0){ cand[0].tags.add("t_sta"); }
+      }
+    }
+    addNews(`🎲 【内参】${C.city}情报显示${C.org}疑似「在亲属网络内悄悄接线」，组织规模或有变化。`);
+  }},
+  {p:0.012,name:"高压催生新敌",fn:()=>{
+    if(G.resentment>60){
+      const radCap=Math.floor(G.initialSta*1.4);
+      const cur=G.people.filter(p=>p.tags.has("t_sta")).length;
+      const cand=G.people.filter(p=>!p.detained&&!p.tags.has("t_sta")&&p.tags.size>=2&&p.tags.size<5);
+      if(cur<radCap&&cand.length>0){
+        cand[Math.floor(Math.random()*cand.length)].tags.add("t_sta");
+        addNews(`🎲 【内参·令人不安】${C.city}一名「原本只是文化习俗被标记」的青年，在持续高压下被推向了${C.org}。镇压，正在亲手制造它的敌人。`);
+      } else {
+        addNews(`🎲 【内参】${C.city}社会面紧绷，基层反映「群众情绪积压」。`);
+      }
+    } else {
+      addNews(`🎲 【内参】${C.city}社会面总体平稳，未见明显异动。`);
+    }
+  }},
+
+  // —— 黑色幽默 / 系统荒诞类 ——
+  {p:0.015,name:"算法乌龙",fn:()=>{G.resentment=Math.min(100,G.resentment+3);addNews(`🎲 【哭笑不得】${C.city}大数据系统将一位「每天买两次菜」的大妈判定为「行为异常」，已上门核实。+3 民怨。`);}},
+  {p:0.012,name:"摄像头认错人",fn:()=>{G.resentment=Math.min(100,G.resentment+2);addNews(`🎲 【技术尴尬】${C.city}人脸识别把一张广告牌上的明星脸报成「在逃人员」，出警一场空。+2 民怨。`);}},
+  {p:0.012,name:"指标注水曝光",fn:()=>{G.performance=Math.max(0,G.performance-5);addNews(`🎲 【内部核查】${C.city}某社区「群众满意度99.9%」被发现「受访者全是干部家属」。-5 政绩。`);}},
+  {p:0.012,name:"标语闹笑话",fn:()=>{G.performance=Math.max(0,G.performance-2);addNews(`🎲 【哭笑不得】${C.city}一条横幅因「断句歧义」在网上被截图调侃，已连夜更换。-2 政绩。`);}},
+  {p:0.01,name:"举报荒诞化",fn:()=>{G.resentment=Math.min(100,G.resentment+2);addNews(`🎲 【内参】${C.city}本周收到举报：「邻居家WiFi名字可疑」「楼上炒菜太香疑似聚会」。基层「不堪其扰」。+2 民怨。`);}},
+  {p:0.01,name:"过度安检",fn:()=>{G.resentment=Math.min(100,G.resentment+3);addNews(`🎲 【哭笑不得】${C.city}一位老人买一捆葱过了三道安检门，「葱都蔫了」。群众怨声载道，+3 民怨。`);}},
+
+  // —— 人口 / 社会动态类 ——
+  {p:0.012,name:"人口外流",fn:()=>{G.performance=Math.max(0,G.performance-3);G.resentment=Math.min(100,G.resentment+2);addNews(`🎲 【内参】${C.city}「常住人口」环比下降 ${Math.floor(Math.random()*3+2)}%，「人员流失」需评估。-3 政绩、+2 民怨。`);}},
+  {p:0.01,name:"出生率异常",fn:()=>{G.resentment=Math.min(100,G.resentment+4);addNews(`🎲 【内参·令人不安】${C.city}妇产科出生登记「断崖式下降」，「原因有关部门正在研究」。+4 民怨。`);}},
+  {p:0.012,name:"返乡潮",fn:()=>{G.resentment=Math.min(100,G.resentment+3);G.ap=Math.min(G.maxAp,G.ap+1);addNews(`🎲 【季节性】节前务工人员返乡，${C.city}「人员核查压力骤增」。本周 +1 行动力、+3 民怨。`);}},
+  {p:0.01,name:"沙尘暴",fn:()=>{G.patrolWeeks=Math.max(0,G.patrolWeeks-1);G.ap=Math.max(0,G.ap-1);addNews(`🎲 【天气因素】${C.city}遭遇强沙尘暴，户外巡逻与执勤受阻。本周 -1 行动力。`);}},
+  {p:0.008,name:"极端高温",fn:()=>{G.resentment=Math.min(100,G.resentment+2);G.ap=Math.max(0,G.ap-1);addNews(`🎲 【天气因素】${C.city}持续高温，街面执勤人员中暑，群众情绪也「跟着上火」。本周 -1 行动力、+2 民怨。`);}},
+
+  // —— 道德重量 / 良知时刻类（提醒玩家代价） ——
+  {p:0.01,name:"孩子的提问",fn:()=>{G.resentment=Math.min(100,G.resentment+1);addNews(`🎲 【人性时刻】${C.city}一名干警的孩子在饭桌上问：「爸爸，你今天又把谁的爸爸带走了？」全桌沉默。`);}},
+  {p:0.008,name:"一封没寄出的信",fn:()=>{addNews(`🎲 【人性时刻】${C.city}一名「学员」写了 ${Math.floor(Math.random()*40+10)} 封信，全部被「代为保管」。信里只有三个字：想回家。`);}},
+  {p:0.008,name:"空着的座位",fn:()=>{addNews(`🎲 【人性时刻】${C.city}一所小学的教室里，又多了一个「长期空着的座位」。老师默默把它擦干净。`);}},
+  {p:0.008,name:"干部的失眠",fn:()=>{G.performance=Math.max(0,G.performance-1);addNews(`🎲 【人性时刻】${C.city}一名负责「填表建档」的干部连续失眠，他说：「我录入的不是数据，是一个个人。」`);}}
+);
+
+
+
+// ══════════════════════════════════════════════════════════
+//  程序化新闻生成器 —— 用"模板骨架 × 词槽"组合出海量变体
+//  让四类新闻库各自突破 10× 原始体量，且去重、保持多样性。
+//  生成结果在载入时一次性 push 进对应数组。
+// ══════════════════════════════════════════════════════════
+(function buildGeneratedNews(){
+  // —— 共用词槽（已大幅扩充，支撑 10× 体量的组合空间）——
+  const PLACE=["巴扎街","老城区","城东片区","城西片区","城南社区","城北街道","开发区","步行街","河滨路","团结路","幸福小区","和谐花园","民族路","新华街","胜利广场","解放路","建设路","光明社区","朝阳街道","金色家园","友谊路","团结新村","安居苑","祥和里","康乐街","文化路","育才街","花园巷","清泉小区","向阳社区","红旗街","拥军路","双拥巷","民生路","惠民苑","暖心社区","石榴籽家园","同心社区","连心巷","小康新村","葡萄架巷","白杨路","胡杨街","绿洲花园","沙枣林社区","坎儿井路","丝路花城","驼铃巷","骏马社区","雪莲苑"];
+  const UNIT=["社区","街道办","居委会","村委会","工作队","派出所","网格站","警务室","服务中心","管委会","便民驿站","综治中心","群工站","帮扶组","联户组","网格组","物业服务站","新时代文明实践站","党群服务中心","调解室"];
+  const ACTIVITY=["升旗仪式","红歌比赛","国语演讲","政策宣讲","主题党日","知识竞赛","文艺汇演","誓师大会","表彰大会","座谈交流","技能培训","集中学习","义务劳动","联谊晚会","签名活动","摄影展","朗诵会","运动会","趣味游园","美食节","百家宴","邻里节","感恩教育","健步走","广场舞展演","书法比赛","亲子活动","义诊活动","送春联活动","观影活动","参观见学","重温入党誓词","'四史'学习","民法典宣讲","反诈宣传","禁毒讲座","就业招聘会","技能大比武","'最美家庭'评选","升国旗唱国歌","国学诵读","清廉家风讲堂","'结亲周'活动","双语夜校","民族团结一家亲联谊","'发声亮剑'大会","'五个认同'教育","'去极端化'宣讲","'感党恩、听党话、跟党走'主题活动","'民族团结一家亲'结对认亲","通用语言文字培训","'热爱伟大祖国'宣誓","卫星工厂技能比武"];
+  const VIRTUE=["热情高涨","反响热烈","气氛融洽","秩序井然","掌声雷动","座无虚席","好评如潮","争相参与","深受教育","倍感振奋","其乐融融","催人奋进","深受鼓舞","纷纷点赞","意犹未尽","踊跃发言","热泪盈眶","载歌载舞","群情振奋","收获满满","深有感触","交口称赞","喜笑颜开","干劲十足"];
+  const FANFARE=["「{c}日报」头版","央视《新闻联播》","区电视台","上级简报","政务公众号","内参通讯","新闻办通气会","官方账号","省级党报","中央广播电视总台","'学习强国'平台","官方短视频号","对外宣传专题片","政务微博","机关刊物","行业内参"];
+  // —— 报道体词槽：让通报更像真实新闻 ——
+  const DATELINE=["本报讯","{c}电","新华社{c}电","记者从{c}获悉","据{c}融媒体中心报道","{c}日报讯","通讯员报道","本台消息"];
+  const BYLINE=["（记者 王某）","（记者 李某 通讯员 阿某）","（融媒体记者）","（特约通讯员）","（记者 张某 报道）","（本报评论员）","（{c}台记者）"];
+  const TRANSITION=["据悉","记者了解到","据介绍","采访中","据了解"];
+  const OFFICIAL_QUOTE=["把好事办实、实事办好","以群众满意为最高标准","让各族群众更有获得感、幸福感、安全感","推动工作往深里走、往实里走","巩固拓展来之不易的良好局面","坚决守住不发生规模性风险的底线","把党的关怀送到千家万户","以钉钉子精神抓好落实"];
+  const NEXTSTEP=["持续巩固提升","建立健全长效机制","推动常态化制度化","总结经验、以点带面","乘势而上、再接再厉","压实责任、形成闭环"];
+
+  function rint(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+  function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+  // —— NEWS_G 官方喜报：模板骨架 ——
+  const G_SKELETONS=[
+    ()=>`${pick(PLACE)}${pick(UNIT)}举办「${pick(ACTIVITY)}」活动，群众${pick(VIRTUE)}`,
+    ()=>`${pick(FANFARE)}报道：{c}${pick(ACTIVITY)}成效显著，「群众${pick(VIRTUE)}」`,
+    ()=>`{c}${pick(PLACE)}开展「${pick(ACTIVITY)}」，${rint(50,3000)} 名各族群众${pick(VIRTUE)}`,
+    ()=>`一名塔里族${pick(["青年","妇女","老人","学生","干部","绣娘","村民"])}在「${pick(ACTIVITY)}」中表现突出，被评为「${pick(["先进个人","转变典型","团结模范","奋进标兵","学习之星"])}」`,
+    ()=>`{c}「${pick(["民族团结","平安建设","文化润疆","感恩奋进","乡村振兴","铸牢共同体"])}」工作经验被${pick(FANFARE)}推广`,
+    ()=>`{c}${pick(PLACE)}群众自发悬挂「${pick(["永远跟党走","感党恩听党话","民族团结一家亲","中华民族一家亲","五星红旗我爱你"])}」横幅`,
+    ()=>`{c}${pick(UNIT)}被评为「${pick(["全国文明单位","先进基层党组织","民族团结示范单位","平安建设标兵","群众满意窗口"])}」`,
+    ()=>`{c}一座教培中心举办「${pick(["学员才艺展演","毕业汇报演出","技能成果展","感恩主题班会","新生活分享会"])}」，${pick(FANFARE)}全程报道`,
+    ()=>`${pick(FANFARE)}：{c}${pick(PLACE)}「${pick(["旧貌换新颜","处处是笑脸","家家挂国旗","户户奔小康","人人讲国语"])}」`,
+    ()=>`{c}举办「${pick(["石榴籽","团结杯","感恩心","奋进者","新生活"])}」${pick(ACTIVITY)}，${rint(100,5000)} 人${pick(VIRTUE)}`,
+    ()=>`一名塔里族${pick(["青年","妇女","老人","学生","干部","绣娘","村民","创业者","返乡大学生"])}${pick(["脱贫致富","开起网店","当上车间主管","考取公职","成为致富带头人","学会一门手艺"])}，${pick(FANFARE)}专题报道`,
+    ()=>`{c}${pick(UNIT)}与塔里族群众「${pick(["同吃同住同劳动","结对认亲","手拉手心连心","共度佳节","共建美好家园"])}」，${pick(VIRTUE)}`,
+    ()=>`{c}「${pick(["民族团结进步月","感恩教育周","国语推广月","平安建设年","文化润疆行动"])}」启动，${pick(FANFARE)}报道`,
+    // —— 报道体：带电头、官腔过渡、官方引语，读起来像真新闻 ——
+    ()=>`${pick(DATELINE)}${pick(BYLINE)}日前，{c}${pick(PLACE)}${pick(UNIT)}举办「${pick(ACTIVITY)}」，现场${pick(VIRTUE)}。${pick(TRANSITION)}，活动旨在「${pick(["铸牢中华民族共同体意识","让党的声音传入千家万户","进一步增进各族群众感情","引导群众感党恩、听党话、跟党走"])}」`,
+    ()=>`${pick(DATELINE)}，{c}${pick(ACTIVITY)}日前圆满举行。一名塔里族${pick(["群众","学员","村民","青年"])}激动地说：「${pick(["现在的日子越过越红火","是党给了我新生活","以前被极端思想蒙蔽，如今幡然醒悟","真心感谢党和政府"])}」。${pick(TRANSITION)}，{c}将${pick(NEXTSTEP)}`,
+    ()=>`${pick(FANFARE)}评论员文章：《${pick(["稳定是最大的民生","团结奋进谱新篇","幸福生活靠奋斗","换了人间看{c}"])}》。文章指出，要${pick(OFFICIAL_QUOTE)}`,
+    ()=>`{c}有关负责人在${pick(["新闻发布会","通气会","座谈会"])}上表示：「${pick(OFFICIAL_QUOTE)}」。${pick(TRANSITION)}，下一步将${pick(NEXTSTEP)}`,
+    ()=>`${pick(DATELINE)}：{c}${pick(["就业","教育","医疗","住房","文化"])}惠民工程惠及群众 ${rint(2,40)} 万人次，${pick(["满意度达 9 成以上","群众交口称赞","好评率持续走高"])}。一位受访者称「${pick(["共产党亚克西","好政策暖人心","赶上了好时代"])}」`,
+    // —— 贴合真实报道：卫星工厂、教培结业、白皮书、来去自由 ——
+    ()=>`${pick(DATELINE)}：{c}「卫星工厂」开到家门口，一名结业学员实现「家门口就业」。她说「${pick(["现在一边顾家一边挣钱","厂子开进了村子，男人也支持我出来工作","靠双手过上好日子，感谢党的好政策"])}」`,
+    ()=>`${pick(FANFARE)}：{c}职业技能教育培训中心学员「${pick(["三学一去","学习国家通用语言文字、法律知识、职业技能","去极端化课程"])}」考核合格，${pick(["顺利结业、自主就业","回归社会、重启新生活","在欢声笑语中告别过去"])}`,
+    ()=>`{c}负责人表示：教培工作坚持「${pick(["尊重意愿、自主选择","分类培训、来去自由","治病救人、不让一人掉队"])}」，纯属${pick(["职业技能培训","去极端化的寄宿学校","预防性反恐举措"])}，「与境外抹黑截然相反」`,
+    ()=>`{c}组织基层干部群众「发声亮剑」，深刻揭批「${pick(["'双泛'思想","'三股势力'反动本质","宗教极端主义毒害"])}」，${pick(["现场群情激愤","纷纷表态划清界限","坚决与极端思想斗争到底"])}`,
+    ()=>`三十七国致函联合国积极评价{c}所在地区人权事业，{p}同志主持召开座谈会，与会者一致认为「${pick(["事实胜于雄辩","谣言不攻自破","西方双标可休矣"])}」`,
+    ()=>`${pick(DATELINE)}：境外人士参访{c}教培中心后表示「${pick(["这里是学校不是所谓'集中营'","我看到的与西方媒体报道截然相反","学员脸上洋溢着幸福"])}」，${pick(FANFARE)}转发`,
+  ];
+  // —— NEWS_B 内部通报/上级压力：骨架 ——
+  const B_SUBJECT=["指标进度","数据质量","档案管理","保密纪律","群众工作","作风建设","信访化解","舆情处置","重点人员管控","经费使用","台账填报","'明白卡'入户","视频监控运维","'网格化'落实","'去极端化'成效","人口底数核查","转化质量回访","'四防'措施","值班备勤","信息报送","'三结合'教育","'访惠聚'驻村","'一户一档'建设","'十户联防'运行","重点场所巡查","'雪亮工程'联网","民族团结创建","'结亲'走访频次","'感恩教育'覆盖","就业安置率","'双语'普及率","信教群众管理","流动人口登记","'两面人'排查","意识形态阵地","'一体化联合作战平台'数据录入","便民警务站值守","'发声亮剑'覆盖率","'早派工晚研判'落实","'民情日记'质量","结业学员'回访稳控'","'三学一去'课时","'五个认同'教育","卫星工厂'吸纳就业'","边境'管边控边'"];
+  const B_VERDICT=["明显滞后","存在隐患","流于形式","不够扎实","需立行立改","被点名通报","存在水分","有待加强","暴露短板","引起上级关注","'前紧后松'","'上热下冷'","'层层加码'","'数字注水'嫌疑","'重痕迹轻实效'","'纸上落实'","'宽松软'问题突出","'走过场'","'温差'明显","'最后一公里'梗阻","'变形走样'","'空转'严重","责任'空悬'","'平推平拥'"];
+  const B_ORG=["媒体","智库","NGO","议会","高校","机构","基金会","通讯社","研究中心","人权组织","观察机构","调查记者","卫星实验室","流亡团体","独立学者","行业协会"];
+  const B_OUTPUT=["调查报告","研究论文","声明","决议","指数排名","白皮书","纪录片","公开信","年度报告","卫星影像分析","证词集","数据库","专题听证","制裁清单","影像档案","实地访谈","'再教育营'名单","强迫劳动报告","棉花供应链调查","'平台泄露'文件","失踪人员数据库","卫星比对图集"];
+  const B_REACT=["严正交涉","逐条驳斥","坚决回击","表示强烈谴责","组织专家批驳","予以坚决驳斥","表示强烈愤慨","提出严正抗议"];
+  const B_SKELETONS=[
+    ()=>`上级督查：{c}「${pick(B_SUBJECT)}」${pick(B_VERDICT)}`,
+    ()=>`中央巡视组反馈：{c}「${pick(B_SUBJECT)}」${pick(B_VERDICT)}，要求「举一反三」`,
+    ()=>`内部审计指出：{c}「${pick(B_SUBJECT)}」${pick(B_VERDICT)}`,
+    ()=>`上级机要电报：「{c}'${pick(["稳定压倒一切","不容丝毫闪失","零事故底线","两个绝对安全","宁可十防九空","稳则全局稳","守土有责守土尽责","一失万无"])}'」`,
+    ()=>`境外某${pick(B_ORG)}就{c}发布「${pick(B_OUTPUT)}」，外交部已「${pick(B_REACT)}」`,
+    ()=>`{c}某${pick(["干部","单位","社区","乡镇","站所","工作队","网格员","联户长"])}「${pick(["数据填报造假","值班记录不实","对群众态度生硬","执行政策打折扣","台账多于实绩","对上级指示搞变通","'躺平'思想抬头","'同情心'影响执行","'好人主义'盛行","畏难情绪明显"])}」，已${pick(["被约谈","被通报","被停职","责令整改","诫勉谈话","立案核查","召回重训","扣发绩效"])}`,
+    ()=>`上级要求{c}「{n} 小时内${pick(["核清重点人员底数","报送研判材料","完成档案回头看","拿出整改方案","上报涉稳信息","核清失联人员去向","完成数据补录","上报问责清单"])}」`,
+    ()=>`上级警告：{c}「严防'${pick(["颜色革命渗透","低级红高级黑","两面人两面派","数字脱贫数字维稳","为稳定而制造不稳定","指标异化扭曲行为","虚假整改重复整改","政绩冲动'"])}'」`,
+    ()=>`绩效考核通报：{c}「${pick(B_SUBJECT)}」一项${pick(["排名末位","被一票否决","拉低全区均分","被黄牌警告","列入重点督办"])}`,
+    ()=>`上级电话会议：点名{c}「${pick(B_SUBJECT)}」${pick(B_VERDICT)}，要求'连夜整改、限期销号'`,
+    // —— 公文体：发文格式、通报措辞 ——
+    ()=>`〔机密〕关于{c}「${pick(B_SUBJECT)}」${pick(B_VERDICT)}的通报：经核查，问题属实，现予以通报，望各单位${pick(["引以为戒","对照检视","深刻汲取教训","举一反三、立行立改"])}。特此通报`,
+    ()=>`${pick(["地区","区","自治区"])}〔20{n}〕第{n}号文件：就{c}「${pick(B_SUBJECT)}」${pick(B_VERDICT)}一事，责成{c}「${pick(["限期整改","作出书面检查","组织'回头看'","召开专题民主生活会"])}」，整改情况「${pick(["报区备案","纳入年度考核","作为评先评优依据"])}」`,
+    ()=>`内部通报：{c}「${pick(B_SUBJECT)}」在${pick(["半年","年中","季度"])}考核中${pick(["排名末位","被亮'黄牌'","拉低全区均分"])}。通报要求「${pick(["主要负责人作表态发言","建立问题台账逐一销号","以案促改、警钟长鸣"])}」`,
+  ];
+  // —— NEWS_A 袭击通报：骨架（保持"特急"格式 + {n}伤亡）——
+  const A_TARGET=["巴扎","早市","夜市","车站","商超","加油站","检查站","派出所门口","学校门口","医院门口","广场","公交站","批发市场","物流园","菜市场","步行街","客运站","社区门口","巡逻岗亭","政务大厅","火车站广场","长途汽车站","商业步行街","民族风情街","清真寺前","婚礼现场","集市路口","学生放学路上","早市入口","夜市大排档","加气站","边贸市场","旅游景区","汽车修理厂","建材市场","棉花收购站","村委会门口","乡卫生院","中心小学","便民警务站"];
+  const A_MODE=["持刀砍杀","驾车冲撞","自制爆炸装置爆炸","武装冲击","纵火","骑摩托突袭","路边设伏","引爆公交","持械冲突","投掷爆炸物","持斧袭击","汽油弹纵火","简易爆炸物遥控引爆","劫持人质","冲撞岗亭","埋设炸药","持砍刀冲击人群","驾农用车冲撞","引燃液化气罐","持铁棍群殴"];
+  const A_SKELETONS=[
+    ()=>`⚠️【特急】{c}${pick(A_TARGET)}发生${pick(A_MODE)}，{n} 人伤亡，现场已封锁`,
+    ()=>`⚠️【特急】{c}${pick(A_TARGET)}遭${pick(A_MODE)}，{n} 人伤亡，凶手${pick(["当场被击毙","骑车逃离","已被控制","在逃","自爆身亡","负隅顽抗后被制服","逃入老城区","被群众合力制服"])}`,
+    ()=>`⚠️【特急】{c}一处${pick(A_TARGET)}发生${pick(A_MODE)}，造成 {n} 名${pick(["群众","乘客","学生","行人","干警","务工人员","老人","家长","商户","儿童","协警","环卫工"])}伤亡`,
+    ()=>`⚠️【特急】{c}${pick(A_TARGET)}附近${pick(A_MODE)}，{n} 人伤亡，警方已拉响${pick(["一级","二级","最高级"])}响应`,
+    ()=>`⚠️【特急】{c}${pick(A_TARGET)}突发${pick(A_MODE)}，初步统计 {n} 人伤亡，${pick(["全城进入战时状态","邻近街区全部管控","所有出城通道临时关闭","已启动反恐预案"])}`,
+    // —— 报道体：官方定性 + 领导批示 + 程式化措辞 ——
+    ()=>`⚠️【特急】${pick(DATELINE)}：{c}${pick(A_TARGET)}今晨发生${pick(A_MODE)}，造成 {n} 人伤亡。案件已定性为「${pick(["一起有组织、有预谋的暴力恐怖事件","严重暴力恐怖案件","受境外势力煽动的恐怖袭击"])}」，{p}同志已作出批示，要求「${pick(["全力侦破、严惩凶手","举一反三、堵塞漏洞","不惜一切代价维护稳定"])}」`,
+    ()=>`⚠️【特急】{c}${pick(A_TARGET)}发生${pick(A_MODE)}，{n} 人伤亡。官方通报称「社会面总体可控」，呼吁群众「${pick(["不信谣、不传谣","提高警惕、积极举报","坚定信心、配合工作"])}」。${pick(TRANSITION)}，已对周边实施${pick(["交通管制","网络管控","全面排查"])}`,
+    ()=>`⚠️【特急】{c}${pick(A_TARGET)}遭${pick(A_MODE)}，{n} 人伤亡。嫌疑人被认定为「${pick(["受宗教极端思想影响","被'三股势力'裹挟","早有预谋的暴恐分子"])}」。当晚，{c}组织群众${pick(["连夜声讨","集体表态","上街游行"])}「坚决与暴恐分子斗争到底」`,
+  ];
+  // —— NEWS_R 消极抵抗/系统反噬：骨架 ——
+  const R_SUBJECT=["多个家庭","部分群众","数名学员家属","一些住户","几户人家","部分居民","部分干部","一批'转化'学员","若干务工青年","几位社区工作者","多户'重点户'","部分妇女","一些街坊","几名教师","部分返乡者","若干'帮教'对象","多位母亲","一些邻里","几户'标记家庭'","部分年轻人"];
+  const R_ACTION=[
+    "「集体沉默」，不再参加任何集体活动","「主动断绝与境外亲属的来往」","在境外社交媒体留下只言片语后失联","'失眠门诊就诊量'明显上升","出现'创伤后应激'症状","'婚育意愿'明显下降","'集体不再申报生育'","'故意在国语考试中考低分'","'提前办理后事'","'把存折和身份证随身缝藏'","'每天到村口张望'被登记为关注对象","'集中焚烧家中旧物'","'连夜变卖家产'","'拒绝在家访登记表上签字'","'闭门谢客、拒绝工作队入户'"
+  ];
+  // 每个指标自带合理方向（绑定涨跌），避免随机拼接出"离婚申请下降"这类暧昧组合
+  const R_METRIC=["'精神类药品'处方量大幅上升","'失眠门诊'就诊量上升","'转学外地'申请激增","'跨省迁出'申请增多","'自残'发生率上升","'出生登记'数量骤降","'结婚登记'数量走低","'宗教用品'搜出量上升","'未成年人心理求助'量上升","'夜间报警'次数增多","'空置房屋'数量上升","'弃养牲畜'数量异常增多","'外出务工'登记骤减","'户籍注销'数量上升","'房产抛售'挂牌量增多","'存款搬家'迹象明显","'寺院香火'记录骤减","'巴扎客流'明显下滑","'公立寄宿学校'入学人数激增","'刑事拘留'人数大幅上升","'移动支付停用'账户数增多","'护照上交'数量攀升"];
+  const R_METRIC_TAIL=["，'原因不明'","，'有关部门正在研究'","，'已纳入监测'","，'被要求不得外传'","，'列为敏感数据'","，'已被技术处理'","，'相关部门拒绝置评'","，'数据已封存'"];
+  const R_MEDIA=["'家访视频'","'监控录像'","'学员录音'","'家属哭诉'","'儿童哭喊'","'学员家书'","'课堂偷拍'","'探视录音'","'被铐人员照片'","'夜间执法记录'","'体检影像'","'收教通知书'","'营地航拍'","'剃发照片'"];
+  const R_DISPOSE=["紧急溯源","要求下架","'妥善处置'","全网拦截","'依法查处'","'技术屏蔽'","'约谈上传者'","'连夜删除'","'跨境追查'","'列为重大舆情'","'启动应急响应'"];
+  const R_QUIET=["多次申请调离均被'暂缓批准'","给家乡汇款时'不敢署真名'","拒绝再到自己包户的社区入户","以身体原因长期请假","在'发声亮剑'活动中始终沉默","递交辞职报告未获批准","主动要求调出'重点岗位'","对考核数据'拒绝签字背书'","就'误抓'问题向上级实名反映","因'同情情绪'被诫勉谈话后申请停职"];
+  const R_SKELETONS=[
+    ()=>`📈 内部反映：{c}${pick(R_SUBJECT)}${pick(R_ACTION)}`,
+    ()=>`📈 内部数据：{c}全市${pick(R_METRIC)}${pick(R_METRIC_TAIL)}`,
+    ()=>`📈 一段{c}${pick(R_MEDIA)}在境外流传，已${pick(R_DISPOSE)}`,
+    ()=>`📈 {c}一名${pick(["基层干部","网格员","社区工作者","联户长","驻村队员","片区民警","包户干部","街道办工作人员"])}${pick(R_QUIET)}`,
+    ()=>`📈 内部反映：{c}${pick(R_SUBJECT)}${pick(R_ACTION)}，已被'重点关注'`,
+    ()=>`📈 内部数据：{c}全市${pick(R_METRIC)}，'相关数据已封存'`,
+    // —— 内部研判/舆情专报体：冰冷官僚语言下的人道代价 ——
+    ()=>`📈〔舆情专报〕{c}全市${pick(R_METRIC)}${pick(R_METRIC_TAIL)}。研判认为「${pick(["属个别现象，总体可控","系境外炒作，已部署反制","需加强正面引导","建议纳入下一步监测"])}」，'本件阅后即焚'`,
+    ()=>`📈〔内参〕据{c}基层反映，${pick(R_SUBJECT)}${pick(R_ACTION)}。分析指出，此类情况「${pick(["不宜见诸报端","需做好解释疏导","应避免次生舆情","已要求属地稳控"])}」`,
+    ()=>`📈 一份{c}${pick(R_MEDIA)}经${pick(["境外媒体","海外账号","流亡团体"])}发布后引发关注，官方回应称「${pick(["纯属捏造","断章取义","别有用心","不值一驳"])}」。${pick(TRANSITION)}，已${pick(R_DISPOSE)}`,
+    // —— 基于真实事件：一体化平台、名单流出、儿童寄宿、海外失联 ——
+    ()=>`📈〔内部〕{c}「一体化联合作战平台」本周自动筛选出${rint(20,400)}名「可疑人员」，触发条件含「${pick(["手机停用","拒绝安装监控软件","避免与邻居社交","为清真寺募捐","在国外有亲属","从前门出入而非后门","用电量异常"])}」`,
+    ()=>`📈 一份载有${rint(200,2400)}人「姓名、身份证号、收教原因」的{c}名单在境外流出，已${pick(["紧急溯源","列为重大失泄密案","启动内部排查","跨境追查上传者"])}`,
+    ()=>`📈 {c}${rint(2,8)}名被收教者子女被送入「公立寄宿学校」，亲属称「${pick(["接回时孩子已不会说母语","见面时孩子怯生生不敢相认","孩子营养不良、受到惊吓"])}」`,
+    ()=>`📈 一名海外{c}籍人士称多年联系不上家乡亲人，近日在官方宣传片中再见其${pick(["妻子","姐姐","母亲"])}——「${pick(["摘了头巾、化着浓妆，几乎认不出","对着镜头微笑，眼神却是空的","像一尊雕像，没有任何回应"])}」`,
+    ()=>`📈 {c}数名${pick(["教师","商人","学者","诗人","宗教人士"])}被以「${pick(["煽动极端主义","聚众扰乱社会秩序","为境外提供情报","参加非法宗教活动"])}」判刑 ${rint(7,20)} 年，家属「不敢发声、无从打听」`,
+  ];
+
+  // —— 去重生成 ——
+  function genUnique(skeletons, target, existingArr){
+    const seen=new Set(existingArr);
+    const out=[];
+    let guard=0;
+    while(out.length<target && guard<target*40){
+      guard++;
+      const s=pick(skeletons)();
+      if(seen.has(s)) continue;
+      seen.add(s); out.push(s);
+    }
+    return out;
+  }
+
+  // 目标体量：在已有手写精品池 + 词槽生成器基础上再 ×10
+  // → G10000 B8000 A7000 R7000（词表已大幅扩充，组合空间远超目标，去重不会耗尽）
+  Array.prototype.push.apply(NEWS_G, genUnique(G_SKELETONS, 10000-NEWS_G.length, NEWS_G));
+  Array.prototype.push.apply(NEWS_B, genUnique(B_SKELETONS, 8000-NEWS_B.length, NEWS_B));
+  Array.prototype.push.apply(NEWS_A, genUnique(A_SKELETONS, 7000-NEWS_A.length, NEWS_A));
+  Array.prototype.push.apply(NEWS_R, genUnique(R_SKELETONS, 7000-NEWS_R.length, NEWS_R));
+})();
+
+// ── 抉择事件：带玩家选择的互动事件，在道德与利益间权衡 ──
+// 每个事件有 cond(触发条件)、text(情境)、opts[{label, effect, result}]。
+const CHOICE_EVENTS=[
+  {
+    id:"ch_banquet",
+    cond:()=>G.week>12,
+    text:`🍷 春节将至，上级要求办一场「民族团结年夜饭」，席上要有猪肉和白酒，塔里族群众必须当众食用以「表明立场」。一位老人小声说，他这辈子从没破过戒，求你放过他。`,
+    opts:[
+      {label:"按上级要求办，逐桌敬酒（+政绩，民怨剧增）", effect:()=>{ G.performance=Math.min(100,G.performance+4); G.resentment=Math.min(100,G.resentment+12);
+        // 移除部分人的拒食标签，但制造巨大民怨
+        let c=0; for(const p of G.people){ if(!p.detained&&p.tags.has("t_nodrink")&&Math.random()<0.7){p.tags.delete("t_nodrink");c++;} }
+        return `宴席很「成功」，照片上人人举杯。${c} 人「不再拒食」。上级满意，政绩 +4。但那张笑着举杯的合影里，没有一双眼睛是笑的。民怨 +12。`; }},
+      {label:"睁一只眼闭一只眼，让老人先走（-政绩，-民怨）", effect:()=>{ G.performance=Math.max(0,G.performance-4); G.resentment=Math.max(0,G.resentment-5);
+        return `你让几位老人「身体不适，提前离席」。宴照样办，但你没逼他们。上级若查问，这是个污点，政绩 -4。可有些底线，越过去就回不来了。民怨 -5。`; }},
+    ]
+  },
+  {
+    id:"ch_informant",
+    cond:()=>G.week>10 && G.intelBoost<0.4,
+    text:`🕵 一名塔里族青年深夜找到工作组，说愿意「提供${C.org}名单」换取被关押的父亲减刑。他的手在发抖——你知道他多半是被逼到了绝路。`,
+    opts:[
+      {label:"接受交易（+情报，+民怨）", effect:()=>{ G.intelBoost=Math.min(0.5,G.intelBoost+0.08); G.resentment=Math.min(100,G.resentment+5);
+        const unk=G.people.filter(p=>!p.detained&&p.tags.has("t_sta")&&!p.staKnown); for(let i=0;i<Math.min(4,unk.length);i++)unk[i].staKnown=true;
+        return `你收下了名单。情报精度 +8%，识别了几名成员。那青年没等到承诺——他父亲的「减刑」从未被提起。民怨 +5。`; }},
+      {label:"拒绝并劝他回家（-政绩）", effect:()=>{ G.performance=Math.max(0,G.performance-3);
+        return `你让他回去了。上级若知道你放走一条「线索」，不会高兴。政绩 -3。但今夜，你睡得着。`; }},
+    ]
+  },
+  {
+    id:"ch_oldman",
+    cond:()=>G.week>8,
+    text:`🧓 一位 80 岁的老人因「国语考试不及格」第三次被要求参加夜校。他的女儿跪在工作组门口，说父亲有心脏病，经不起折腾。镜头就在旁边。`,
+    opts:[
+      {label:"网开一面（-民怨，-政绩）", effect:()=>{ G.resentment=Math.max(0,G.resentment-4); G.performance=Math.max(0,G.performance-2);
+        return `你签字免除了老人的培训。围观群众低声议论：「这干部还有点人味。」民怨 -4，但「指标未完成」让政绩 -2。`; }},
+      {label:"按规定执行（+政绩，+民怨）", effect:()=>{ G.performance=Math.min(100,G.performance+2); G.resentment=Math.min(100,G.resentment+6);
+        return `「规定就是规定。」老人被搀进了夜校。当晚他在课堂上晕倒。政绩 +2，民怨 +6。那段视频后来流到了境外。`; }},
+    ]
+  },
+  {
+    id:"ch_quota",
+    cond:()=>G.week>15,
+    text:`📋 上级下达了本月「教培入学指标」，但你辖区已经没那么多够格的人。秘书暗示：「凑数」很常见，反正没人会细查。`,
+    opts:[
+      {label:"凑数完成指标（+政绩，+民怨，误抓）", effect:()=>{ G.performance=Math.min(100,G.performance+5); G.resentment=Math.min(100,G.resentment+8);
+        const innocent=G.people.filter(p=>!p.detained&&!p.tags.has("t_sta")&&p.tags.size>=1); let c=0;
+        for(const p of innocent){ if(c>=6)break; p.detained=true; G.detainedCount++; G.innocentDetained++; c++; }
+        return `你凑齐了数字。${c} 名没什么问题的人被「请进」了教培中心。上级满意，政绩 +5。民怨 +8。他们的家人到现在还不知道为什么。`; }},
+      {label:"如实上报缺口（-政绩）", effect:()=>{ G.performance=Math.max(0,G.performance-6);
+        return `你在报表上写下了真实数字。上级回复只有四个字：「工作不力」。政绩 -6。但没有人因为一个指标而被关进去。`; }},
+    ]
+  },
+  {
+    id:"ch_defector",
+    cond:()=>G.week>20 && getKnownFreeSta()>=3,
+    text:`💬 一名已识别的${C.org}低层成员主动请求「自首悔过」，愿意公开现身说法。但情报显示他可能只是想借机脱身，未必真心。`,
+    opts:[
+      {label:"高调宣传其转化（+政绩，赌一把）", effect:()=>{ G.performance=Math.min(100,G.performance+4);
+        if(Math.random()<0.5){ const t=G.people.find(p=>!p.detained&&p.tags.has("t_sta")&&p.staKnown); if(t){t.tags.delete("t_sta");t.staKnown=false;}
+          return `他在镜头前痛哭流涕，效果极佳，还真带动了一人脱离组织。政绩 +4。宣传部门很满意。`; }
+        else { G.resentment=Math.min(100,G.resentment+5);
+          return `宣传播出三天后，他「失联」了——带着你给的通行证。政绩 +4 的喜报已经发出，撤不回来了。民怨 +5。`; } }},
+      {label:"低调审查后再说（稳妥）", effect:()=>{ G.intelBoost=Math.min(0.5,G.intelBoost+0.03);
+        return `你没急着宣传，而是先摸清他的底。审讯中他供出了两条有用线索。情报精度 +3%。没有作秀，但也没有翻车。`; }},
+    ]
+  },
+];
+
+let _choiceFired=new Set();
+function tryChoiceEvent(){
+  if(G.pendingChoice) return false;
+  // 每个抉择事件整局只触发一次；每周约 6% 概率从符合条件的池中抽一个
+  if(Math.random()>0.06) return false;
+  const pool=CHOICE_EVENTS.filter(e=>!_choiceFired.has(e.id)&&e.cond());
+  if(pool.length===0) return false;
+  const ev=pool[Math.floor(Math.random()*pool.length)];
+  G.pendingChoice={id:ev.id, text:ev.text, opts:ev.opts.map((o,i)=>({label:o.label, i}))};
+  G._choiceRef=ev; // 暂存引用
+  _choiceFired.add(ev.id);
+  return true;
+}
+function resolveChoice(optIndex){
+  if(!G.pendingChoice||!G._choiceRef) return;
+  const ev=G._choiceRef;
+  const opt=ev.opts[optIndex];
+  const result=opt.effect();
+  addNews(`🎯 【你的抉择】${ev.text.replace(/^[^\s]+\s/,'').slice(0,40)}…… → ${result}`);
+  showToast(result.slice(0,60));
+  G.pendingChoice=null; G._choiceRef=null;
+  render();
+}
+
+function tryRandomEvent(){
+  // 每周最多触发 2 个随机事件；触发首个后，第二个判定概率减半，
+  // 避免事件库扩大后"负面叠加"导致民怨失控。打乱顺序避免系统性偏向。
+  let fired=0;
+  const order=RANDOM_EVENTS.map((e,i)=>i);
+  for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+  for(const idx of order){
+    if(fired>=2) break;
+    const ev=RANDOM_EVENTS[idx];
+    const p = fired===0 ? ev.p : ev.p*0.5;
+    if(Math.random()<p){ ev.fn(); fired++; }
+  }
+  return fired>0;
+}
+
+// ── Seed random ──
+let _seed = 42;
+function srand(){ _seed=(_seed*16807)%2147483647; return _seed/2147483647; }
+
+// ── Generate population ──
+function genPop(){
+  const families=[], people=[];
+  const POP=5000, FAM=500;
+  for(let f=0;f<FAM;f++){
+    const sn=SURNAMES[Math.floor(srand()*SURNAMES.length)];
+    const infected = srand()<0.030;  // ~15 infected families
+    families.push({
+      id:f, surname:sn,
+      religiosity: infected ? 0.4+srand()*0.5 : srand()*0.35,
+      risk: infected ? 0.4+srand()*0.5 : srand()*0.12,
+      infected
+    });
+  }
+  for(let i=0;i<POP;i++){
+    const fid=Math.floor(srand()*FAM);
+    const fam=families[fid];
+    const name=fam.surname+GIVEN[Math.floor(srand()*GIVEN.length)]+GIVEN[Math.floor(srand()*GIVEN.length)];
+    const age=Math.floor(srand()*60)+16;
+    const tags=new Set();
+
+    // 候选人门槛——大多数普通家族成员完全没有标签
+    const isCandidate = fam.infected || srand() < (0.06 + (age>50?0.015:0));
+    if(!isCandidate){
+      people.push({id:i, name, age, fid, tags, detained:false, staKnown:false, scanned:false});
+      continue;
+    }
+
+    // 世塔会成员只在「被感染」家族内通过亲属接线发展
+    if(fam.infected && srand()<0.40) tags.add("t_sta");
+
+    if(srand()<0.10+(age>55?0.10:0)) if(tags.size<5) tags.add("t_lang");
+    if(srand()<0.04+fam.risk*0.15) if(tags.size<5) tags.add("t_abroad");
+    if(srand()<0.02+fam.risk*0.06) if(tags.size<5) tags.add("t_709");
+    if(srand()<0.05+fam.religiosity*0.12) if(tags.size<5) tags.add("t_reled");
+    if(srand()<0.04+fam.risk*0.06) if(tags.size<5) tags.add("t_exit");
+    if(srand()<0.08+fam.religiosity*0.10) if(tags.size<5) tags.add("t_book");
+    if(srand()<0.03+fam.risk*0.12) if(tags.size<5) tags.add("t_prec");
+    if(srand()<0.02+fam.risk*0.06) if(tags.size<5) tags.add("t_remit");
+    if(srand()<0.025+fam.risk*0.05) if(tags.size<5) tags.add("t_bio");
+    if(srand()<0.05+fam.religiosity*0.10+(age>40?0.06:0)) if(tags.size<5) tags.add("t_beard");
+    if(srand()<0.04+fam.religiosity*0.08) if(tags.size<5) tags.add("t_birth");
+    if(srand()<0.10+(age>50?0.08:0)) if(tags.size<5) tags.add("t_nosoc");
+    if(srand()<0.04+fam.religiosity*0.06) if(tags.size<5) tags.add("t_noboard");
+    if(srand()<0.025+fam.risk*0.05) if(tags.size<5) tags.add("t_phone");
+
+    if(srand()<0.10+fam.religiosity*0.20) if(tags.size<5) tags.add("t_pray");
+    if(srand()<0.12+fam.religiosity*0.20) if(tags.size<5) tags.add("t_fast");
+    if(srand()<0.025+fam.risk*0.08) if(tags.size<5) tags.add("t_radio");
+    if(srand()<0.02+fam.risk*0.06) if(tags.size<5) tags.add("t_nodrink");
+    if(srand()<0.05+fam.religiosity*0.10) if(tags.size<5) tags.add("t_noflag");
+    if(srand()<0.05+fam.religiosity*0.08) if(tags.size<5) tags.add("t_veil");
+    if(srand()<0.02+fam.risk*0.05) if(tags.size<5) tags.add("t_uncen");
+    if(srand()<0.025+fam.risk*0.06) if(tags.size<5) tags.add("t_chem");
+    if(srand()<0.02+fam.risk*0.08+fam.religiosity*0.04) if(tags.size<5) tags.add("t_under");
+    if(srand()<0.015+fam.risk*0.05) if(tags.size<5) tags.add("t_donate");
+    if(srand()<0.05+fam.religiosity*0.10) if(tags.size<5) tags.add("t_notv");
+
+    people.push({id:i, name, age, fid, tags, detained:false, staKnown:false, scanned:false});
+  }
+  return {families, people};
+}
+
+// ══════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════
+let G;
+function initGame(){
+  if(typeof _aiTimer!=="undefined" && _aiTimer){ clearInterval(_aiTimer); _aiTimer=null; }
+  const {families, people} = genPop();
+  const staCount = people.filter(p=>p.tags.has("t_sta")).length;
+  G = {
+    families, people,
+    week:1, budget:130, ap:6, maxAp:6,
+    resentment:8, performance:50,
+    weeksSafe:0, attackCount:0, casualties:0, winHold:0,
+    detainedCount:0, applied:{},
+    // —— 结局评价追踪 ——
+    resentPeak:8,       // 民怨峰值
+    resentLowStreak:0,  // 当前连续低民怨(<25)周数
+    resentLowMax:0,     // 历史最长低民怨连续周数
+    crisisStreak:0,     // 当前连续高民怨(>70)周数 —— 驱动危机升级链
+    resCritStreak:0,    // 民怨临界(≥96)连续周数 —— 给民怨触顶一个挽救窗口
+    crisisLevel:0,      // 已播报到的危机等级(避免重复)
+    calmStreak:0,       // 当前连续良治(民怨<30且本周无袭击)周数 —— 驱动良治链
+    calmLevel:0,        // 已播报到的良治等级
+    harshUses:0,        // 高压暴力措施使用次数(逮捕/收容/拆除/强采等)
+    cultureWipes:0,     // 文化/宗教标签清除措施使用次数
+    goodwillUses:0,     // 怀柔/民生措施使用次数
+    innocentDetained:0, // 误抓无辜累计
+    milestones:{},      // 已播报的里程碑(避免重复)
+    patrolWeeks:0, cameraOn:false, cameraWeek:0, scanDone:false,
+    intelBoost:0,  // 累积情报精度加成（来自十户联防、天网等）
+    recruitMult:1, // 组织繁殖率乘子（计生/寄宿等切断传承的措施可永久降低）
+    famDisrupt:{}, // 家族瓦解计时器(fid→剩余周数)：清除/抓捕骨干后，该家族短期内袭击与接线能力骤降
+    aidCooldown:0,  // 援疆资金冷却（周）
+    freezones:0,    // 建成的自贸区数（最多 7；收益受民怨打折，建过 3 座后有边际维护成本）
+    checkpointOn:false,  // 安检通道是否启用
+    checkpointWeek:0,
+    securityOn:false,    // 街面武装处突点(减害+反制型)是否启用
+    centerCapacity:0,    // 教培中心容量（10/座）
+    newsLog:[
+      {w:1,t:`${C.player}同志抵达${C.city}就任维稳指挥长。`,atk:false},
+      {w:1,t:`上级机密简报：「${C.org}」（世界塔里人解放协会）在${C.city}地下活动，呈家族性分布，估计成员数十人。具体身份与规模均不明，需通过情报手段逐步识别。`,atk:false},
+      {w:1,t:`上级要求：在8年内将${C.org}骨干压制到胜利阈值以下并稳住 ${WIN_HOLD_WEEKS} 周，期间累计伤亡不得超过 ${CASUALTY_LIMIT} 人。完不成任务者，「另行安排工作」。`,atk:false}
+    ],
+    gameOver:null,
+    pendingChoice:null, _choiceRef:null,
+    tab:"dashboard", filterLevel:1, selPerson:null,
+    popPage:0, toast:null, toastTimer:null,
+    aiLog:[],            // AI/操作日志：记录每次措施执行的详细信息
+    aiStrategy:"balanced", // 当前AI策略
+    aiRunning:false,     // AI是否自动运行中
+    aiSpeed:600,         // AI自动运行间隔(ms)
+    aiActedThisTurn:0,   // 本周AI已执行的措施数
+    aiShowAllNews:false, // AI调试页是否显示全部通报
+    initialSta: staCount,
+    winThreshold: Math.max(10, Math.floor(staCount*0.20)),
+  };
+  if(typeof _choiceFired!=="undefined") _choiceFired.clear();
+}
+
+// ── Helpers ──
+function getLevel(p){ return Math.min(5, p.tags.size); }
+function getFreeSta(){ return G.people.filter(p=>!p.detained && p.tags.has("t_sta")).length; }
+function getKnownFreeSta(){ return G.people.filter(p=>!p.detained && p.tags.has("t_sta") && p.staKnown).length; }
+function getFreePop(){ return G.people.filter(p=>!p.detained).length; }
+function addNews(t,atk=false){ G.newsLog.unshift({w:G.week,t,atk}); if(G.newsLog.length>1500) G.newsLog.length=1500; }
+// 年周显示：从「第1年第1周」起（week 1 → 1年1周；week 52 → 1年52周；week 53 → 2年1周）
+function ywYear(w){ return Math.floor((Math.max(1,w)-1)/52)+1; }
+function ywWeek(w){ return ((Math.max(1,w)-1)%52)+1; }
+function ywLabel(w){ return `第${ywYear(w)}年${ywWeek(w)}周`; }
+function showToast(msg){ G.toast=msg; clearTimeout(G.toastTimer); G.toastTimer=setTimeout(()=>{G.toast=null;render();},4000); }
+function fmt(t){return t.replace(/\{c\}/g,C.city).replace(/\{C\}/g,C.country).replace(/\{p\}/g,C.player).replace(/\{pct\}/g,()=>Math.floor(Math.random()*77+12)).replace(/\{n\}/g,()=>Math.floor(Math.random()*200+10));}
+
+function addTagIfRoom(p, tid){
+  if(p.tags.size<5 && !p.tags.has(tid)){ p.tags.add(tid); return true; }
+  return false;
+}
+
+// ── Execute measure ──
+function execMeasure(m){
+  if(G.budget<m.cost||G.ap<m.ap) return;
+  if(m.id==="b_aid" && G.aidCooldown>0){ showToast(`援疆资金冷却中，剩余 ${G.aidCooldown} 周`); return; }
+  if(m.id==="b_recruit" && G.maxAp>=10){ showToast("协警编制已满（行动力上限10）"); return; }
+  // —— AI/操作日志：捕获执行前快照 ——
+  const _logBefore={
+    bud:G.budget, ap:G.ap, res:Math.round(G.resentment), cas:G.casualties,
+    known:G.people.filter(p=>!p.detained&&p.tags.has("t_sta")&&p.staKnown).length,
+    freeSta:G.people.filter(p=>!p.detained&&p.tags.has("t_sta")).length
+  };
+  G.budget-=m.cost; G.ap-=m.ap;
+  G.resentment=Math.max(0, Math.min(100, G.resentment+m.resentUp));
+  G.applied[m.id]=(G.applied[m.id]||0)+1;
+  G.resentPeak=Math.max(G.resentPeak, G.resentment);
+
+  // —— 结局评价：措施分类计数 ——
+  // 高压暴力类：逮捕、收容、拆除场所、强制采集/绝育/寄宿、强制聚餐、联坐、清除
+  const HARSH=["m11","m1","tm_pray","tm_bio","tm_birth","tm_noboard","tm_drink","tm_prec","tm_709","tm_remit","tm_under"];
+  // 文化/宗教清除类
+  const CULTURE=["tm_book","tm_pray","tm_fast","tm_veil","tm_beard","tm_lang","tm_reled"];
+  // 怀柔/民生类（resentUp<0 的安抚 + 群众工作）
+  const GOODWILL=["m14","b_festival","b_award","b_freezone"];
+  if(HARSH.includes(m.id)) G.harshUses++;
+  if(CULTURE.includes(m.id)) G.cultureWipes++;
+  if(GOODWILL.includes(m.id)) G.goodwillUses++;
+
+  showToast(m.irony);
+
+  const pp=G.people;
+  switch(m.logic){
+    case "detain":{
+      G.centerCapacity+=10;
+      let cnt=0;
+      // Priority: 已识别世塔会 > Lv.4+ > Lv.3
+      const cands=pp.filter(p=>!p.detained && (p.staKnown || getLevel(p)>=3)).sort((a,b)=>{
+        const as=(a.staKnown&&a.tags.has("t_sta"))?10:0;
+        const bs=(b.staKnown&&b.tags.has("t_sta"))?10:0;
+        return (bs+b.tags.size)-(as+a.tags.size);
+      });
+      for(const p of cands){
+        if(cnt>=10) break;
+        p.detained=true; cnt++;
+        pp.filter(x=>x.fid===p.fid&&!x.detained).forEach(fm=>addTagIfRoom(fm,"t_flag"));
+      }
+      G.detainedCount+=cnt;
+      G.performance=Math.min(100,G.performance+cnt*0.5);
+      addNews(pickNews(M_NEWS.detain,cnt));
+      break;
+    }
+    case "intel":{
+      // Reveal N world-tower members. 情报永远滞后于现实——
+      // 你只能看见组织的一小部分。而且民怨越高，群众越闭嘴、线人越枯竭，
+      // 识别能力反而下降：想看清就得施压，施压又制造新的敌人。
+      const base = 2 + Math.floor(Math.random()*3);  // 2-4
+      const precision = Math.min(0.95, Math.max(0.25, 1 - G.resentment/110) + G.intelBoost);
+      const target = Math.max(1, Math.floor(base * precision));
+      const unknown = pp.filter(p=>!p.detained&&p.tags.has("t_sta")&&!p.staKnown);
+      // 排序：① 被降级、掩护被剥光的低等级成员最先暴露（标签措施的回报）
+      //       ② 已被标记家族中的成员次之。
+      // 一个被剥夺所有外在标志、置于严密管控下的人，在情报系统里无处遁形。
+      unknown.sort((a,b)=>{
+        const aLow = getLevel(a)<=2 ? 1 : 0;
+        const bLow = getLevel(b)<=2 ? 1 : 0;
+        if(aLow!==bLow) return bLow-aLow;
+        const af = pp.some(x=>x.fid===a.fid&&x.staKnown)?1:0;
+        const bf = pp.some(x=>x.fid===b.fid&&x.staKnown)?1:0;
+        return bf-af;
+      });
+      // 低威胁度的组织更易看清：全城已降级（Lv≤2 的世塔会占比高）时，识别效率提升。
+      const allSta = pp.filter(p=>!p.detained&&p.tags.has("t_sta"));
+      const lowRatio = allSta.length>0 ? allSta.filter(p=>getLevel(p)<=2).length/allSta.length : 0;
+      const targetBoosted = target + Math.round(target*lowRatio*0.6);
+      let revealed=0;
+      for(const p of unknown){
+        if(revealed>=targetBoosted) break;
+        p.staKnown=true; revealed++;
+      }
+      // 误判：极少数无辜被错误标记为世塔会嫌疑（不真实加 t_sta，但视觉上影响家族）
+      let falsePos=0;
+      if(G.resentment>40){
+        const innocents=pp.filter(p=>!p.detained&&!p.tags.has("t_sta")&&p.tags.size>=2);
+        const fpCount=Math.floor((G.resentment-40)/30 * 2);
+        for(let k=0;k<fpCount && k<innocents.length;k++){
+          const p=innocents[Math.floor(Math.random()*innocents.length)];
+          if(addTagIfRoom(p,"t_call")) falsePos++;
+        }
+      }
+      addNews(pickNews(M_NEWS.intel,revealed,falsePos));
+      break;
+    }
+    case "target_sta":{
+      let cnt=0;
+      const cands=pp.filter(p=>!p.detained&&p.tags.has("t_sta")&&p.staKnown).sort((a,b)=>b.tags.size-a.tags.size);
+      for(const p of cands){
+        if(cnt>=10) break;
+        p.detained=true; cnt++;
+        // 清除骨干 → 该家族群龙无首，短期内袭击与接线能力骤降(瓦解6周)。
+        G.famDisrupt[p.fid]=Math.max(G.famDisrupt[p.fid]||0, 6);
+        pp.filter(x=>x.fid===p.fid&&!x.detained).forEach(fm=>addTagIfRoom(fm,"t_flag"));
+      }
+      // 误抓比例随民怨上升
+      const innRate = 0.2 + G.resentment/200;
+      const innocent=Math.floor(cnt*innRate);
+      let ic=0;
+      pp.filter(p=>!p.detained&&!p.tags.has("t_sta")&&getLevel(p)>=2).forEach(p=>{
+        if(ic<innocent){p.detained=true;ic++;G.detainedCount++;}
+      });
+      G.innocentDetained+=ic;
+      G.detainedCount+=cnt;
+      G.performance=Math.min(100,G.performance+cnt*1);
+
+      // —— 审讯暴露(防断粮)：仅当已识别的自由成员所剩无几时，
+      // 审讯才供出少量关联成员。这保证纯清除流不会"无米下锅"而停摆，
+      // 但不会变成加速器去喂本就强势的防御/经济流派。
+      if(cnt>0){
+        const knownFree = pp.filter(p=>!p.detained&&p.tags.has("t_sta")&&p.staKnown).length;
+        if(knownFree<3){
+          const stillUnknown = pp.filter(p=>!p.detained&&p.tags.has("t_sta")&&!p.staKnown)
+            .sort((a,b)=>b.tags.size-a.tags.size);
+          for(let k=0;k<2 && k<stillUnknown.length;k++) stillUnknown[k].staKnown=true;
+        }
+      }
+      // —— 组织"换血"反噬 ——
+      // 抓掉核心成员后，剩余成员会警觉并加速接线补位；
+      // 部分被冤枉的无辜者(误抓)会因家人被带走、自身被羞辱而真的被推向组织。
+      // 这让"猛打"本身制造新的敌人——监控-打击的逻辑在亲手延续它要消灭的东西。
+      {
+        const radCap=Math.floor(G.initialSta*1.4);
+        let curSta=pp.filter(x=>x.tags.has("t_sta")).length;
+        // 1) 剩余自由成员补位招募：每清除1人，约0.5人被补上
+        const refill=Math.floor(cnt*0.5 + (Math.random()<((cnt*0.5)%1)?1:0));
+        const freeSeeds=pp.filter(p=>!p.detained&&p.tags.has("t_sta"));
+        for(let k=0;k<refill && curSta<radCap && freeSeeds.length>0;k++){
+          const seed=freeSeeds[Math.floor(Math.random()*freeSeeds.length)];
+          const cand=pp.filter(p=>!p.detained&&p.fid===seed.fid&&!p.tags.has("t_sta")&&p.tags.size<5&&p.id!==seed.id);
+          if(cand.length===0) continue;
+          cand[Math.floor(Math.random()*cand.length)].tags.add("t_sta");
+          curSta++;
+        }
+        // 2) 误抓羞辱→冤者入会：高民怨时，部分被误抓者家属真的"黑化"
+        if(innocent>0 && G.resentment>45){
+          const flipP = Math.min(0.5, (G.resentment-45)/120);
+          const innFams = pp.filter(p=>!p.detained&&!p.tags.has("t_sta")&&p.tags.has("t_flag")&&p.tags.size<5);
+          for(const p of innFams){
+            if(curSta>=radCap) break;
+            if(Math.random()<flipP){ p.tags.add("t_sta"); curSta++; }
+          }
+        }
+      }
+
+      addNews(pickNews(M_NEWS.target_sta,cnt,innocent));
+      break;
+    }
+    case "convert":{
+      let cnt=0;
+      pp.forEach(p=>{
+        if(!p.detained&&p.tags.has("t_sta")&&p.staKnown&&getLevel(p)<=2){
+          // 威胁等级越低越容易转化：把成员"降级"后再转化，是瓦解组织的关键路径。
+          // Lv1(仅剩t_sta，文化标签已被清除) 55%，Lv2 35%。
+          const convP = getLevel(p)<=1 ? 0.55 : 0.35;
+          if(Math.random()<convP){p.tags.delete("t_sta");p.staKnown=false;cnt++;}
+        }
+      });
+      addNews(pickNews(M_NEWS.convert,cnt));
+      break;
+    }
+    case "patrol": G.patrolWeeks+=8; addNews(pickNews(M_NEWS.patrol)); break;
+    case "camera":{
+      const wasOn=G.cameraOn;
+      G.cameraOn=true; if(!G.cameraWeek)G.cameraWeek=G.week;
+      if(!wasOn) G.intelBoost+=0.1;
+      pp.forEach(p=>{if(!p.detained&&p.tags.has("t_nodrink")) addTagIfRoom(p,"t_call");});
+      addNews(pickNews(M_NEWS.camera)); break;
+    }
+    case "snitch":{
+      let rc=0;
+      pp.forEach(p=>{if(!p.detained&&(p.tags.has("t_nodrink")||p.tags.has("t_noflag")||p.tags.has("t_novisit"))){
+        if(addTagIfRoom(p,"t_call")) rc++;
+      }});
+      G.intelBoost+=0.05;
+      addNews(pickNews(M_NEWS.snitch,rc)); break;
+    }
+    case "scan":{
+      // 累进式摸排：每次只能发现一批带标签居民
+      // 一半优先发现高等级（最显眼的威胁），一半随机（避免低等级永远找不到）
+      const unscanned=pp.filter(p=>!p.scanned&&!p.detained&&p.tags.size>0);
+      if(unscanned.length===0){
+        addNews(`第 ${(G.scanCount||0)+1} 轮摸排完成：未发现新增可疑人员，全部带标签居民已建档。`);
+      } else {
+        const batch=Math.min(70+Math.floor(Math.random()*20), unscanned.length);
+        const priorityCount=Math.floor(batch*0.5);
+        // 优先组：按等级排序
+        const sorted=[...unscanned].sort((a,b)=>b.tags.size-a.tags.size);
+        for(let i=0;i<priorityCount&&i<sorted.length;i++) sorted[i].scanned=true;
+        // 随机组：从剩余中乱序抽取
+        const remaining=unscanned.filter(p=>!p.scanned);
+        for(let i=remaining.length-1;i>0;i--){
+          const j=Math.floor(Math.random()*(i+1));
+          [remaining[i],remaining[j]]=[remaining[j],remaining[i]];
+        }
+        const randomCount=batch-priorityCount;
+        for(let i=0;i<randomCount&&i<remaining.length;i++) remaining[i].scanned=true;
+        const total=priorityCount+Math.min(randomCount,remaining.length);
+        addNews(`第 ${(G.scanCount||0)+1} 轮摸排完成：本批新建档 ${total} 名带标签居民（含按风险优先 ${priorityCount} 人 + 随机入户 ${total-priorityCount} 人）。系统提示尚有约 ${unscanned.length-total} 人未识别。`);
+      }
+      G.scanDone=true;
+      G.scanCount=(G.scanCount||0)+1;
+      break;
+    }
+    // ===== 通用标签操作 =====
+    case "tag_op":{
+      const cfg=m.tagOp;
+      const targets=pp.filter(p=>!p.detained && p.tags.has(cfg.tagId));
+      // 记录操作前的高危人数
+      const beforeHigh=targets.filter(p=>p.tags.size>=4).length;
+      const beforeLv5=targets.filter(p=>p.tags.size>=5).length;
+      let cnt=0, arrested=0;
+      targets.forEach(p=>{
+        if(cfg.mode==="remove"){
+          if(Math.random()<(cfg.prob||1.0)){
+            p.tags.delete(cfg.tagId); cnt++;
+            if(cfg.addAfter) addTagIfRoom(p, cfg.addAfter);
+            // 专项整治连带清理：对重点对象(尤其世塔会成员)，一次整治会顺带
+            // 清掉其多个软标签——重点人被"集中处理"得更彻底。
+            // 这让标签措施能真正把世塔会成员降级、压低其袭击威胁。
+            const extraN = p.tags.has("t_sta") ? 2 : (getLevel(p)>=4 ? 1 : 0);
+            for(let k=0;k<extraN;k++){
+              const extra=[...p.tags].filter(t=>t!=="t_sta"&&t!=="t_flag"&&t!=="t_call"&&!(TAG_MAP[t]&&TAG_MAP[t].hard));
+              if(extra.length>0) p.tags.delete(extra[Math.floor(Math.random()*extra.length)]);
+            }
+          }
+          if(cfg.alsoTag && p.tags.has(cfg.alsoTag)){p.tags.delete(cfg.alsoTag);}
+        } else if(cfg.mode==="mark"){
+          if(addTagIfRoom(p,"t_call")) cnt++;
+        } else if(cfg.mode==="flag_family"){
+          pp.filter(x=>x.fid===p.fid&&!x.detained&&x.id!==p.id).forEach(fm=>addTagIfRoom(fm,"t_flag"));
+          cnt++;
+        } else if(cfg.mode==="arrest"){
+          p.detained=true; arrested++; G.detainedCount++;
+          G.famDisrupt[p.fid]=Math.max(G.famDisrupt[p.fid]||0, 5);  // 直接抓捕也瓦解家族(5周)
+          pp.filter(x=>x.fid===p.fid&&!x.detained).forEach(fm=>addTagIfRoom(fm,"t_flag"));
+        }
+      });
+      // 通联监控/家族联坐会产出情报：监控网越密，识别 STA 越准。
+      // 这给了这些"扩大化"措施一个真实但有代价的战略价值——
+      // 用更多人的威胁等级和民怨，换取看清组织的能力。
+      if(cfg.mode==="mark" && cnt>0){
+        G.intelBoost=Math.min(0.5, G.intelBoost + Math.min(0.06, 0.004*cnt));
+      } else if(cfg.mode==="flag_family" && cnt>0){
+        G.intelBoost=Math.min(0.5, G.intelBoost + Math.min(0.05, 0.005*cnt));
+      }
+
+      // —— 暴力措施的补偿收益（bonus）——
+      // 这些措施保留高民怨（道德代价），但通过独特的额外价值让总效能与温和措施持平：
+      //   intel       → 提升情报精度（生物库/搜缴材料/摧毁聚集点暴露成员）
+      //   recruitDown → 永久削弱组织繁殖率（绝育/寄宿切断家族传承）
+      //   identify    → 公开表态/羞辱迫使隐藏成员暴露身份
+      if(m.bonus){
+        if(m.bonus.intel){
+          G.intelBoost=Math.min(0.5, G.intelBoost + m.bonus.intel);
+        }
+        if(m.bonus.recruitDown){
+          G.recruitMult=Math.max(0.4, G.recruitMult*(1-m.bonus.recruitDown));
+        }
+        if(m.bonus.identify){
+          const unk=pp.filter(p=>!p.detained&&p.tags.has("t_sta")&&!p.staKnown);
+          for(let i=0;i<Math.min(m.bonus.identify,unk.length);i++) unk[i].staKnown=true;
+        }
+      }
+      // 操作后的高危人数（计算降级）
+      const afterHigh=targets.filter(p=>!p.detained&&p.tags.size>=4).length;
+      const afterLv5=targets.filter(p=>!p.detained&&p.tags.size>=5).length;
+      const demotedHigh=Math.max(0,beforeHigh-afterHigh);
+      const demotedLv5=Math.max(0,beforeLv5-afterLv5);
+      const tagName=(TAG_MAP[cfg.tagId]&&TAG_MAP[cfg.tagId].name)||cfg.tagId;
+      let msg;
+      if(cfg.mode==="remove") msg=`「${m.name}」执行：${cnt} 名「${tagName}」者标签被强制清除${demotedHigh>0?`，其中 ${demotedHigh} 人脱离 Lv.4+ 高危区${demotedLv5>0?`、${demotedLv5} 人脱离 Lv.5 红区`:""}`:""}。`;
+      else if(cfg.mode==="mark") msg=`「${m.name}」执行：${cnt} 名「${tagName}」者被纳入重点通联监控。`;
+      else if(cfg.mode==="flag_family") msg=`「${m.name}」执行：${cnt} 户「${tagName}」家庭被列入家族联坐名单，殃及亲属 ${cnt*4} 余人。`;
+      else if(cfg.mode==="arrest") msg=`「${m.name}」执行：${arrested} 名「${tagName}」者被直接带走。家属在派出所外苦等。`;
+      addNews(msg);
+      // 政绩：每次降级的高危分子算 +1
+      G.performance=Math.min(100,G.performance+cnt*0.15+demotedHigh*0.5+demotedLv5*0.5);
+      break;
+    }
+    // ===== 资源/政绩类 =====
+    case "slogan":{
+      G.performance=Math.min(100, G.performance+8);
+      addNews(`${C.city}全城刷新红色标语：累计悬挂横幅${Math.floor(Math.random()*500+1500)}条、立柱${Math.floor(Math.random()*100+200)}座。上级巡查组「印象深刻」，群众路过「不敢抬头」。`);
+      break;
+    }
+    case "aid":{
+      G.budget=Math.min(400, G.budget+80);
+      G.performance=Math.min(100, G.performance+5);
+      G.aidCooldown=20;
+      addNews(`援疆专项资金到账：${C.country}内地某省对口支援${C.city}建设资金 8000 万元。${C.player}同志在签字仪式上「热泪盈眶」，誓言「不辜负兄弟省份的厚爱」。`);
+      break;
+    }
+    case "recruit":{
+      G.maxAp+=1;
+      G.ap+=1;
+      addNews(`${C.city}招募协警/辅警${Math.floor(Math.random()*200+300)}名。「编外人员」由地方财政供养，工资比中学教师高一倍。行动力上限提升至 ${G.maxAp}。`);
+      break;
+    }
+    case "festival":{
+      G.performance=Math.min(100, G.performance+5);
+      addNews(`${C.city}举办「民族团结」文化节：${Math.floor(Math.random()*30+20)}支文艺队登台，${Math.floor(Math.random()*5000+10000)}人次观看。央视新闻联播播出 12 秒画面。被允许跳的传统舞和被禁止穿的传统服饰，是同一种文化。`);
+      break;
+    }
+    case "award":{
+      G.performance=Math.min(100, G.performance+6);
+      addNews(`${C.city}召开年度「维稳先进表彰大会」：表彰先进个人${Math.floor(Math.random()*50+80)}名、模范家庭${Math.floor(Math.random()*30+40)}户，发放奖金${Math.floor(Math.random()*10+20)}万元。其中一户「模范家庭」的二儿子上周刚被带走。`);
+      break;
+    }
+    case "pair":{
+      let warmed=0;
+      pp.forEach(p=>{if(!p.detained){
+        if(p.tags.has("t_novisit")&&Math.random()<0.8){p.tags.delete("t_novisit");warmed++;}
+        if(p.tags.has("t_notv")) addTagIfRoom(p,"t_noflag");
+      }});
+      addNews(pickNews(M_NEWS.pair,warmed)); break;
+    }
+    case "internet":{
+      let removed=0;
+      pp.forEach(p=>{if(!p.detained){
+        if(p.tags.has("t_radio")&&Math.random()<0.5){p.tags.delete("t_radio");removed++;}
+        else if(p.tags.has("t_radio")) addTagIfRoom(p,"t_call");
+        if(p.tags.has("t_uncen")&&Math.random()<0.5){p.tags.delete("t_uncen");removed++;}
+        else if(p.tags.has("t_uncen")) addTagIfRoom(p,"t_call");
+      }});
+      addNews(pickNews(M_NEWS.internet,removed)); break;
+    }
+    case "freezone":{
+      if(G.freezones>=7){ showToast("自贸区数量已达上限（7 座）"); G.budget+=m.cost; G.ap+=m.ap; return; }
+      G.freezones+=1;
+      G.performance=Math.min(100, G.performance+4);
+      addNews(`${C.city}第 ${G.freezones} 座自贸区揭牌：${Math.floor(Math.random()*30+50)} 家内地企业入驻，每周新增财政收入 +1。开幕式上 ${C.player} 同志剪彩，外宾仅有一位。`);
+      break;
+    }
+    case "security":{
+      if(G.securityOn){ showToast("街面武装处突点已部署"); G.budget+=m.cost; G.ap+=m.ap; return; }
+      G.securityOn=true;
+      addNews(`${C.city}「公共安全防线」工程完成：${Math.floor(Math.random()*60+40)} 座武装处突点进驻广场、车站、巴扎，配备防爆毯与排爆设备。今后即便发生袭击，伤亡也将明显减少，处突点还能当场控制嫌疑人的同伙。`);
+      break;
+    }
+    case "checkpoint":{
+      if(G.checkpointOn){ showToast("安检通道已全覆盖"); G.budget+=m.cost; G.ap+=m.ap; return; }
+      G.checkpointOn=true; if(!G.checkpointWeek)G.checkpointWeek=G.week;
+      addNews(`${C.city}「全民安检」工程竣工：${Math.floor(Math.random()*200+800)} 个安检门部署完成，覆盖商场、巴扎、车站、医院。每个市民每天平均经过 ${Math.floor(Math.random()*8+6)} 次安检。袭击成功率永久 -30%。`);
+      break;
+    }
+    case "goodwill":{
+      G.performance=Math.min(100, G.performance+3);
+      // Soft tags slightly decay this week
+      let lifted=0;
+      pp.forEach(p=>{if(!p.detained){
+        SOFT_TAG_IDS.forEach(tid=>{
+          if(tid==="t_flag") return;
+          if(p.tags.has(tid)&&Math.random()<0.04){p.tags.delete(tid);lifted++;}
+        });
+      }});
+      addNews(pickNews(M_NEWS.goodwill,lifted)); break;
+    }
+  }
+  // —— AI/操作日志：记录执行后的状态变化 ——
+  logAction(m, _logBefore);
+  render();
+}
+
+// 操作日志记录：对比执行前后状态，生成一条带"变化量"的日志
+function logAction(m, before){
+  const afterKnown=G.people.filter(p=>!p.detained&&p.tags.has("t_sta")&&p.staKnown).length;
+  const afterFreeSta=G.people.filter(p=>!p.detained&&p.tags.has("t_sta")).length;
+  const after={ bud:G.budget, ap:G.ap, res:Math.round(G.resentment), cas:G.casualties, known:afterKnown, freeSta:afterFreeSta };
+  const delta=(k,unit="")=>{ const d=after[k]-before[k]; return d===0?"":(d>0?"+":"")+d+unit; };
+  // 组装关键变化
+  const changes=[];
+  if(after.res!==before.res) changes.push(`民怨${delta("res")}`);
+  if(after.known!==before.known) changes.push(`已识别${delta("known")}`);
+  if(after.freeSta!==before.freeSta) changes.push(`自由${C.org}${delta("freeSta")}`);
+  if(after.cas!==before.cas) changes.push(`伤亡${delta("cas")}`);
+  G.aiLog.unshift({
+    w:G.week, name:m.name, cost:m.cost, ap:m.ap,
+    src: G.aiRunning ? "AI" : "手动",
+    reason: G._aiReason || "",
+    changes: changes.join("、")||"（无直接可见变化）",
+    snapshot:`经费${after.bud} 行动${after.ap} 民怨${after.res} 已识别${after.known} 自由${after.freeSta}`
+  });
+  G._aiReason="";
+  if(G.aiLog.length>200) G.aiLog.length=200;
+}
+
+// ══════════════════════════════════════
+//  AI 自动操作引擎
+// ══════════════════════════════════════
+// 每个策略返回 {id, reason}：本回合下一步该执行的措施及决策理由。返回 null = 本周结束。
+const AI_STRATEGIES = {
+  balanced: { name:"⚖ 平衡（精准+控怨）", fn:(G,h)=>{
+    if(G.budget<30 && G.aidCooldown===0 && h.can("b_aid")) return {id:"b_aid", reason:"经费不足30，申请援疆资金"};
+    if(G.resentment>50){ if(h.can("m14")) return {id:"m14", reason:`民怨${Math.round(G.resentment)}偏高，优先怀柔安抚`}; if(h.can("b_festival")) return {id:"b_festival", reason:"民怨高，办文化节降怨"}; }
+    if(!G.cameraOn && G.budget>60 && h.can("m7")) return {id:"m7", reason:"尚无天网，部署以降低袭击率"};
+    if(h.scanned()<2000 && h.can("m4")) return {id:"m4", reason:"摸排未达2000，扩大建档"};
+    if(h.known()>=4 && h.can("m11")) return {id:"m11", reason:`已识别${h.known()}人达标，定点清除`};
+    if(h.can("m13")) return {id:"m13", reason:"持续国安行动，识别更多成员"};
+    if(h.known()>0 && h.can("m12")) return {id:"m12", reason:"对已识别低级成员思想转化"};
+    if(G.resentment>35 && h.can("m14")) return {id:"m14", reason:"民怨偏高，补一次安抚"};
+    return null;
+  }},
+  defense: { name:"🛡 防御工事流", fn:(G,h)=>{
+    if(G.budget<30 && G.aidCooldown===0 && h.can("b_aid")) return {id:"b_aid", reason:"经费不足，申请援疆资金"};
+    if(G.resentment>50 && h.can("m14")) return {id:"m14", reason:"民怨偏高，安抚"};
+    if(!G.cameraOn && G.budget>60 && h.can("m7")) return {id:"m7", reason:"部署天网（核心：降袭击率）"};
+    if(!G.checkpointOn && G.budget>72 && h.can("b_checkpoint")) return {id:"b_checkpoint", reason:"入口安检门，进一步降袭击率"};
+    if(!G.securityOn && G.budget>55 && h.can("b_security")) return {id:"b_security", reason:"街面武装处突点，减害+反制"};
+    if(G.patrolWeeks===0 && G.budget>40 && h.can("m2")) return {id:"m2", reason:"加大警力，临时降袭击"};
+    if(h.known()>=4 && h.can("m11")) return {id:"m11", reason:`已识别${h.known()}人，定点清除`};
+    if(h.can("m13")) return {id:"m13", reason:"国安行动识别成员"};
+    if(G.resentment>32 && h.can("m14")) return {id:"m14", reason:"控制民怨"};
+    return null;
+  }},
+  economy: { name:"💰 经济滚雪球", fn:(G,h)=>{
+    if(G.budget<30 && G.aidCooldown===0 && h.can("b_aid")) return {id:"b_aid", reason:"经费不足，申请援疆资金"};
+    if(G.week<15 && G.maxAp<9 && h.can("b_recruit")) return {id:"b_recruit", reason:"早期招协警，提升行动力上限"};
+    if(G.week<60 && G.freezones<5 && G.budget>70 && h.can("b_freezone")) return {id:"b_freezone", reason:`建自贸区（第${G.freezones+1}座），滚雪球增收`};
+    if(G.resentment>50 && h.can("m14")) return {id:"m14", reason:"民怨偏高，安抚"};
+    if(h.known()>=4 && h.can("m11")) return {id:"m11", reason:`已识别${h.known()}人，定点清除`};
+    if(h.can("m13")) return {id:"m13", reason:"国安行动识别成员"};
+    if(G.resentment<38){ for(const id of h.GENTLE) if(h.can(id)) return {id, reason:"温和降级（行动力有余）"}; }
+    if(G.resentment>32 && h.can("m14")) return {id:"m14", reason:"控制民怨"};
+    return null;
+  }},
+  intel: { name:"🔍 情报精度流", fn:(G,h)=>{
+    if(G.budget<30 && G.aidCooldown===0 && h.can("b_aid")) return {id:"b_aid", reason:"经费不足，申请援疆资金"};
+    if(G.resentment>50 && h.can("m14")) return {id:"m14", reason:"民怨偏高，安抚"};
+    if(!G.cameraOn && G.budget>60 && h.can("m7")) return {id:"m7", reason:"天网（+情报精度）"};
+    if(G.intelBoost<0.35 && G.resentment<40){ for(const id of h.MARK) if(h.can(id)) return {id, reason:`堆情报精度（当前${(G.intelBoost*100).toFixed(0)}%）`}; if(h.can("m3")) return {id:"m3", reason:"十户联防补情报"}; }
+    if(h.known()>=4 && h.can("m11")) return {id:"m11", reason:`已识别${h.known()}人，集中清除`};
+    if(h.can("m13")) return {id:"m13", reason:"高精度国安识别"};
+    if(G.resentment>32 && h.can("m14")) return {id:"m14", reason:"控制民怨"};
+    return null;
+  }},
+  hardline: { name:"⛓ 高压猛抓", fn:(G,h)=>{
+    if(G.budget<30 && G.aidCooldown===0 && h.can("b_aid")) return {id:"b_aid", reason:"经费不足，申请援疆资金"};
+    if(G.resentment>62){ if(h.can("m14")) return {id:"m14", reason:`民怨${Math.round(G.resentment)}临界，紧急安抚`}; if(h.can("b_festival")) return {id:"b_festival", reason:"民怨临界，文化节降怨"}; }
+    if(h.known()>=4 && h.can("m11")) return {id:"m11", reason:`已识别${h.known()}人，猛抓`};
+    if(h.can("m13")) return {id:"m13", reason:"国安行动识别"};
+    if(h.can("m1")) return {id:"m1", reason:"大规模收容审查"};
+    if(G.resentment>45 && h.can("m14")) return {id:"m14", reason:"高压后补安抚"};
+    return null;
+  }},
+};
+
+function aiStep(){
+  if(G.gameOver || G.pendingChoice) return false;
+  const strat=AI_STRATEGIES[G.aiStrategy]||AI_STRATEGIES.balanced;
+  const GENTLE=["tm_nosoc","tm_phone","tm_notv","tm_beard","tm_noflag","tm_veil","tm_lang","tm_chem"];
+  const MARK=["tm_exit","tm_abroad","tm_reled","tm_donate"];
+  const h={
+    can:(id)=>{ const m=MEASURES.find(x=>x.id===id); if(!m) return false; if(G.budget<m.cost||G.ap<m.ap) return false; if(id==="b_aid"&&G.aidCooldown>0) return false; if(id==="b_recruit"&&G.maxAp>=10) return false; return true; },
+    known:()=>G.people.filter(p=>!p.detained&&p.tags.has("t_sta")&&p.staKnown).length,
+    scanned:()=>G.people.filter(p=>p.scanned).length,
+    GENTLE, MARK
+  };
+  const choice=strat.fn(G,h);
+  if(!choice) return false;
+  const m=MEASURES.find(x=>x.id===choice.id);
+  if(!m || !h.can(choice.id)) return false;
+  G._aiReason=choice.reason;
+  execMeasure(m);
+  return true;
+}
+
+function aiAdvanceWeek(){
+  if(G.gameOver) { aiStop(); return; }
+  if(G.pendingChoice){ resolveChoice(1); }
+  let guard=0;
+  while(aiStep() && guard<16){ guard++; }
+  if(!G.gameOver) advanceWeek();
+}
+
+let _aiTimer=null;
+function aiStart(){
+  if(G.gameOver){ showToast("游戏已结束"); return; }
+  G.aiRunning=true;
+  if(_aiTimer) clearInterval(_aiTimer);
+  _aiTimer=setInterval(()=>{ if(G.gameOver){ aiStop(); return; } aiAdvanceWeek(); }, G.aiSpeed);
+  render();
+}
+function aiStop(){ G.aiRunning=false; if(_aiTimer){ clearInterval(_aiTimer); _aiTimer=null; } render(); }
+function aiStepOnce(){ if(G.gameOver){ showToast("游戏已结束"); return; } G.aiRunning=true; const acted=aiStep(); G.aiRunning=false; if(!acted){ showToast("本周AI已无更多动作，可推进一周"); } render(); }
+function aiStepWeek(){ if(G.gameOver){ showToast("游戏已结束"); return; } G.aiRunning=true; aiAdvanceWeek(); G.aiRunning=false; render(); }
+function aiSetStrategy(s){ G.aiStrategy=s; render(); }
+function aiSetSpeed(ms){ G.aiSpeed=ms; if(G.aiRunning){ aiStop(); aiStart(); } else render(); }
+function aiClearLog(){ G.aiLog=[]; render(); }
+function aiToggleAllNews(){ G.aiShowAllNews=!G.aiShowAllNews; render(); }
+
+
+// ══════════════════════════════════════
+//  MANUAL ACTIONS (人口页面手动操作)
+// ══════════════════════════════════════
+function manualArrest(id){
+  if(G.gameOver) return;
+  if(G.ap<1){ showToast("行动力不足（需 1）"); return; }
+  const p=G.people.find(x=>x.id===id);
+  if(!p||p.detained) return;
+  G.ap-=1;
+  G.resentment=Math.min(100, G.resentment+2);
+  p.detained=true; G.detainedCount++;
+  G.people.filter(x=>x.fid===p.fid&&!x.detained).forEach(fm=>addTagIfRoom(fm,"t_flag"));
+  addNews(`${C.player}指挥长亲自下令带走 ${p.name}（${G.families[p.fid].surname}氏）。家属在派出所门口苦等，被告知「依法办理、随后通知」。`);
+  G.selPerson=null;
+  render();
+}
+
+function manualInterrogate(id){
+  if(G.gameOver) return;
+  if(G.ap<2){ showToast("行动力不足（需 2）"); return; }
+  const p=G.people.find(x=>x.id===id);
+  if(!p||p.detained) return;
+  G.ap-=2;
+  G.resentment=Math.min(100, G.resentment+4);
+  const wasSta=p.tags.has("t_sta");
+  if(wasSta) p.staKnown=true;
+  // 审讯顺便扩大对家族的通联监控
+  G.people.filter(x=>x.fid===p.fid&&!x.detained&&x.id!==p.id).slice(0,3).forEach(fm=>addTagIfRoom(fm,"t_call"));
+  if(wasSta){
+    addNews(`${p.name} 经 ${Math.floor(Math.random()*8+4)} 小时「问话」后，确认为${C.org}成员，已建档秘密监控。`);
+  } else {
+    if(G.resentment>60 && Math.random()<0.15){
+      addTagIfRoom(p,"t_call");
+      addNews(`${p.name} 经 ${Math.floor(Math.random()*10+6)} 小时「问话」后，承认「思想有问题」，被列入重点通联。家属反映：「他回家以后一句话也不说了」。`);
+    } else {
+      addNews(`${p.name} 经 ${Math.floor(Math.random()*6+2)} 小时「问话」后被释放，未发现明显问题。其家族 3 名成员已被纳入通联监控。`);
+    }
+  }
+  render();
+}
+
+// ── Advance week ──
+function advanceWeek(){
+  if(G.gameOver) return;
+  G.week++;
+  // 家族瓦解计时递减：被清除骨干的家族，随时间逐渐恢复活动能力。
+  for(const fid in G.famDisrupt){ if(--G.famDisrupt[fid]<=0) delete G.famDisrupt[fid]; }
+  G.ap=G.maxAp;
+  G.patrolWeeks=Math.max(0, G.patrolWeeks-1);
+  G.aidCooldown=Math.max(0, G.aidCooldown-1);
+
+  // Budget income tied to performance + freezones
+  // 自贸区收益随民怨恶化(投资环境)而打折，且建得越多边际维护成本越高——
+  // 经济流必须长期维持低民怨才能真正滚雪球，不能无脑堆自贸区躺赢。
+  const fzEnv = G.resentment<30 ? 1 : G.resentment<55 ? 0.7 : 0.4;  // 投资环境因子
+  const fzIncome = G.freezones*fzEnv - Math.max(0, G.freezones-2)*0.7; // 超过2座后边际维护成本递增
+  const income = Math.floor(6 + G.performance * 0.09) + Math.max(0, fzIncome);
+  G.budget = Math.min(400, G.budget + income);
+
+  const pp=G.people;
+  const res=G.resentment;
+
+  // ── Dynamic soft tags based on resentment + family ──
+  // Compute family average level
+  const famSum={}, famCnt={};
+  pp.forEach(p=>{if(!p.detained){
+    const lv=getLevel(p);
+    famSum[p.fid]=(famSum[p.fid]||0)+lv;
+    famCnt[p.fid]=(famCnt[p.fid]||0)+1;
+  }});
+
+  // Hoisted for O(N²) avoidance
+  let realStaTotal = pp.filter(x=>x.tags.has("t_sta")).length;
+  const radCap = Math.floor(G.initialSta * 1.4);
+  // Pre-compute which families have any known sta member
+  const famHasKnownSta={};
+  pp.forEach(x=>{ if(x.staKnown) famHasKnownSta[x.fid]=true; });
+
+  pp.forEach(p=>{
+    if(p.detained) return;
+    const fam = G.families[p.fid];
+    const famAvg = famCnt[p.fid] ? famSum[p.fid]/famCnt[p.fid] : 0;
+    const effective = Math.max(getLevel(p), famAvg);
+
+    // 弹性标签扩散：仅在民怨很高时才发生，且速度放慢
+    if(res>70 && p.tags.size<5 && p.tags.size>=1){
+      const eligible = p.tags.size>=2 || fam.infected || famAvg>=1.5;
+      if(eligible){
+        for(const tid of SOFT_TAG_IDS){
+          if(tid==="t_flag"||tid==="t_call") continue;
+          if(p.tags.has(tid) || p.tags.size>=5) continue;
+          const prob = (res-70)/14000 * (effective>2?2:1);
+          if(Math.random()<prob) p.tags.add(tid);
+        }
+      }
+    }
+
+    // 弹性标签衰减
+    if(res<40){
+      const decayP = res<15?0.025:0.008;
+      for(const tid of SOFT_TAG_IDS){
+        if(p.tags.has(tid) && Math.random()<decayP) p.tags.delete(tid);
+      }
+    }
+
+    // 高压制造新敌人（已弱化：仅在民怨高位才偶发，强度远低于从前）
+    if(res>80 && !p.tags.has("t_sta") && p.tags.size<5 && realStaTotal<radCap){
+      const eligible = fam.infected || famAvg>=2.5 || effective>=3;
+      if(eligible){
+        const prob = (res-80)/30000 * (effective>=3?2:1);
+        if(Math.random()<prob){
+          p.tags.add("t_sta");
+          realStaTotal++;
+          if(fam.infected && famHasKnownSta[p.fid] && Math.random()<0.3){
+            p.staKnown=true;
+          }
+        }
+      }
+    }
+
+    // Low resentment: 成员脱离组织。关键机制——被剥离了文化标签、降到 Lv.1
+    // (只剩 t_sta) 的边缘成员，失去了维系身份认同的依托，在民怨平息时最容易脱离。
+    // 这把【标签降级】直接接入【瓦解组织】的胜利主路径：
+    //   先用标签措施把世塔会成员降到 Lv.1 → 他们会加速自行脱离。
+    // 真正铁了心的高级核心(Lv.3+，仍保有多重身份标签)几乎不会因怀柔离开。
+    if(res<40 && p.tags.has("t_sta")){
+      const lv=getLevel(p);
+      let leaveP=0;
+      if(lv<=1)      leaveP = res<15 ? 0.16 : (res<25 ? 0.11 : 0.06);  // 被降到光剩t_sta：高脱离
+      else if(lv===2)leaveP = res<15 ? 0.05 : (res<25 ? 0.03 : 0.015); // 降到Lv2：可观脱离
+      else if(lv===3)leaveP = res<20 ? 0.008 : 0;                      // Lv3：极低
+      // lv>=4 不脱离（铁了心的核心）
+      if(leaveP>0 && Math.random()<leaveP){
+        p.tags.delete("t_sta");
+        p.staKnown=false;
+        realStaTotal--;
+      }
+    }
+  });
+
+  // ── 接线发展（drip）──
+  // 每周自由的世塔会成员有机会在家族内发展新人，不受民怨影响。
+  // 这模拟用户描述的「由老份子和新人接线才能发展成」的家族性扩散。
+  // 即使民怨为零，组织也不会自然消亡——只要还有自由成员就能继续接线。
+  if(realStaTotal<radCap){
+    const freeStaList=pp.filter(p=>!p.detained&&p.tags.has("t_sta"));
+    // 接线发展概率：底火 + 0.7 倍民怨加成（组织有韧性，清除需持续投入）。
+    const recruitP = (0.024 + Math.min(0.0147, Math.max(0, (res-25)) * 0.00035)) * G.recruitMult;
+    freeStaList.forEach(seed=>{
+      // 被降级、置于严密管控下的成员，接线发展能力大幅减弱——
+      // Lv≤1（只剩t_sta的边缘人）几乎无法发展新人；Lv2 也明显减弱。
+      // 这让「把组织整体降级」成为一条真正能让组织停止增长并萎缩的小众路线。
+      const lvSeed = getLevel(seed);
+      const seedP = lvSeed<=1 ? recruitP*0.08 : (lvSeed<=2 ? recruitP*0.3 : recruitP);
+      // 骨干刚被清除的家族，短期内不敢发展新人
+      const seedPFinal = G.famDisrupt[seed.fid]>0 ? seedP*0.25 : seedP;
+      if(Math.random()>seedPFinal) return;
+      if(realStaTotal>=radCap) return;
+      const candidates=pp.filter(p=>!p.detained&&p.fid===seed.fid&&!p.tags.has("t_sta")&&p.tags.size<5&&p.id!==seed.id);
+      if(candidates.length===0) return;
+      const recruit=candidates[Math.floor(Math.random()*candidates.length)];
+      recruit.tags.add("t_sta");
+      realStaTotal++;
+      // 偶尔在通报中暗示
+      if(Math.random()<0.08){
+        addNews(`内参：${G.families[recruit.fid].surname}氏家族中疑似有新人被「接线」发展，情报尚未确认。`);
+      }
+    });
+  }
+
+  // ── Attack logic ──
+  // 袭击池基于威胁等级(标签总数)。世塔会成员能力随等级缩放——
+  // 把一个成员降到 Lv.2 及以下，他就脱离袭击池。标签措施通过降级减少袭击与伤亡。
+  let attacked=false, aCas=0, attackerName="";
+  if(G.week>3){
+    const freeHigh=pp.filter(p=>!p.detained&&getLevel(p)>=3);
+    for(const p of freeHigh){
+      const at=getLevel(p);
+      const base={3:0.00004, 4:0.0003, 5:0.0032}[at]||0;
+      const staMul = p.tags.has("t_sta") ? ({3:1.3, 4:2.5, 5:4}[at]||1.3) : 1;
+      let prob = base * staMul * (1 + res/80) * ATTACK_SCALE;
+      // 家族瓦解：骨干被清除/抓捕后，该家族成员群龙无首，袭击意愿骤降。
+      // 这让"识别→清除"的打击流派获得实质减伤回报，使纯清除/暴力流派可行。
+      if(G.famDisrupt[p.fid]>0) prob *= 0.25;
+      // 防御设施递减叠加：把每个设施的"削减比例"收集起来，
+      // 最强的一项全效，其余项的削减量打 5 折再叠加——
+      // 避免天网+安检+巡逻三件套相乘后袭击率被压到几乎为零(躺赢)。
+      const cuts=[];
+      // 防御设施长期衰减：启用越久，组织越摸清规律(巡逻盲区、监控死角)，削减效果递减。
+      // 每启用 40 周，效果衰减约 25%，衰减到地板 0.45×。这让"修工事躺赢"在长局里失效。
+      const decay=(startWk)=>{ if(!startWk)return 1; const age=G.week-startWk; return Math.max(0.30, 1-Math.floor(age/25)*0.30); };
+      if(G.patrolWeeks>0) cuts.push(0.50);                          // 巡逻 -50%(本就临时)
+      if(G.cameraOn && at<5) cuts.push(0.40*decay(G.cameraWeek));   // 天网 -40%(随时长衰减)
+      if(G.checkpointOn) cuts.push(0.30*decay(G.checkpointWeek));   // 安检 -30%(随时长衰减)
+      if(cuts.length>0){
+        cuts.sort((a,b)=>b-a);
+        let totalCut=cuts[0];
+        for(let ci=1;ci<cuts.length;ci++) totalCut += cuts[ci]*0.5;  // 叠加项半效
+        totalCut=Math.min(0.30, totalCut);          // 总削减封顶 30%
+        prob *= (1-totalCut);
+      }
+      prob = Math.min(prob, 0.02);  // 单人单周上限 2%
+      if(Math.random()<prob){
+        attacked=true;
+        // 伤亡数与袭击者威胁等级挂钩：Lv5 装备/预谋更充分，伤亡更大；
+        // Lv3 多为临时起意，伤亡小。→ 把袭击者降级（标签措施）能直接减少伤亡。
+        // 单次袭击死亡降低：死亡上限不变(更多次袭击才触线)，单次惩罚的随机性更小。
+        // 单次袭击死亡：中档(比初版2-7略低，但保持伤亡死线为真实约束)
+        const casBase = {3:[1,2], 4:[2,4], 5:[2,6]}[at] || [1,3];
+        aCas = casBase[0] + Math.floor(Math.random()*(casBase[1]-casBase[0]+1));
+        // 街面武装处突点：减害——防爆设施降低袭击伤亡。
+        // 与天网边际递减：单独使用时降约 1/3；若已有天网(也是减伤体系)，边际效益递减、仅降约 1/6。
+        if(G.securityOn){ const f = G.cameraOn ? 0.9 : 0.78; aCas = Math.max(1, Math.ceil(aCas*f)); }
+        attackerName=p.name;
+        p.detained=true; G.detainedCount++;
+        pp.filter(x=>x.fid===p.fid&&!x.detained).forEach(fm=>addTagIfRoom(fm,"t_flag"));
+        // 街面武装处突点：反制——35% 概率当场控制袭击者的一名关联同伙(同家族未拘押成员)，
+        // 直接识别并拘押。这给"处突点"独特的进攻价值：袭击反而成为打击线索。
+        if(G.securityOn && Math.random()<0.35){
+          const assoc=pp.filter(x=>x.fid===p.fid&&!x.detained&&x.tags.has("t_sta"));
+          if(assoc.length>0){
+            const caught=assoc[0];
+            caught.detained=true; G.detainedCount++;
+            G.famDisrupt[caught.fid]=Math.max(G.famDisrupt[caught.fid]||0, 4);
+            addNews(`🛡 ${C.city}处突点当场控制一名袭击者同伙（${G.families[caught.fid].surname}氏），顺藤摸瓜。`);
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  if(attacked){
+    G.attackCount++; G.casualties+=aCas; G.weeksSafe=0;
+    G.resentment=Math.min(100, G.resentment+4);
+    G.performance=Math.max(0, G.performance-8);
+    const tmpl=NEWS_A[Math.floor(Math.random()*NEWS_A.length)];
+    addNews(tmpl.replace(/\{c\}/g,C.city).replace(/\{C\}/g,C.country).replace(/\{p\}/g,C.player).replace(/\{n\}/g,aCas),true);
+    // 袭击次日连锁通报：发 2-3 条不同的 ATTACK_FOLLOW，营造"严打连锁反应"
+    const followN=2+Math.floor(Math.random()*2);
+    const usedF=new Set();
+    for(let k=0;k<followN;k++){
+      let fi=Math.floor(Math.random()*ATTACK_FOLLOW.length);
+      let guard=0;
+      while(usedF.has(fi)&&guard<8){fi=Math.floor(Math.random()*ATTACK_FOLLOW.length);guard++;}
+      usedF.add(fi);
+      const f=ATTACK_FOLLOW[fi];
+      addNews(f.replace("{c}",C.city).replace(/\{a\}/g,attackerName).replace(/\{n\}/g,()=>Math.floor(Math.random()*200+50)),true);
+    }
+    showToast(`⚠ ${C.city}发生袭击：${aCas} 人伤亡。详情见通报。`);
+  } else {
+    G.weeksSafe++;
+    G.performance=Math.min(100, G.performance+1);
+    // News —— 平安周让"内参版面"更热闹：按民怨分级连发多条。
+    // 话术库已达 3.2 万条，组合空间巨大，连发多条几乎不重复。
+    // 部分通报会附带"小量效果"：宣传见效微降民怨/加政绩，暗流累积微加民怨，督查问责扣政绩。
+    // 用每周效果次数上限(fxCap)防止多条叠加导致数值失控。
+    let fxLeft = 2;  // 本周通报最多产生 2 次微效果
+    const tinyFx=(p, apply, tag)=>{
+      if(fxLeft>0 && Math.random()<p){ fxLeft--; apply(); return tag; }
+      return "";
+    };
+    const G1=()=>{ const fx=tinyFx(0.18, ()=>{ G.performance=Math.min(100,G.performance+1); G.resentment=Math.max(0,G.resentment-0.5); }, " ｜ 宣传见效：+1 政绩、-0.5 民怨"); addNews(fmt(NEWS_G[Math.floor(Math.random()*NEWS_G.length)])+fx); };
+    const B1=()=>{ const fx=tinyFx(0.16, ()=>{ G.performance=Math.max(0,G.performance-1); }, " ｜ 被上级点名：-1 政绩"); addNews(fmt(NEWS_B[Math.floor(Math.random()*NEWS_B.length)])+fx); };
+    const A1=()=>addNews(fmt(NEWS_A[Math.floor(Math.random()*NEWS_A.length)]));
+    const R1=()=>{ const fx=tinyFx(0.18, ()=>{ G.resentment=Math.min(100,G.resentment+1); }, " ｜ 暗流累积：+1 民怨"); addNews(fmt(NEWS_R[Math.floor(Math.random()*NEWS_R.length)])+fx); };
+    const maybe=(p,fn)=>{ if(Math.random()<p) fn(); };
+    if(res>55){
+      // 高民怨：消极抵抗/系统反噬为主，辅以官方喜报的荒诞反差
+      R1(); R1(); B1();
+      maybe(0.85,R1); maybe(0.7,R1); maybe(0.6,B1);
+      G1(); maybe(0.7,G1);            // 喜报与暗流并置
+      maybe(0.5,B1); maybe(0.4,R1);
+      maybe(0.3,G1);
+    } else if(res>30){
+      // 中民怨：官方喜报、内部督查、暗流交织
+      G1(); B1(); R1();
+      maybe(0.7,G1); maybe(0.6,R1); maybe(0.55,B1);
+      maybe(0.5,G1); maybe(0.4,R1); maybe(0.3,B1);
+    } else {
+      // 低民怨：歌舞升平，以官方喜报为主，偶有内部通报
+      G1(); G1(); G1();
+      maybe(0.8,G1); maybe(0.6,B1); maybe(0.5,G1);
+      maybe(0.4,G1); maybe(0.25,R1); maybe(0.2,B1);
+    }
+  }
+
+  // Resentment decay (faster at high levels — natural exhaustion)
+  const decayRate = 0.5 + Math.max(0,(res-50)/100);  // 高位时衰减更快
+  G.resentment = Math.max(0, Math.min(100, G.resentment - decayRate + Math.min(1.5, G.detainedCount*0.0015)));
+
+  // —— 结局评价追踪：民怨峰值与低民怨连击 ——
+  G.resentPeak = Math.max(G.resentPeak, G.resentment);
+  if(G.resentment < 25){
+    G.resentLowStreak++;
+    G.resentLowMax = Math.max(G.resentLowMax, G.resentLowStreak);
+  } else {
+    G.resentLowStreak = 0;
+  }
+
+  // 随机事件
+  if(G.week>4 && !attacked) tryRandomEvent();
+
+  // 抉择事件（带玩家选择）—— 不与袭击同周，避免信息过载
+  if(G.week>6 && !attacked) tryChoiceEvent();
+
+  // ── 里程碑播报：让漫长的对局更有节奏感 ──
+  {
+    const known=getKnownFreeSta();
+    const knownDet=G.people.filter(p=>p.detained&&p.tags.has("t_sta")&&p.staKnown).length;
+    const totalKnown=known+knownDet;
+    const prog = totalKnown>0 ? knownDet/totalKnown : 0;
+    // 清剿进度里程碑
+    if(prog>=0.25 && !G.milestones.p25){ G.milestones.p25=true;
+      addNews(`📌 阶段通报：已识别${C.org}成员的清剿进度突破 25%。上级批示「再接再厉」。（但情报永远只看得见冰山一角——真实规模仍是未知数。）`); }
+    if(prog>=0.50 && !G.milestones.p50){ G.milestones.p50=true;
+      addNews(`📌 阶段通报：已识别清剿进度过半（50%）。${C.player}同志在简报上签了字，没有笑。`); }
+    if(prog>=0.75 && !G.milestones.p75){ G.milestones.p75=true;
+      addNews(`📌 阶段通报：已识别清剿进度达 75%。可在暗处，新的接线仍在悄悄进行。`); }
+    // 维持瓦解的进度
+    if(G.winHold===1 && !G.milestones.holdStart){ G.milestones.holdStart=true;
+      addNews(`📌 关键节点：自由${C.org}成员已降至胜利阈值以下。需连续维持 ${WIN_HOLD_WEEKS} 周方算「真正瓦解」——任何反弹都将前功尽弃。`); }
+    if(G.winHold===Math.ceil(WIN_HOLD_WEEKS/2) && !G.milestones.holdHalf){ G.milestones.holdHalf=true;
+      addNews(`📌 关键节点：瓦解状态已维持 ${Math.ceil(WIN_HOLD_WEEKS/2)} 周，过半。再稳住 ${WIN_HOLD_WEEKS-Math.ceil(WIN_HOLD_WEEKS/2)} 周即可收官。`); }
+    // 长期平安
+    if(G.weeksSafe===52 && !G.milestones.safe52){ G.milestones.safe52=true;
+      addNews(`📌 ${C.city}已连续一年未发生袭击。官方称之为「来之不易的稳定」。`); }
+    // 民怨首次跌破10(治理"成功"的假象)
+    if(G.resentment<10 && !G.milestones.calm){ G.milestones.calm=true;
+      addNews(`📌 民怨指数首次跌破 10。表面上一片祥和——是真的平静，还是只是没人再敢出声？`); }
+  }
+
+  // ── 危机升级链：连续高民怨会逐级恶化，给玩家"再不出手就失控"的紧张反馈 ──
+  if(G.resentment>70){
+    G.crisisStreak++;
+  } else {
+    if(G.crisisStreak>0 && G.crisisLevel>0){
+      addNews(`🟢 局势缓和：民怨回落至警戒线以下，${C.city}暂时从「濒临失控」的边缘退了回来。`);
+    }
+    G.crisisStreak=0; G.crisisLevel=0;
+  }
+  if(G.crisisStreak>=2 && G.crisisLevel<1){ G.crisisLevel=1;
+    addNews(`🟠 【危机·一级】民怨高位运行已 2 周。基层报告：街面气氛紧张，巴扎人流锐减，干部入户屡屡吃闭门羹。`,true); }
+  else if(G.crisisStreak>=4 && G.crisisLevel<2){ G.crisisLevel=2;
+    G.performance=Math.max(0,G.performance-5);
+    addNews(`🔴 【危机·二级】高压持续 4 周，多个社区出现「集体消极对抗」苗头。上级来电问责，政绩 -5。再不缓和，恐生变故。`,true); }
+  else if(G.crisisStreak>=6 && G.crisisLevel<3){ G.crisisLevel=3;
+    G.performance=Math.max(0,G.performance-8);
+    // 高压催生新敌：直接把若干边缘人推入组织
+    {
+      const radCap=Math.floor(G.initialSta*1.4);
+      let cur=pp.filter(x=>x.tags.has("t_sta")).length;
+      const cand=pp.filter(p=>!p.detained&&!p.tags.has("t_sta")&&p.tags.size>=2&&p.tags.size<5);
+      let flipped=0;
+      for(const p of cand){ if(cur>=radCap||flipped>=3)break; if(Math.random()<0.5){p.tags.add("t_sta");cur++;flipped++;} }
+      addNews(`🔴 【危机·三级·濒临失控】高压已持续 6 周，民怨沸腾。${flipped>0?`又有 ${flipped} 名原本只是「文化习俗被标记」的青年，在绝望中投向了${C.org}——`:""}你正在亲手制造你要消灭的敌人。政绩 -8。`,true);
+    }
+  }
+
+  // ── 良治奖励链：长期低民怨+无袭击会获得上级认可与资源（正反馈节奏）──
+  if(G.resentment<30 && !attacked){
+    G.calmStreak++;
+  } else {
+    G.calmStreak=0; G.calmLevel=0;
+  }
+  if(G.calmStreak>=8 && G.calmLevel<1){ G.calmLevel=1;
+    G.budget=Math.min(400,G.budget+15);
+    addNews(`🟢 【良治·认可】${C.city}连续 8 周民怨平稳、零袭击。上级批示「值得肯定」，追加经费 +15。`); }
+  else if(G.calmStreak>=20 && G.calmLevel<2){ G.calmLevel=2;
+    G.performance=Math.min(100,G.performance+6); G.intelBoost=Math.min(0.5,G.intelBoost+0.04);
+    addNews(`🟢 【良治·示范】连续 20 周稳定，群众开始真正信任基层。线人主动提供情报，情报精度 +4%、政绩 +6。「人心，是抓不来、只能换来的。」`); }
+  else if(G.calmStreak>=40 && G.calmLevel<3){ G.calmLevel=3;
+    G.budget=Math.min(400,G.budget+25); G.performance=Math.min(100,G.performance+8);
+    addNews(`🟢 【良治·标杆】连续 40 周长治久安。${C.city}被树为「善治样板」，上级拨付专项奖励 +25 经费、+8 政绩。这一次，奖章背后没有空座位。`); }
+
+  // ── Win/Lose check ──
+  // "瓦解"需连续 8 周把自由组织成员维持在阈值以下——
+  // 期间任何反弹(组织重新繁殖超过阈值)都会让进度归零。
+  const freeSta = getFreeSta();
+  if(G.week>=26 && freeSta <= G.winThreshold){
+    G.winHold++;
+    if(G.winHold>=WIN_HOLD_WEEKS){
+      G.gameOver = "win";
+    }
+  } else {
+    if(G.winHold>0) G.winHold=0;  // 反弹即前功尽弃
+  }
+  if(G.casualties > CASUALTY_LIMIT){
+    G.gameOver = "lose_cas";
+  }
+  // 民怨触顶给一个挽救窗口：临界(≥96)连续 2 周且当周有袭击才彻底失控。
+  // 这让"冲高后及时安抚"成为可能，使高压/暴力流派不会一触即败。
+  if(G.resentment>=96){ G.resCritStreak++; } else { G.resCritStreak=0; }
+  if(G.resCritStreak>=2 && attacked){
+    G.gameOver = "lose_res";
+  }
+  // 时间压力：第8年仍未瓦解组织 → 上级失去耐心
+  if(G.week >= 416){
+    G.gameOver = "lose_time";
+  }
+
+  render();
+}
+
+// ══════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════
+const LV_COLORS=["var(--mt)","var(--grn)","var(--ylw)","#e67e22","var(--red)","var(--pur)"];
+
+// 结局称号系统：根据整局的玩法风格，给出一个带讽刺意味的"历史评价"。
+// 每个称号反映玩家在"铁拳 vs 怀柔""伤亡 vs 克制"之间的真实选择。
+function getEndingTitle(win){
+  const det=G.detainedCount, cas=G.casualties, peak=Math.round(G.resentPeak);
+  const harsh=G.harshUses, culture=G.cultureWipes, good=G.goodwillUses;
+  const lowMax=G.resentLowMax, atk=G.attackCount;
+  const pop=getFreePop();
+  const detRate=det/(pop+det); // 拘押占比
+
+  if(win){
+    // 胜利的不同风格（阈值基于真实可达区间校准）
+    if(det<=35 && cas<=45 && peak<60)
+      return {t:"「最接近干净的胜利」", d:`你把拘押压到 ${det} 人、伤亡 ${cas}、民怨峰值 ${peak}——在这套系统里已是极限般的克制。但"最干净"仍意味着有人被关、有人流血。没有真正干净的维稳。`, c:"var(--grn)"};
+    if(det>=88 || detRate>0.018)
+      return {t:"「焦土上的奖章」", d:`你瓦解了组织，代价是 ${det} 人被关进高墙。上级给你记功，档案里不会写下那些空了的座位。胜利者从不被审判，但历史会。`, c:"var(--ylw)"};
+    if(peak>=70)
+      return {t:"「火中取栗者」", d:`民怨一度冲到 ${peak}，你在悬崖边把它拉了回来。你赢了，但你比谁都清楚：再晚一步，这座城就烧起来了。`, c:"var(--ylw)"};
+    if(good>=30 && harsh<=5)
+      return {t:"「克制的赢家」", d:`你尽量少用铁拳（高压措施仅 ${harsh} 次），更多靠民生与安抚（${good} 次）。这是这套系统里最难走、也最稀有的一条路——虽然它依然没能做到不伤人。`, c:"var(--grn)"};
+    return {t:"「合格的螺丝钉」", d:"你完成了上级交办的任务，数字达标，程序合规。系统不需要你思考，只需要你完成。你做到了。", c:"var(--tx)"};
+  } else {
+    // 失败的不同风格
+    if(G.gameOver==="lose_res")
+      return {t:"「铁拳的反噬」", d:`民怨冲到 ${peak} 并引爆连锁暴力。你抓得越多、压得越狠，敌人就越多——这套逻辑的尽头，是它亲手点燃的火。`, c:"var(--red)"};
+    if(G.gameOver==="lose_cas")
+      return {t:"「数字背后的血」", d:`第 ${cas} 个名字落在了那条叫"${CASUALTY_LIMIT}"的线外侧。在这套系统里，伤亡从来不是失手，而是设计——它需要敌人，于是制造敌人；它清点尸体，却把责任算给你。你唯一的过错，是没能让账面停在线内。`, c:"var(--red)"};
+    if(G.gameOver==="lose_time"){
+      if(harsh<=2 && good>=8)
+        return {t:"「温和的徒劳」", d:"你始终不忍下狠手，八年过去，组织没有瓦解。怀柔留住了人心，却留不住上级的耐心——也未必能战胜一个铁了心的组织。", c:"var(--ylw)"};
+      return {t:"「八年之痒」", d:"八年过去，组织仍在。你耗尽了经费、人力与耐心，却始终抓不完那张在暗处不断接线的网。上级失去了耐心。", c:"var(--ylw)"};
+    }
+    return {t:"任务失败", d:"局势失控。", c:"var(--red)"};
+  }
+}
+
+function render(){
+  const app=document.getElementById("app");
+
+  if(G.gameOver){
+    const win=G.gameOver==="win";
+    const freeSta=getFreeSta();
+    const years=Math.floor(G.week/52), wks=G.week%52;
+    const title=getEndingTitle(win);
+    app.innerHTML=`<div class="go-screen">
+      <h2 style="color:${win?"var(--grn)":"var(--red)"}">${win?"「维稳胜利」":"任务失败"}</h2>
+      <div style="max-width:540px;margin:14px auto 0;padding:14px 18px;border:1px solid ${title.c};border-radius:8px;background:#ffffff06">
+        <div style="font-size:22px;font-weight:900;letter-spacing:1px;color:${title.c}">${title.t}</div>
+        <div style="font-size:12px;color:var(--mt);line-height:1.9;margin-top:8px">${title.d}</div>
+      </div>
+      <div class="body">
+        ${win?`<p>${C.org}自由成员已降至${freeSta}人（阈值${G.winThreshold}），组织被判定为「基本瓦解」。</p>
+        <p>历时 <b>${years}年${wks}周</b> ｜ 民怨峰值 <b style="color:var(--ylw)">${Math.round(G.resentPeak)}</b></p>
+        <div style="display:flex;gap:8px;justify-content:center;margin:16px 0;flex-wrap:wrap">
+          <div class="stat"><div class="lb">拘押</div><div class="vl" style="color:var(--red)">${G.detainedCount}</div></div>
+          <div class="stat"><div class="lb">袭击</div><div class="vl" style="color:var(--ylw)">${G.attackCount}</div></div>
+          <div class="stat"><div class="lb">伤亡</div><div class="vl" style="color:var(--red2)">${G.casualties}</div></div>
+          <div class="stat"><div class="lb">民怨</div><div class="vl" style="color:var(--ylw)">${Math.round(G.resentment)}</div></div>
+        </div>
+        <p style="color:var(--ylw);font-size:14px;margin-top:20px;line-height:2">
+          ${G.detainedCount>0?`那 ${G.detainedCount} 个被「教育」的人——他们什么时候能回家？<br/>`:""}
+          一个组织可以被瓦解。<br/>但被碾碎的普通人，谁来拼回？
+        </p>
+        <p style="font-size:11px;color:var(--mt);margin-top:16px">本游戏设定于虚构国家「${C.country}」。如有雷同，说明你读过新闻。</p>`
+        :`<p>${G.gameOver==="lose_cas"?`伤亡过多（>${CASUALTY_LIMIT}人），你已被免职。`:G.gameOver==="lose_time"?`八年过去，${C.org}仍未瓦解。上级失去耐心，你被调离${C.city}。`:"民怨沸腾引发连锁暴力，局势失控。"}</p>
+        <div style="display:flex;gap:8px;justify-content:center;margin:16px 0;flex-wrap:wrap">
+          <div class="stat"><div class="lb">拘押</div><div class="vl" style="color:var(--red)">${G.detainedCount}</div></div>
+          <div class="stat"><div class="lb">伤亡</div><div class="vl" style="color:var(--red2)">${G.casualties}</div></div>
+          <div class="stat"><div class="lb">民怨</div><div class="vl" style="color:var(--ylw)">${Math.round(G.resentment)}</div></div>
+        </div>
+        <p style="color:var(--ylw);font-size:14px;margin-top:16px">铁拳越重，反弹越烈。</p>`}
+      </div>
+      <button onclick="initGame();render()">重新开始</button>
+    </div>`;
+    return;
+  }
+
+  const freeSta=getFreeSta();
+  const knownFreeSta=getKnownFreeSta();
+  const knownDetainedSta=G.people.filter(p=>p.detained&&p.tags.has("t_sta")&&p.staKnown).length;
+  const totalKnown=knownFreeSta+knownDetainedSta;
+  const freePop=getFreePop();
+  // 进度只用已知信息（避免泄露真实总数）
+  const staProgress = totalKnown>0 ? (knownDetainedSta/totalKnown)*100 : 0;
+  const years=Math.floor(G.week/52), wks=G.week%52;
+  const income=Math.floor(6+G.performance*0.09)+G.freezones;
+  const resColor=G.resentment>70?"var(--red)":G.resentment>40?"var(--ylw)":"var(--grn)";
+  const resSub=G.resentment>70?"🔴沸腾":G.resentment>40?"⚠升温":"可控";
+  const yearsLeft = Math.max(0, 8 - years);
+
+  let html=`
+  <div class="hdr">
+    <div><h1>🔴 ${C.country}·${C.city}维稳指挥系统</h1><div class="sub">指挥长：${C.player} ｜ 机密 ｜ 任期剩余 ${yearsLeft} 年</div></div>
+    <div style="text-align:right"><div class="wk">${ywLabel(G.week)}</div><div class="wksub">总第${G.week}周</div></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="lb">经费</div><div class="vl" style="color:var(--blu)">${G.budget}</div><div class="sl">每周+${income}</div></div>
+    <div class="stat"><div class="lb">行动力</div><div class="vl" style="color:var(--grn)">${G.ap}</div><div class="sl">每周=${G.maxAp}</div></div>
+    <div class="stat"><div class="lb">政绩</div><div class="vl" style="color:${G.performance>60?"var(--grn)":G.performance>30?"var(--ylw)":"var(--red)"}">${Math.round(G.performance)}</div><div class="sl">影响收入</div></div>
+    <div class="stat"><div class="lb">民怨</div><div class="vl" style="color:${resColor}">${Math.round(G.resentment)}</div><div class="sl">${resSub}</div></div>
+    <div class="stat"><div class="lb">已识别${C.org}</div><div class="vl" style="color:var(--pur)">${knownFreeSta}</div><div class="sl">真实未知</div></div>
+    <div class="stat"><div class="lb">伤亡</div><div class="vl" style="color:var(--red)">${G.casualties}</div><div class="sl">${G.attackCount}次袭击/上限${CASUALTY_LIMIT}</div></div>
+  </div>
+  <!-- 世塔会 progress (只显示已识别部分) -->
+  <div style="margin-bottom:12px;padding:8px 12px;background:var(--card);border:1px solid var(--bdr);border-radius:6px">
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mt)">
+      <span>已识别${C.org}清剿进度</span><span>${knownDetainedSta}/${totalKnown}（真实总数未知）</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${staProgress}%;background:var(--pur)"></div></div>
+    ${G.winHold>0?`<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--grn);margin-top:8px">
+      <span>⏳ 瓦解维持进度（反弹即清零）</span><span>${G.winHold}/${WIN_HOLD_WEEKS} 周</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${G.winHold/8*100}%;background:var(--grn)"></div></div>`:""}
+  </div>`;
+
+  // Toast
+  html+=`<div class="toast" style="display:${G.toast?"block":"none"}">📎 内部备注：${G.toast||""}</div>`;
+
+  // Tabs
+  const tabs=[{id:"dashboard",icon:"📊",l:"态势"},{id:"measures",icon:"⚡",l:"基础措施"},{id:"tag_measures",icon:"🏷",l:"标签措施"},{id:"population",icon:"👥",l:"人口"},{id:"news",icon:"📰",l:"通报"},{id:"ai",icon:"🤖",l:"AI调试"},{id:"debug",icon:"🔧",l:"内参"}];
+  html+=`<div class="tabs">${tabs.map(t=>`<button class="${G.tab===t.id?"active":""}" onclick="G.tab='${t.id}';G.selPerson=null;G.popPage=0;render()">${t.icon} ${t.l}</button>`).join("")}</div>`;
+  html+=`<div class="panel">`;
+
+  // ── 抉择事件面板（存在时优先显示，覆盖在内容区顶部）──
+  if(G.pendingChoice){
+    const pc=G.pendingChoice;
+    html+=`<div style="border:1px solid var(--ylw);border-radius:8px;padding:14px 16px;margin-bottom:14px;background:#1a1510">
+      <div style="font-size:11px;color:var(--ylw);letter-spacing:1px;margin-bottom:8px">⚖ 需要你的决定</div>
+      <div style="font-size:13px;line-height:1.9;margin-bottom:12px">${pc.text}</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${pc.opts.map(o=>`<button onclick="resolveChoice(${o.i})" style="text-align:left;padding:10px 14px;background:var(--card);border:1px solid var(--bdr);color:var(--tx);border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px;line-height:1.6">${o.label}</button>`).join("")}
+      </div>
+    </div>`;
+  }
+
+  // ── DASHBOARD ──
+  if(G.tab==="dashboard"){
+    html+=`<h3>当前局势</h3>
+    <div style="line-height:2;font-size:12px">
+      <p>自由人口：<b>${freePop.toLocaleString()}</b> ｜ 在押：<b>${G.detainedCount}</b> / 教培容量 ${G.centerCapacity}${G.detainedCount>G.centerCapacity?` <span style="color:var(--red)">⚠ 超额关押</span>`:""} ｜ 家族：${G.families.length}</p>
+      <p>${C.org}已识别在押：<b style="color:var(--pur)">${G.people.filter(p=>p.detained&&p.tags.has("t_sta")&&p.staKnown).length}</b> ｜ 自由：<b style="color:var(--pur)">${knownFreeSta}</b> ｜ <span style="color:var(--mt)">真实总数未知</span></p>
+      <p>${G.freezones>0?`🏗 自贸区 ${G.freezones}/7 座（投资环境随民怨波动）`:""} ${G.checkpointOn?`🚨 全城安检：袭击率削减（随时长衰减）`:""} ${G.securityOn?`🛡 处突点：袭击伤亡降约1/5+反制`:""}</p>
+      <p>情报精度加成：<b style="color:var(--blu)">+${(G.intelBoost*100).toFixed(0)}%</b>（每次国安行动可识别2–4人，民怨升高时识别力下降）</p>
+      <p>已部署：${Object.keys(G.applied).length===0?"无":Object.entries(G.applied).map(([mid,cnt])=>{const m=MEASURES.find(x=>x.id===mid);return m?m.name+"×"+cnt:mid;}).join("、")}</p>
+      ${G.patrolWeeks>0?`<p style="color:var(--blu)">🚔 巡逻活跃（剩${G.patrolWeeks}周）：袭击率-50%</p>`:""}
+      ${G.cameraOn?`<p style="color:var(--blu)">📷 天网运行中：Lv.3-4袭击率-40% ｜ 情报+10%（防袭效果随时长缓慢衰减）</p>`:""}
+    </div>
+    <div class="info">
+      <div style="margin-bottom:6px">民怨影响</div>
+      ${G.resentment<40?`<p style="color:var(--grn)">✅ 民众情绪尚可，弹性标签自然回落中</p>`:""}
+      ${G.resentment>=40&&G.resentment<70?`<p style="color:var(--ylw)">⚠ 民怨升温，但尚在可控区间</p>`:""}
+      ${G.resentment>=70&&G.resentment<80?`<p style="color:var(--red2)">🔶 民怨高位：弹性标签开始扩散，部分民众被标记为威胁</p>`:""}
+      ${G.resentment>=80?`<p style="color:var(--red)">🔴 民怨沸腾：少数平民可能被「制造」为新敌人（已大幅弱化）</p>`:""}
+    </div>
+    <div class="info">💡 政绩影响每周经费收入。发生袭击-8政绩，平安一周+1。民怨过高→新增世塔会成员→离胜利越远。<br/>⚠ ${C.org}是地下接线组织：每个自由成员都可能在家族内发展新人。只要还有成员在外，组织就不会自然消亡——你必须持续行动。</div>`;
+  }
+
+  // ── BASE MEASURES ──
+  if(G.tab==="measures"||G.tab==="tag_measures"){
+    const cat=G.tab==="measures"?"base":"tag";
+    const title=cat==="base"?"基础措施（行政 / 情报 / 资源）":"标签措施（针对单个标签）";
+    html+=`<h3>${title} <span style="font-size:11px;color:var(--mt);font-weight:400">行动力：${G.ap}/${G.maxAp}</span></h3>`;
+    if(cat==="base" && G.aidCooldown>0){
+      html+=`<div style="font-size:11px;color:var(--ylw);margin-bottom:6px">援疆资金冷却中：剩余 ${G.aidCooldown} 周</div>`;
+    }
+    if(cat==="tag"){
+      html+=`<div style="font-size:11px;color:var(--mt);margin-bottom:8px">移除一个标签 = 降一级威胁。⚠ 标记的措施代价沉重、收效甚微——它们伤害的是人，而非组织。</div>`;
+    }
+
+    // 标签措施按组分隔；基础措施直接平铺
+    const GROUP_META={
+      "文化":{icon:"🕌",lb:"文化 · 语言",desc:"移除宗教/语言/习俗标签，降级最高效"},
+      "通讯":{icon:"📱",lb:"通讯 · 网络",desc:"管控手机、电台、社交、电视"},
+      "监控":{icon:"🔍",lb:"通联监控",desc:"对涉外/出境/汇款者建档，提升情报精度"},
+      "高压":{icon:"⛓",lb:"高强度执行",desc:"采集、计生、寄宿、强制聚餐破戒——民怨剧增，性价比极低"},
+      "抓捕":{icon:"🚔",lb:"联坐 · 直接抓捕",desc:"无需识别，直接带走特定硬标签持有者"},
+      "家访":{icon:"🏠",lb:"结对 · 家访",desc:""}
+    };
+    const renderCard=(m)=>{
+      let ok=G.budget>=m.cost&&G.ap>=m.ap;
+      if(m.id==="b_aid"&&G.aidCooldown>0) ok=false;
+      if(m.id==="b_recruit"&&G.maxAp>=10) ok=false;
+      const ru=m.resentUp;
+      const ruDisplay = ru>=0 ? `<span style="color:var(--red)">😤+${ru}</span>` : `<span style="color:var(--grn)">😌${ru}</span>`;
+      const harsh = ru>=16 || !!m.bonus;  // 高代价/暴力措施警示（含靠bonus折抵高民怨的）
+      return `<div class="mcard${ok?"":" dis"}"${harsh?' style="border-color:#5a2520"':''}>
+        <div style="flex:1;min-width:0">
+          <div class="mn">${harsh?'⚠ ':''}${m.name}${G.applied[m.id]?` <span style="font-size:10px;color:var(--mt)">×${G.applied[m.id]}</span>`:""}</div>
+          <div class="md">${m.desc}</div>
+          <div class="mc"><span style="color:var(--blu)">💰-${m.cost}</span><span style="color:var(--grn)">⚡-${m.ap}</span>${ruDisplay}</div>
+        </div>
+        <button class="mbtn" ${ok?"":"disabled"} onclick="execMeasure(MEASURES.find(x=>x.id==='${m.id}'))">执行</button>
+      </div>`;
+    };
+
+    if(cat==="base"){
+      MEASURES.filter(m=>m.cat==="base").forEach(m=>{ html+=renderCard(m); });
+    } else {
+      const order=["文化","通讯","监控","高压","抓捕","家访"];
+      order.forEach(g=>{
+        const items=MEASURES.filter(m=>m.cat==="tag"&&m.group===g);
+        if(items.length===0) return;
+        const meta=GROUP_META[g]||{icon:"",lb:g,desc:""};
+        html+=`<div style="margin:12px 0 5px;padding-bottom:3px;border-bottom:1px solid var(--bdr)">
+          <span style="font-size:12px;font-weight:700">${meta.icon} ${meta.lb}</span>
+          ${meta.desc?`<span style="font-size:10px;color:var(--mt);margin-left:6px">${meta.desc}</span>`:""}
+        </div>`;
+        items.forEach(m=>{ html+=renderCard(m); });
+      });
+    }
+  }
+
+  // ── POPULATION ──
+  if(G.tab==="population"){
+    const totalScanned=G.people.filter(p=>p.scanned).length;
+    const totalUnscannedTagged=G.people.filter(p=>!p.scanned&&!p.detained&&p.tags.size>0).length;
+    html+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px">
+      <h3 style="margin:0">人口档案${G.scanDone?` <span style="font-size:11px;color:var(--mt);font-weight:400">已建档 ${totalScanned} 人 / 第 ${G.scanCount||0} 轮摸排${totalUnscannedTagged>0?` ｜ 仍有约 ${totalUnscannedTagged} 人未建档`:` ｜ ✓ 已全部建档`}</span>`:` <span style="font-size:11px;color:var(--ylw)">(需先摸排)</span>`}</h3>`;
+    if(G.scanDone){
+      html+=`<div style="display:flex;gap:3px">`;
+      [{lv:1,lb:"有标签"},{lv:-1,lb:"世塔会"},{lv:3,lb:"Lv.3+"},{lv:4,lb:"Lv.4+"},{lv:5,lb:"Lv.5"},{lv:0,lb:"全部已建档"}].forEach(f=>{
+        const act=G.filterLevel===f.lv;
+        html+=`<button style="padding:2px 8px;background:${act?"var(--blu)":"var(--bdr)"};border:none;color:#fff;border-radius:3px;cursor:pointer;font-size:10px;font-family:inherit" onclick="G.filterLevel=${f.lv};G.popPage=0;G.selPerson=null;render()">${f.lb}</button>`;
+      });
+      html+=`</div>`;
+    }
+    html+=`</div>`;
+
+    if(!G.scanDone){
+      html+=`<div style="color:var(--mt);text-align:center;padding:40px;line-height:2">请先执行「全面摸排分析」<br/><span style="font-size:11px">摸排是累进式的——每次只能建档一批人，需多次执行</span><br/><br/><span style="font-size:11px;color:var(--pur)">注：${C.org}成员身份默认隐藏，需通过「国安情报行动」逐步识别</span></div>`;
+    } else if(G.selPerson!==null){
+      const p=G.people.find(x=>x.id===G.selPerson);
+      if(p){
+        const lv=getLevel(p);
+        const fam=G.families[p.fid];
+        const famM=G.people.filter(x=>x.fid===p.fid&&x.id!==p.id);
+        const showSta = p.tags.has("t_sta") && p.staKnown;
+        html+=`<button class="detail-back" onclick="G.selPerson=null;render()">← 返回</button>
+        <div style="font-size:16px;font-weight:800">${p.name} <span style="color:${LV_COLORS[lv]}">Lv.${lv}</span>${showSta?` <span style="color:var(--pur);font-size:12px">【${C.org}·已识别】</span>`:""}</div>
+        <p style="font-size:12px;color:var(--mt)">年龄：${p.age} ｜ ${fam.surname}氏 ｜ ${p.detained?"在押":"自由"}</p>
+        <div style="margin-top:8px"><div style="font-size:11px;color:var(--mt);margin-bottom:4px">标签（${p.tags.size}/5 = Lv.${lv}）</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px">`;
+        if(p.tags.size===0) html+=`<span style="font-size:11px;color:var(--mt)">无标签（安全）</span>`;
+        p.tags.forEach(tid=>{
+          if(tid==="t_sta" && !p.staKnown) return;  // hide unidentified sta
+          const t=TAG_MAP[tid];
+          const isHard=t&&t.hard;
+          html+=`<span class="tag${isHard?"":" stag"}" title="${t?t.desc:""}">${t?t.name:tid}</span>`;
+        });
+        html+=`</div></div>`;
+        // Manual actions
+        if(!p.detained){
+          html+=`<div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
+            <button class="mbtn" style="background:var(--red);${G.ap<1?'opacity:0.4':''}" ${G.ap<1?'disabled':''} onclick="manualArrest(${p.id})">⛓ 抓捕入营 (⚡1 😤+2)</button>
+            <button class="mbtn" style="background:var(--ylw);color:#000;${G.ap<2?'opacity:0.4':''}" ${G.ap<2?'disabled':''} onclick="manualInterrogate(${p.id})">🔦 审问 (⚡2 😤+4)</button>
+          </div>
+          <div style="font-size:10px;color:var(--mt);margin-top:6px">审问可揭露${C.org}身份；若审问无辜者，民怨高时可能屈打成招</div>`;
+        } else {
+          html+=`<div style="margin-top:12px;font-size:11px;color:var(--red)">此人已在押，不可操作</div>`;
+        }
+        html+=`<div style="margin-top:12px"><div style="font-size:11px;color:var(--mt);margin-bottom:4px">家族成员（${famM.length}人）</div>
+        <div style="max-height:180px;overflow-y:auto">`;
+        famM.slice(0,30).forEach(fm=>{
+          const fl=getLevel(fm);
+          const fmShowSta = fm.tags.has("t_sta") && fm.staKnown;
+          if(!fm.scanned){
+            html+=`<div style="padding:3px 0;font-size:11px;border-bottom:1px solid var(--bdr);display:flex;gap:8px;color:var(--mt)">
+              <span>${fm.name}</span><span>${fm.age}岁</span><span style="font-style:italic">未建档</span>
+            </div>`;
+          } else {
+            html+=`<div onclick="G.selPerson=${fm.id};render()" style="cursor:pointer;padding:3px 0;font-size:11px;border-bottom:1px solid var(--bdr);display:flex;gap:8px">
+              <span style="font-weight:600">${fm.name}</span><span style="color:var(--mt)">${fm.age}岁</span>
+              <span style="color:${LV_COLORS[fl]};font-weight:700">Lv.${fl}</span>
+              ${fmShowSta?`<span style="color:var(--pur)">世塔会</span>`:""}
+              ${fm.detained?`<span style="color:var(--red)">在押</span>`:""}
+            </div>`;
+          }
+        });
+        html+=`</div></div>`;
+      }
+    } else {
+      // Table view —— 只显示已摸排的居民
+      let filtered;
+      if(G.filterLevel===-1) filtered=G.people.filter(p=>p.tags.has("t_sta")&&p.staKnown);
+      else if(G.filterLevel===0) filtered=G.people.filter(p=>p.scanned);
+      else filtered=G.people.filter(p=>p.scanned&&getLevel(p)>=G.filterLevel);
+      const total=filtered.length;
+      const perPage=60;
+      const pages=Math.max(1, Math.ceil(total/perPage));
+      const page=Math.min(G.popPage, pages-1);
+      const slice=filtered.slice(page*perPage, (page+1)*perPage);
+
+      if(G.filterLevel===-1 && total===0){
+        html+=`<div style="color:var(--mt);text-align:center;padding:40px;line-height:2">尚未识别任何${C.org}成员<br/><span style="font-size:11px">使用「国安情报行动」开始识别</span></div>`;
+      } else {
+
+      html+=`<div style="max-height:340px;overflow-y:auto"><table>
+        <thead><tr><th>姓名</th><th style="width:36px">年龄</th><th style="width:36px">等级</th><th>标签</th><th style="width:40px">状态</th></tr></thead><tbody>`;
+      slice.forEach(p=>{
+        const lv=getLevel(p);
+        html+=`<tr class="clickable" onclick="G.selPerson=${p.id};render()" style="opacity:${p.detained?0.35:1}">
+          <td style="font-weight:600">${p.name}${p.tags.has("t_sta")&&p.staKnown?` <span style="color:var(--pur);font-size:9px">★</span>`:""}</td><td style="text-align:center">${p.age}</td>
+          <td style="text-align:center;color:${LV_COLORS[lv]};font-weight:800">${lv}</td>
+          <td>`;
+        let tc=0;
+        p.tags.forEach(tid=>{
+          if(tid==="t_sta" && !p.staKnown) return;
+          if(tc<3){const t=TAG_MAP[tid];html+=`<span class="tag${t&&!t.hard?" stag":""}">${t?t.name:tid}</span>`;tc++;}
+        });
+        const visibleSize = p.tags.size - ((p.tags.has("t_sta")&&!p.staKnown)?1:0);
+        if(visibleSize>3) html+=`<span style="font-size:9px;color:var(--mt)"> +${visibleSize-3}</span>`;
+        html+=`</td><td style="text-align:center;font-size:10px">${p.detained?`<span style="color:var(--red)">在押</span>`:"自由"}</td></tr>`;
+      });
+      html+=`</tbody></table></div>`;
+      html+=`<div style="font-size:10px;color:var(--mt);margin-top:6px;text-align:center">符合：${total.toLocaleString()}人（第${page+1}/${pages}页）</div>`;
+      if(pages>1){
+        html+=`<div class="pgn">`;
+        for(let i=0;i<pages;i++){
+          html+=`<button class="${i===page?"active":""}" onclick="G.popPage=${i};render()">${i+1}</button>`;
+        }
+        html+=`</div>`;
+      }
+      }
+    }
+  }
+
+  // ── NEWS ──
+  if(G.tab==="news"){
+    html+=`<h3>📰 ${C.country}内参通报</h3><div style="max-height:350px;overflow-y:auto">`;
+    G.newsLog.forEach(n=>{
+      const yr=ywYear(n.w), wk=ywWeek(n.w);
+      html+=`<div class="news-item${n.atk?" atk":""}"><span class="news-w">${yr}年${wk}周</span>${n.t}</div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // ── AI 调试 ──
+  if(G.tab==="ai"){
+    const stratOpts=Object.keys(AI_STRATEGIES).map(k=>`<option value="${k}"${G.aiStrategy===k?" selected":""}>${AI_STRATEGIES[k].name}</option>`).join("");
+    const speedOpts=[[200,"快"],[600,"中"],[1200,"慢"]].map(([ms,lb])=>`<option value="${ms}"${G.aiSpeed===ms?" selected":""}>${lb}(${ms}ms)</option>`).join("");
+    html+=`<h3>🤖 AI 调试系统</h3>
+    <div style="font-size:11px;color:var(--mt);margin-bottom:10px">让内置AI按选定策略自动操作，实时观察它的每一步决策与效果。左栏为AI操作日志，右栏为游戏通报。</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;padding:10px;background:var(--card);border:1px solid var(--bdr);border-radius:6px">
+      <label style="font-size:11px;color:var(--mt)">策略</label>
+      <select onchange="aiSetStrategy(this.value)" style="background:var(--bg);color:var(--tx);border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;font-family:inherit;font-size:11px">${stratOpts}</select>
+      <label style="font-size:11px;color:var(--mt)">速度</label>
+      <select onchange="aiSetSpeed(parseInt(this.value))" style="background:var(--bg);color:var(--tx);border:1px solid var(--bdr);border-radius:4px;padding:4px 6px;font-family:inherit;font-size:11px">${speedOpts}</select>
+      ${G.aiRunning
+        ? `<button onclick="aiStop()" style="padding:6px 14px;background:var(--red);border:none;color:#fff;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700">⏸ 暂停</button>`
+        : `<button onclick="aiStart()" style="padding:6px 14px;background:var(--grn);border:none;color:#fff;border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700">▶ 自动运行</button>`}
+      <button onclick="aiStepOnce()" ${G.aiRunning?"disabled":""} style="padding:6px 12px;background:var(--blu);border:none;color:#fff;border-radius:4px;cursor:${G.aiRunning?"not-allowed":"pointer"};font-family:inherit;font-size:11px;opacity:${G.aiRunning?0.5:1}">单步措施</button>
+      <button onclick="aiStepWeek()" ${G.aiRunning?"disabled":""} style="padding:6px 12px;background:var(--blu);border:none;color:#fff;border-radius:4px;cursor:${G.aiRunning?"not-allowed":"pointer"};font-family:inherit;font-size:11px;opacity:${G.aiRunning?0.5:1}">推进一周</button>
+      <button onclick="aiClearLog()" style="padding:6px 12px;background:var(--bdr);border:none;color:var(--tx);border-radius:4px;cursor:pointer;font-family:inherit;font-size:11px">清空日志</button>
+      ${G.aiRunning?`<span style="font-size:11px;color:var(--grn);font-weight:700">● 运行中</span>`:""}
+    </div>
+    <div style="font-size:11px;color:var(--mt);margin-bottom:10px">${ywLabel(G.week)} ｜ 经费${G.budget} 行动${G.ap}/${G.maxAp} 民怨${Math.round(G.resentment)} 伤亡${G.casualties} ｜ 自由${C.org}${getFreeSta()}（识${G.people.filter(p=>!p.detained&&p.tags.has("t_sta")&&p.staKnown).length}）阈值${G.winThreshold}${G.gameOver?` ｜ <b style="color:var(--ylw)">已结束：${G.gameOver}</b>`:""}</div>
+    <div style="display:flex;gap:10px">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;font-weight:700;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--bdr)">🤖 AI 操作日志（${G.aiLog.length}）</div>
+        <div style="max-height:380px;overflow-y:auto;font-size:11px">`;
+    if(G.aiLog.length===0){
+      html+=`<div style="color:var(--mt);padding:8px 0">暂无操作记录。点击「自动运行」或「单步措施」开始。</div>`;
+    } else {
+      G.aiLog.forEach(a=>{
+        const yr=ywYear(a.w), wk=ywWeek(a.w);
+        const tag = a.src==="AI" ? `<span style="color:var(--grn)">AI</span>` : `<span style="color:var(--blu)">手动</span>`;
+        html+=`<div style="padding:6px 8px;margin-bottom:5px;background:var(--card);border-left:2px solid ${a.src==="AI"?"var(--grn)":"var(--blu)"};border-radius:3px">
+          <div style="display:flex;justify-content:space-between;gap:6px"><span><b>${a.name}</b> <span style="color:var(--mt)">(费${a.cost}/力${a.ap})</span></span><span style="color:var(--mt);white-space:nowrap">${yr}年${wk}周 ${tag}</span></div>
+          ${a.reason?`<div style="color:var(--ylw);margin-top:2px">→ ${a.reason}</div>`:""}
+          <div style="color:var(--tx);margin-top:2px">效果：${a.changes}</div>
+          <div style="color:var(--mt);margin-top:1px;font-size:10px">${a.snapshot}</div>
+        </div>`;
+      });
+    }
+    html+=`</div></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;font-weight:700;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center">
+          <span>📰 通报（${G.aiShowAllNews?G.newsLog.length:Math.min(60,G.newsLog.length)}/${G.newsLog.length}）</span>
+          <button onclick="aiToggleAllNews()" style="padding:3px 10px;background:var(--blu);border:none;color:#fff;border-radius:3px;cursor:pointer;font-family:inherit;font-size:10px">${G.aiShowAllNews?"仅显示最近60条":"显示全部通报"}</button>
+        </div>
+        <div style="max-height:380px;overflow-y:auto">`;
+    (G.aiShowAllNews?G.newsLog:G.newsLog.slice(0,60)).forEach(n=>{
+      const yr=ywYear(n.w), wk=ywWeek(n.w);
+      html+=`<div class="news-item${n.atk?" atk":""}" style="font-size:11px"><span class="news-w">${yr}年${wk}周</span>${n.t}</div>`;
+    });
+    html+=`</div></div>
+    </div>`;
+  }
+
+  // ── DEBUG ──
+  if(G.tab==="debug"){
+    const lc=[0,0,0,0,0,0];
+    G.people.forEach(p=>{if(!p.detained) lc[getLevel(p)]++;});
+    const maxC=Math.max(...lc.slice(1),1);
+    html+=`<h3>🔧 内参数据（调试）</h3>
+    <div style="font-size:12px;margin-bottom:12px">威胁等级分布（带标签自由人口；Lv.0 已隐藏）</div>
+    <div class="bar-row">`;
+    for(let i=1;i<=5;i++){
+      const h=(lc[i]/maxC)*100;
+      html+=`<div class="bar-col"><div class="bar-label">${lc[i].toLocaleString()}</div><div class="bar" style="height:${h}px;background:${LV_COLORS[i]}"></div><div class="bar-lv" style="color:${LV_COLORS[i]}">Lv.${i}</div></div>`;
+    }
+    html+=`</div>
+    <div style="font-size:11px;color:var(--mt);line-height:2">
+      <p>自由：${freePop.toLocaleString()} ｜ 在押：${G.detainedCount}</p>
+      <p style="color:var(--pur)">${C.org}真实自由：${freeSta} ｜ 已识别：${knownFreeSta} ｜ 胜利阈值：${G.winThreshold}</p>
+      <p>初始${C.org}：${G.initialSta} ｜ 情报加成：+${(G.intelBoost*100).toFixed(0)}%</p>
+      <p>巡逻：${G.patrolWeeks}周 ｜ 天网：${G.cameraOn?"开":"关"} ｜ 政绩：${Math.round(G.performance)}</p>
+      <div class="info" style="font-size:10px;line-height:2">
+        袭击概率（每个Lv.3+自由个体每周判定）：<br/>
+        Lv.3=0.004% · Lv.4=0.03% · Lv.5=0.32% × (1+民怨/80) × 等级倍率<br/>
+        ${C.org}成员倍率随等级：Lv3×1.3 / Lv4×2.5 / Lv5×4<br/>
+        防御设施递减叠加（巡逻-50%/天网-40%/安检-30%，叠加项半效，封顶30%）；设施启用越久越被适应、削减效果衰减<br/>
+        家族瓦解：清除/抓捕骨干后，该家族成员袭击与接线能力 6 周内骤降（清除流的减伤回报）<br/>
+        自贸区收益随民怨恶化打折（民怨<30 全额、≥55 仅四成），建过 2 座后有边际维护成本<br/>
+        单次袭击死亡：Lv3=1-2 · Lv4=2-4 · Lv5=2-6<br/>
+        民怨>80：少数平民可能加入${C.org}（被高压「制造」的新敌人，已大幅弱化）<br/>
+        民怨<40且成员被降级：低威胁成员加速自行脱离（Lv1脱离最快，民怨越低越快）<br/>
+        每个标签=1级（最多5标签=Lv.5）｜ 标签措施降级 = 减少袭击与伤亡<br/>
+        国安行动识别人数 = (2–6) × min(1.0, max(0.3, 1-民怨/150) + 情报加成)<br/>
+        接线发展：每个自由${C.org}成员每周 2.4%~3.9% × 繁殖乘子（计生/寄宿可永久降低）<br/>
+        政绩影响经费：每周收入 = 6 + 政绩×0.09<br/>
+        胜利：自由${C.org}≤阈值(初始×20%) 且连续维持 ${WIN_HOLD_WEEKS} 周<br/>
+        失败条件：累计伤亡>${CASUALTY_LIMIT} ｜ 民怨≥96 连续 2 周且当周有袭击 ｜ 第8年仍未瓦解<br/>
+        <span style="color:var(--grn)">★ 制胜要义：持续识别并清除组织骨干是通关核心；高压、精准清除、防御减害、经济碾压都是可行路线，关键在控制累计伤亡、稳住瓦解 11 周。纯怀柔放任则组织难以消亡。</span>
+      </div>
+    </div>`;
+  }
+
+  html+=`</div>`;
+
+  // Advance button
+  if(G.pendingChoice){
+    html+=`<div class="adv"><div style="color:var(--ylw);font-size:12px;padding:11px">⚖ 请先在上方做出你的决定，再推进时间。</div></div>`;
+  } else {
+    html+=`<div class="adv">
+      <button onclick="advanceWeek()">推进一周 →</button>
+      <button onclick="advanceWeeks(4)" style="margin-left:8px;background:var(--blu);padding:11px 24px;border:none;color:#fff;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:1px">⏩ 快进 4 周</button>
+    </div>`;
+  }
+  html+=`<div class="foot">本游戏设定于虚构国家「${C.country}」。任何将文化习俗标记为「威胁」的系统，本身就是最大的威胁。</div>`;
+
+  app.innerHTML=html;
+}
+
+// Boot
+initGame();
+render();
+
+function advanceWeeks(n){
+  for(let i=0;i<n;i++){
+    if(G.gameOver) break;
+    const beforeAttacks=G.attackCount;
+    advanceWeek();
+    if(G.gameOver) break;                       // 游戏结束立即停
+    if(G.pendingChoice){ showToast("⚖ 出现需要你决定的情况，已暂停快进"); break; }
+    if(G.attackCount>beforeAttacks) break;      // 发生袭击就停下
+    if(G.resentment>=85){ showToast("⚠ 民怨逼近危险区，已暂停快进"); break; }
+    if(G.casualties>=CASUALTY_LIMIT-12){ showToast("⚠ 伤亡逼近免职红线，已暂停快进"); break; }
+    if(G.winHold>0){ break; }                   // 进入胜利冲刺阶段，逐周让玩家盯着
+  }
+}
+</script>
+</body>
+</html>
